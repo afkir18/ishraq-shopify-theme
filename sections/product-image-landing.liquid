@@ -6,7 +6,15 @@
 {% assign current_variant = product.selected_or_first_available_variant %}
 {% assign first_image = product.featured_image | default: product.images.first %}
 
-<div class="ishraq-product-landing full-width">
+<div
+  class="ishraq-product-landing full-width"
+  style="
+    --landing-spacing-before-form: {{ section.settings.spacing_before_form }}px;
+    --landing-spacing-after-form: {{ section.settings.spacing_after_form }}px;
+    --landing-form-padding-inline: {{ section.settings.form_padding_inline }}px;
+    --landing-block-gap: {{ section.settings.block_gap }}px;
+  "
+>
   {% if section.blocks.size > 0 %}
     {% for block in section.blocks %}
       {% case block.type %}
@@ -90,6 +98,13 @@
     margin: 0;
   }
 
+  .ishraq-product-landing__figure + .ishraq-product-landing__inner,
+  .ishraq-product-landing__inner + .ishraq-product-landing__figure,
+  .ishraq-product-landing__figure + .ishraq-product-landing__figure,
+  .ishraq-product-landing__inner + .ishraq-product-landing__inner {
+    margin-top: var(--landing-block-gap, 0);
+  }
+
   .ishraq-product-landing__figure--bleed {
     width: 100%;
     max-width: none;
@@ -142,7 +157,10 @@
   .ishraq-product-landing__order {
     border-block: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
     background: var(--ivory-100);
-    padding: 2.5rem 1rem;
+    padding-top: var(--landing-spacing-before-form, 0);
+    padding-bottom: var(--landing-spacing-after-form, 2.5rem);
+    padding-inline: var(--landing-form-padding-inline, 1rem);
+    margin: 0;
   }
 
   .ishraq-product-landing__card {
@@ -302,11 +320,6 @@
   }
 
   @media (min-width: 768px) {
-    .ishraq-product-landing__order {
-      padding-inline: 2.5rem;
-      padding-block: 3.5rem;
-    }
-
     .ishraq-product-landing__card {
       padding: 2rem;
     }
@@ -374,6 +387,52 @@
       "id": "trust_note",
       "label": "Trust note",
       "default": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "spacing_before_form",
+      "label": "Space before order form",
+      "info": "Gap between the image above and the order form.",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "spacing_after_form",
+      "label": "Space after order form",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "block_gap",
+      "label": "Space between blocks",
+      "info": "Gap between image blocks, or between form and images below.",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "form_padding_inline",
+      "label": "Form side padding",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 16
     }
   ],
   "blocks": [

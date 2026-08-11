@@ -15,61 +15,31 @@
         "hero_image": {
           "type": "fullscreen_image",
           "settings": {
-            "image": "shopify://shop_images/01-_--_-Hero_6.webp",
-            "alt": "",
-            "mobile_full_screen": false
+            "mobile_full_screen": true
           }
         },
-        "fullscreen_image_TRP9jW": {
-          "type": "fullscreen_image",
-          "settings": {
-            "image": "shopify://shop_images/02-_-_-Benefits_7.webp",
-            "alt": "",
-            "mobile_full_screen": false
-          }
-        },
-        "fullscreen_image_4A8RjG": {
-          "type": "fullscreen_image",
-          "settings": {
-            "image": "shopify://shop_images/02-_-_-Benefits_7.webp",
-            "alt": "",
-            "mobile_full_screen": false
-          }
+        "order_form": {
+          "type": "order_form",
+          "settings": {}
         }
       },
       "block_order": [
         "hero_image",
-        "fullscreen_image_TRP9jW",
-        "fullscreen_image_4A8RjG"
+        "order_form"
       ],
-      "custom_css": [],
       "settings": {
         "eyebrow": "أداء عند الاستلام · تأكيد قبل الإرسال",
-        "title": "",
-        "intro": "",
         "submit_label": "أضيفي للسلة — الأداء عند الاستلام",
         "sticky_label": "كمّلي الطلب",
-        "trust_note": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب"
+        "trust_note": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب",
+        "spacing_before_form": 0,
+        "spacing_after_form": 40,
+        "block_gap": 0,
+        "form_padding_inline": 16
       }
-    },
-    "178647925591e91a5e": {
-      "type": "apps",
-      "blocks": {
-        "easysell_cod_form_app_block_KHadUp": {
-          "type": "shopify://apps/easysell-cod-form/blocks/app-block/7bfd0a95-6839-4f02-b2ee-896832dbe67e",
-          "settings": {
-            "product": ""
-          }
-        }
-      },
-      "block_order": [
-        "easysell_cod_form_app_block_KHadUp"
-      ],
-      "settings": {}
     }
   },
   "order": [
-    "main",
-    "178647925591e91a5e"
+    "main"
   ]
 }

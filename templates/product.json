@@ -10,18 +10,8 @@
 {
   "sections": {
     "main": {
-      "type": "product-image-landing",
-      "settings": {
-        "eyebrow": "",
-        "title": "",
-        "intro": "",
-        "sticky_label": "",
-        "trust_note": "",
-        "spacing_before_form": 0,
-        "spacing_after_form": 40,
-        "block_gap": 0,
-        "form_padding_inline": 16
-      }
+      "type": "product-blank",
+      "settings": {}
     }
   },
   "order": [

@@ -15,27 +15,61 @@
         "hero_image": {
           "type": "fullscreen_image",
           "settings": {
-            "mobile_full_screen": true
+            "image": "shopify://shop_images/01-_--_-Hero_6.webp",
+            "alt": "",
+            "mobile_full_screen": false
           }
         },
-        "order_form": {
-          "type": "order_form",
-          "settings": {}
+        "fullscreen_image_TRP9jW": {
+          "type": "fullscreen_image",
+          "settings": {
+            "image": "shopify://shop_images/02-_-_-Benefits_7.webp",
+            "alt": "",
+            "mobile_full_screen": false
+          }
+        },
+        "fullscreen_image_4A8RjG": {
+          "type": "fullscreen_image",
+          "settings": {
+            "image": "shopify://shop_images/02-_-_-Benefits_7.webp",
+            "alt": "",
+            "mobile_full_screen": false
+          }
         }
       },
       "block_order": [
         "hero_image",
-        "order_form"
+        "fullscreen_image_TRP9jW",
+        "fullscreen_image_4A8RjG"
       ],
+      "custom_css": [],
       "settings": {
         "eyebrow": "أداء عند الاستلام · تأكيد قبل الإرسال",
+        "title": "",
+        "intro": "",
         "submit_label": "أضيفي للسلة — الأداء عند الاستلام",
         "sticky_label": "كمّلي الطلب",
         "trust_note": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب"
       }
+    },
+    "178647925591e91a5e": {
+      "type": "apps",
+      "blocks": {
+        "easysell_cod_form_app_block_KHadUp": {
+          "type": "shopify://apps/easysell-cod-form/blocks/app-block/7bfd0a95-6839-4f02-b2ee-896832dbe67e",
+          "settings": {
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "easysell_cod_form_app_block_KHadUp"
+      ],
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "178647925591e91a5e"
   ]
 }

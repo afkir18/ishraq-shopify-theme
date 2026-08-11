@@ -12,79 +12,38 @@
     "landing_1": {
       "type": "product-image-landing-1",
       "blocks": {
-        "fullscreen_image_k8KEdb": {
-          "type": "fullscreen_image",
-          "settings": {
-            "image": "shopify://shop_images/01-_--_-Hero_6.webp",
-            "alt": "",
-            "mobile_full_screen": false
-          }
-        },
         "hero_image": {
           "type": "fullscreen_image",
           "settings": {
-            "alt": "",
             "mobile_full_screen": true
           }
         }
       },
       "block_order": [
-        "fullscreen_image_k8KEdb",
         "hero_image"
       ],
       "settings": {
-        "fallback_full_screen": false,
+        "fallback_full_screen": true,
         "block_gap": 0
       }
     },
-    "1786481229a0fbfebe": {
-      "type": "apps",
-      "blocks": {
-        "easysell_cod_form_app_block_caXkq7": {
-          "type": "shopify://apps/easysell-cod-form/blocks/app-block/7bfd0a95-6839-4f02-b2ee-896832dbe67e",
-          "settings": {
-            "product": ""
-          }
-        }
-      },
-      "block_order": [
-        "easysell_cod_form_app_block_caXkq7"
-      ],
-      "settings": {}
-    },
     "apps": {
       "type": "product-landing-apps",
-      "disabled": true,
       "settings": {}
     },
     "landing_2": {
       "type": "product-image-landing-2",
       "blocks": {
-        "fullscreen_image_tkxLgi": {
-          "type": "fullscreen_image",
-          "settings": {
-            "image": "shopify://shop_images/02-_-_-Benefits_7.webp",
-            "alt": "",
-            "mobile_full_screen": false
-          }
-        },
-        "fullscreen_image_7KbbX8": {
-          "type": "fullscreen_image",
-          "settings": {
-            "image": "shopify://shop_images/03-_-_-How-to-Use.webp",
-            "alt": "",
-            "mobile_full_screen": false
-          }
+        "order_form": {
+          "type": "order_form",
+          "settings": {}
         }
       },
       "block_order": [
-        "fullscreen_image_tkxLgi",
-        "fullscreen_image_7KbbX8"
+        "order_form"
       ],
       "settings": {
         "eyebrow": "أداء عند الاستلام · تأكيد قبل الإرسال",
-        "title": "",
-        "intro": "",
         "submit_label": "أضيفي للسلة — الأداء عند الاستلام",
         "sticky_label": "كمّلي الطلب",
         "trust_note": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب",
@@ -97,7 +56,6 @@
   },
   "order": [
     "landing_1",
-    "1786481229a0fbfebe",
     "apps",
     "landing_2"
   ]

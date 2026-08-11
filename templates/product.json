@@ -22,25 +22,9 @@
         "block_gap": 0,
         "form_padding_inline": 16
       }
-    },
-    "1786482761bbac30bb": {
-      "type": "apps",
-      "blocks": {
-        "easysell_cod_form_app_block_iJyYPh": {
-          "type": "shopify://apps/easysell-cod-form/blocks/app-block/7bfd0a95-6839-4f02-b2ee-896832dbe67e",
-          "settings": {
-            "product": ""
-          }
-        }
-      },
-      "block_order": [
-        "easysell_cod_form_app_block_iJyYPh"
-      ],
-      "settings": {}
     }
   },
   "order": [
-    "main",
-    "1786482761bbac30bb"
+    "main"
   ]
 }

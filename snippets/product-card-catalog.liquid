@@ -1,0 +1,224 @@
+{% comment %}
+  Catalog product card — used on collection / products listing.
+  Accepts: product (required), badge (optional)
+{% endcomment %}
+
+{% assign price = product.price_min %}
+{% assign compare_at = product.compare_at_price_min %}
+{% assign has_discount = false %}
+{% if compare_at > price %}
+  {% assign has_discount = true %}
+  {% assign savings = compare_at | minus: price %}
+  {% assign discount_pct = savings | times: 100.0 | divided_by: compare_at | round %}
+{% endif %}
+
+{% assign card_badge = badge | strip %}
+{% if card_badge == blank %}
+  {% if product.tags contains 'collagen' or product.title contains 'كولاجين' %}
+    {% assign card_badge = 'روتين المساء' %}
+  {% elsif product.tags contains 'magnesium' or product.title contains 'ماغنيسيوم' %}
+    {% assign card_badge = 'عناية من الداخل' %}
+  {% endif %}
+{% endif %}
+
+<article class="ishraq-catalog-card{% unless product.available %} is-unavailable{% endunless %}">
+  <a href="{{ product.url }}" class="ishraq-catalog-card__link">
+    <div class="ishraq-catalog-card__media">
+      {% if product.featured_image %}
+        {{
+          product.featured_image
+          | image_url: width: 900
+          | image_tag: loading: 'lazy', alt: product.title, class: 'ishraq-catalog-card__image'
+        }}
+      {% else %}
+        <div class="ishraq-catalog-card__placeholder" aria-hidden="true"></div>
+      {% endif %}
+
+      {% if has_discount %}
+        <span class="ishraq-catalog-card__discount">-{{ discount_pct }}%</span>
+      {% endif %}
+
+      {% if card_badge != blank %}
+        <span class="ishraq-catalog-card__badge">{{ card_badge }}</span>
+      {% endif %}
+    </div>
+
+    <div class="ishraq-catalog-card__title-wrap">
+      <h2 class="ishraq-catalog-card__title">{{ product.title }}</h2>
+    </div>
+
+    <div class="ishraq-catalog-card__footer">
+      {% if product.available %}
+        <span class="ishraq-catalog-card__arrow" aria-hidden="true">←</span>
+      {% else %}
+        <span class="ishraq-catalog-card__status">غير متاح حالياً</span>
+      {% endif %}
+
+      <div class="ishraq-catalog-card__pricing">
+        {% if has_discount %}
+          <span class="ishraq-catalog-card__compare">{{ compare_at | money }}</span>
+          <span class="ishraq-catalog-card__divider" aria-hidden="true"></span>
+        {% endif %}
+        <span class="ishraq-catalog-card__price">
+          {% if product.available %}
+            {% if product.price_varies %}من {% endif %}{{ price | money }}
+          {% else %}
+            قريباً
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .ishraq-catalog-card {
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in srgb, var(--brand-950) 90%, transparent);
+    background: var(--white);
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--brand-950) 8%, transparent);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .ishraq-catalog-card:hover {
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--brand-950) 14%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .ishraq-catalog-card.is-unavailable {
+    opacity: 0.92;
+  }
+
+  .ishraq-catalog-card.is-unavailable:hover {
+    transform: none;
+  }
+
+  .ishraq-catalog-card__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ishraq-catalog-card__media {
+    position: relative;
+    overflow: hidden;
+    background: var(--ivory-100);
+  }
+
+  .ishraq-catalog-card__image,
+  .ishraq-catalog-card__placeholder {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: 78% center;
+    transition: transform 0.5s ease;
+  }
+
+  .ishraq-catalog-card__placeholder {
+    background: linear-gradient(135deg, var(--ivory-100), color-mix(in srgb, var(--brand-800) 8%, white));
+  }
+
+  .ishraq-catalog-card:hover .ishraq-catalog-card__image {
+    transform: scale(1.03);
+  }
+
+  .ishraq-catalog-card__discount {
+    position: absolute;
+    top: 0.75rem;
+    inset-inline-start: 0.75rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.375rem;
+    background: #c53030;
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 900;
+    box-shadow: 0 4px 12px color-mix(in srgb, #c53030 35%, transparent);
+  }
+
+  .ishraq-catalog-card__badge {
+    position: absolute;
+    top: 0.75rem;
+    inset-inline-end: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--brand-800) 92%, transparent);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 800;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--brand-800) 25%, transparent);
+  }
+
+  .ishraq-catalog-card__title-wrap {
+    padding: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--brand-950) 10%, transparent);
+  }
+
+  .ishraq-catalog-card__title {
+    margin: 0;
+    text-align: center;
+    font-size: clamp(1.0625rem, 2.5vw, 1.25rem);
+    font-weight: 900;
+    line-height: 1.4;
+    color: var(--brand-950);
+  }
+
+  .ishraq-catalog-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--brand-950) 10%, transparent);
+  }
+
+  .ishraq-catalog-card__arrow {
+    font-size: 1.125rem;
+    font-weight: 900;
+    color: var(--brand-950);
+    transition: transform 0.2s ease;
+  }
+
+  .ishraq-catalog-card:hover .ishraq-catalog-card__arrow {
+    transform: translateX(-2px);
+  }
+
+  .ishraq-catalog-card__status {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    color: var(--ink-600);
+  }
+
+  .ishraq-catalog-card__pricing {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-inline-start: auto;
+  }
+
+  .ishraq-catalog-card__compare {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--ink-600);
+    text-decoration: line-through;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ishraq-catalog-card__divider {
+    width: 1px;
+    height: 1rem;
+    background: color-mix(in srgb, var(--brand-950) 15%, transparent);
+  }
+
+  .ishraq-catalog-card__price {
+    font-size: clamp(1rem, 2.5vw, 1.125rem);
+    font-weight: 900;
+    color: var(--brand-950);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ishraq-catalog-card.is-unavailable .ishraq-catalog-card__price {
+    color: var(--ink-600);
+  }
+</style>

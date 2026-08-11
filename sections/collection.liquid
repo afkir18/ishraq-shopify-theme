@@ -1,47 +1,191 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+  Ishraq collection / products listing — matches ishraq.ma catalog design.
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+<section class="ishraq-catalog page-width">
+  {% if section.settings.heading != blank %}
+    {% assign catalog_title = section.settings.heading %}
+  {% elsif collection.handle == 'all' %}
+    {% assign catalog_title = 'منتجاتنا' %}
+  {% else %}
+    {% assign catalog_title = collection.title %}
+  {% endif %}
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
+  <header class="ishraq-catalog__hero">
+    <p class="section-label">{{ section.settings.label | default: "منتجاتنا" }}</p>
+    <h1>{{ catalog_title }}</h1>
+    <p class="ishraq-catalog__intro">
+      {{ section.settings.subheading | default: "اختاري منتوجك، شوفي السعر، وكمّلي الطلب بأداء عند الاستلام." }}
+    </p>
+  </header>
+
+  {% paginate collection.products by section.settings.products_per_page %}
+    {% if collection.products.size > 0 %}
+      <div class="ishraq-catalog__grid">
+        {% for product in collection.products %}
+          {% render 'product-card-catalog', product: product, badge: product.type %}
+        {% endfor %}
       </div>
-    {% endfor %}
 
-    {{ paginate | default_pagination }}
+      {% if paginate.pages > 1 %}
+        <nav class="ishraq-catalog__pagination" aria-label="التصفح">
+          {% if paginate.previous %}
+            <a href="{{ paginate.previous.url }}" class="ishraq-catalog__page-link">← السابق</a>
+          {% endif %}
+          <span class="ishraq-catalog__page-status">
+            {{ paginate.current_page }} / {{ paginate.pages }}
+          </span>
+          {% if paginate.next %}
+            <a href="{{ paginate.next.url }}" class="ishraq-catalog__page-link">التالي →</a>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% else %}
+      <div class="ishraq-catalog__empty card">
+        <p>ما كاين حتى منتوج فهاد المجموعة دابا.</p>
+        <a href="{{ routes.root_url }}" class="btn btn--secondary">الرئيسية</a>
+      </div>
+    {% endif %}
   {% endpaginate %}
-</div>
+
+  <div class="ishraq-catalog__trust">
+    <span>✓ أداء عند الاستلام</span>
+    <span>✓ تأكيد قبل الإرسال</span>
+    <span>✓ توصيل المغرب</span>
+  </div>
+</section>
 
 {% stylesheet %}
-  .collection-products {
+  .ishraq-catalog {
+    padding-block: 2.5rem 4.5rem;
+  }
+
+  .ishraq-catalog__hero {
+    max-width: 36rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .ishraq-catalog__hero h1 {
+    font-size: clamp(1.875rem, 5vw, 2.5rem);
+    font-weight: 900;
+    color: var(--brand-950);
+  }
+
+  .ishraq-catalog__intro {
+    margin-top: 0.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--ink-600);
+    font-weight: 700;
+  }
+
+  .ishraq-catalog__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .ishraq-catalog__empty {
+    margin-top: 2.5rem;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+  }
+
+  .ishraq-catalog__empty p {
+    margin-bottom: 1rem;
+    color: var(--ink-600);
+    font-weight: 700;
+  }
+
+  .ishraq-catalog__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  .ishraq-catalog__page-link {
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--brand-800) 15%, transparent);
+    background: var(--white);
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: var(--brand-800);
+    text-decoration: none;
+  }
+
+  .ishraq-catalog__page-status {
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: var(--ink-600);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ishraq-catalog__trust {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 1.25rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    color: var(--brand-800);
+  }
+
+  @media (min-width: 640px) {
+    .ishraq-catalog__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ishraq-catalog {
+      padding-block: 3.5rem 5rem;
+    }
+
+    .ishraq-catalog__grid {
+      gap: 1.75rem;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "t:general.collection",
-  "settings": []
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section label",
+      "default": "منتجاتنا"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading override",
+      "info": "Leave blank to use collection title."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "اختاري منتوجك، شوفي السعر، وكمّلي الطلب بأداء عند الاستلام."
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "default": 12,
+      "label": "Products per page"
+    }
+  ]
 }
 {% endschema %}

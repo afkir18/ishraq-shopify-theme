@@ -1,5 +1,20 @@
 <header class="ishraq-header full-width">
   <div class="ishraq-header__inner page-width">
+    <button
+      type="button"
+      class="ishraq-header__control ishraq-header__menu-toggle"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      aria-label="القائمة"
+      data-mobile-nav-toggle
+    >
+      <span class="ishraq-header__menu-icon" aria-hidden="true">
+        <span class="ishraq-header__menu-line"></span>
+        <span class="ishraq-header__menu-line"></span>
+        <span class="ishraq-header__menu-line"></span>
+      </span>
+    </button>
+
     <a href="{{ routes.root_url }}" class="ishraq-header__logo">
       <img
         src="{{ 'logo-ishraq.png' | asset_url }}"
@@ -11,70 +26,67 @@
     </a>
 
     <nav class="ishraq-header__nav" aria-label="القائمة الرئيسية">
-      {% if section.settings.menu != blank %}
-        {% for link in section.settings.menu.links %}
-          <a href="{{ link.url }}" class="ishraq-header__link">{{ link.title }}</a>
-        {% endfor %}
-      {% else %}
-        <a href="{{ routes.root_url }}" class="ishraq-header__link">الرئيسية</a>
-        <a href="{{ routes.all_products_collection_url }}" class="ishraq-header__link">منتجاتنا</a>
-        {% if pages.contact %}
-          <a href="{{ pages.contact.url }}" class="ishraq-header__link">تواصل معنا</a>
-        {% endif %}
-      {% endif %}
+      {% assign contact_url = pages.contact.url | default: '/pages/contact' %}
+      <a href="{{ routes.root_url }}" class="ishraq-header__link">الرئيسية</a>
+      <a href="{{ routes.all_products_collection_url }}" class="ishraq-header__link">منتجاتنا</a>
+      <a href="{{ contact_url }}" class="ishraq-header__link">تواصل معنا</a>
     </nav>
 
     <div class="ishraq-header__actions">
-      <a href="{{ routes.cart_url }}" class="ishraq-header__cart" aria-label="السلة">
-        السلة
-        {% if cart.item_count > 0 %}
-          <span class="ishraq-header__cart-count">{{ cart.item_count }}</span>
-        {% endif %}
-      </a>
       <button
         type="button"
-        class="ishraq-header__menu-toggle"
-        aria-expanded="false"
-        aria-controls="mobile-nav"
-        data-mobile-nav-toggle
+        class="ishraq-header__control ishraq-header__cart"
+        data-cart-drawer-open
+        aria-label="{% if cart.item_count > 0 %}السلة ({{ cart.item_count }}){% else %}السلة{% endif %}"
       >
-        ☰
+        <svg class="ishraq-header__cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.392 6.875h13.216v8.016c0 .567-.224 1.112-.624 1.513-.4.402-.941.627-1.506.627H5.522a2.13 2.13 0 0 1-1.506-.627 2.15 2.15 0 0 1-.624-1.513zM8.818 2.969h2.333c.618 0 1.211.247 1.649.686a2.35 2.35 0 0 1 .683 1.658v1.562H6.486V5.313c0-.622.246-1.218.683-1.658a2.33 2.33 0 0 1 1.65-.686"/>
+        </svg>
+        <span class="ishraq-header__cart-label">السلة</span>
+        <span class="ishraq-header__cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
       </button>
     </div>
   </div>
 
-  <nav id="mobile-nav" class="ishraq-header__mobile" hidden data-mobile-nav>
-    {% if section.settings.menu != blank %}
-      {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
-      {% endfor %}
-    {% else %}
-      <a href="{{ routes.root_url }}">الرئيسية</a>
-      <a href="{{ routes.all_products_collection_url }}">منتجاتنا</a>
-      {% if pages.contact %}
-        <a href="{{ pages.contact.url }}">تواصل معنا</a>
-      {% endif %}
-    {% endif %}
+  <nav id="mobile-nav" class="ishraq-header__mobile" hidden data-mobile-nav aria-label="القائمة الرئيسية">
+    <a href="{{ routes.root_url }}">الرئيسية</a>
+    <a href="{{ routes.all_products_collection_url }}">منتجاتنا</a>
+    <a href="{{ contact_url }}">تواصل معنا</a>
   </nav>
-</header>
 
-<script>
-  (function () {
-    var toggle = document.querySelector('[data-mobile-nav-toggle]');
-    var nav = document.querySelector('[data-mobile-nav]');
-    if (!toggle || !nav) return;
-    toggle.addEventListener('click', function () {
-      var open = nav.hasAttribute('hidden');
-      if (open) {
-        nav.removeAttribute('hidden');
-        toggle.setAttribute('aria-expanded', 'true');
-      } else {
-        nav.setAttribute('hidden', '');
-        toggle.setAttribute('aria-expanded', 'false');
+  <script>
+    (function () {
+      var header = document.currentScript.closest('.ishraq-header');
+      if (!header) return;
+
+      var toggle = header.querySelector('[data-mobile-nav-toggle]');
+      var nav = header.querySelector('[data-mobile-nav]');
+      if (!toggle || !nav) return;
+
+      function setMenuOpen(open) {
+        if (open) {
+          nav.removeAttribute('hidden');
+          nav.classList.add('is-open');
+          toggle.setAttribute('aria-expanded', 'true');
+        } else {
+          nav.setAttribute('hidden', '');
+          nav.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
       }
-    });
-  })();
-</script>
+
+      toggle.addEventListener('click', function () {
+        setMenuOpen(nav.hasAttribute('hidden'));
+      });
+
+      nav.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          setMenuOpen(false);
+        });
+      });
+    })();
+  </script>
+</header>
 
 {% stylesheet %}
   .ishraq-header {
@@ -87,16 +99,167 @@
   }
 
   .ishraq-header__inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'menu logo cart';
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
     padding-block: 0.875rem;
+    direction: ltr;
   }
 
-  .ishraq-header__logo img {
-    height: 2.5rem;
-    width: auto;
+  .ishraq-header__control {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    padding: 0 0.875rem;
+    border-radius: 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--brand-800) 14%, transparent);
+    background: linear-gradient(180deg, var(--white) 0%, color-mix(in srgb, var(--ivory-100) 40%, white) 100%);
+    color: var(--brand-800);
+    text-decoration: none;
+    box-shadow:
+      0 1px 2px color-mix(in srgb, var(--brand-950) 6%, transparent),
+      inset 0 1px 0 color-mix(in srgb, white 80%, transparent);
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.15s ease,
+      color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ishraq-header__control:hover {
+    border-color: color-mix(in srgb, var(--brand-800) 32%, transparent);
+    box-shadow:
+      0 6px 16px color-mix(in srgb, var(--brand-800) 10%, transparent),
+      inset 0 1px 0 color-mix(in srgb, white 80%, transparent);
+  }
+
+  .ishraq-header__control:active {
+    transform: scale(0.96);
+  }
+
+  .ishraq-header__menu-toggle {
+    grid-area: menu;
+    justify-self: start;
+    padding: 0;
+    width: 2.75rem;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  .ishraq-header__menu-toggle[aria-expanded='true'] {
+    border-color: color-mix(in srgb, var(--brand-800) 28%, transparent);
+    background: color-mix(in srgb, var(--brand-800) 8%, white);
+    color: var(--brand-950);
+  }
+
+  .ishraq-header__menu-icon {
+    position: relative;
+    display: block;
+    width: 1.125rem;
+    height: 0.875rem;
+    pointer-events: none;
+  }
+
+  .ishraq-header__menu-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 9999px;
+    background: currentColor;
+    transition:
+      transform 0.25s ease,
+      top 0.25s ease,
+      opacity 0.2s ease;
+  }
+
+  .ishraq-header__menu-line:nth-child(1) {
+    top: 0;
+  }
+
+  .ishraq-header__menu-line:nth-child(2) {
+    top: 0.375rem;
+  }
+
+  .ishraq-header__menu-line:nth-child(3) {
+    top: 0.75rem;
+  }
+
+  .ishraq-header__menu-toggle[aria-expanded='true'] .ishraq-header__menu-line:nth-child(1) {
+    top: 0.375rem;
+    transform: rotate(45deg);
+  }
+
+  .ishraq-header__menu-toggle[aria-expanded='true'] .ishraq-header__menu-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .ishraq-header__menu-toggle[aria-expanded='true'] .ishraq-header__menu-line:nth-child(3) {
+    top: 0.375rem;
+    transform: rotate(-45deg);
+  }
+
+  .ishraq-header__cart {
+    padding-inline: 0.75rem;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .ishraq-header__cart-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+  }
+
+  .ishraq-header__cart-label {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+  }
+
+  .ishraq-header__cart-count {
+    position: absolute;
+    top: -0.375rem;
+    inset-inline-end: -0.375rem;
+    min-width: 1.125rem;
+    height: 1.125rem;
+    padding-inline: 0.25rem;
+    border-radius: 9999px;
+    background: var(--brand-800);
+    color: var(--white);
+    font-size: 0.625rem;
+    font-weight: 800;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px var(--ivory-50);
+  }
+
+  .ishraq-header__cart-count[hidden] {
+    display: none;
+  }
+
+  body.ishraq-cart-open {
+    overflow: hidden;
+  }
+
+  .ishraq-header__logo {
+    grid-area: logo;
+    justify-self: center;
+  }
+
+  .ishraq-header__actions {
+    grid-area: cart;
+    justify-self: end;
   }
 
   .ishraq-header__nav {
@@ -116,63 +279,34 @@
     color: var(--brand-800);
   }
 
-  .ishraq-header__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .ishraq-header__logo img {
+    height: 2.5rem;
+    width: auto;
   }
 
-  .ishraq-header__cart {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.75rem;
-    padding: 0 1rem;
-    border-radius: 9999px;
-    border: 1px solid color-mix(in srgb, var(--brand-800) 15%, transparent);
-    background: var(--white);
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: var(--brand-800);
-    text-decoration: none;
-  }
+  @media (max-width: 420px) {
+    .ishraq-header__cart {
+      width: 2.75rem;
+      padding: 0;
+    }
 
-  .ishraq-header__cart-count {
-    position: absolute;
-    top: -0.25rem;
-    inset-inline-start: -0.25rem;
-    min-width: 1.25rem;
-    height: 1.25rem;
-    padding-inline: 0.25rem;
-    border-radius: 9999px;
-    background: var(--brand-800);
-    color: var(--white);
-    font-size: 0.6875rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .ishraq-header__menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    border-radius: 9999px;
-    border: 1px solid color-mix(in srgb, var(--brand-800) 15%, transparent);
-    background: var(--white);
-    font-weight: 700;
-    cursor: pointer;
+    .ishraq-header__cart-label {
+      display: none;
+    }
   }
 
   .ishraq-header__mobile {
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 0.25rem;
     border-top: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
     background: var(--ivory-50);
     padding: 0.75rem 1rem 1rem;
+    direction: rtl;
+  }
+
+  .ishraq-header__mobile.is-open {
+    display: flex;
   }
 
   .ishraq-header__mobile a {
@@ -188,6 +322,16 @@
   }
 
   @media (min-width: 768px) {
+    .ishraq-header__inner {
+      display: flex;
+      justify-content: space-between;
+      direction: rtl;
+    }
+
+    .ishraq-header__logo {
+      justify-self: auto;
+    }
+
     .ishraq-header__nav {
       display: flex;
     }

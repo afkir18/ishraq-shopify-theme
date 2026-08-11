@@ -11,7 +11,14 @@
   "sections": {
     "main": {
       "type": "product",
-      "settings": {}
+      "settings": {
+        "eyebrow": "",
+        "title": "",
+        "intro": "",
+        "submit_label": "",
+        "sticky_label": "",
+        "trust_note": ""
+      }
     },
     "178647748236b3853a": {
       "type": "_blocks",

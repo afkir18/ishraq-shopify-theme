@@ -3,7 +3,6 @@
   Add "Full screen image" blocks in the theme editor; drag to reorder.
 {% endcomment %}
 
-{% assign current_variant = product.selected_or_first_available_variant %}
 {% assign first_image = product.featured_image | default: product.images.first %}
 
 <div
@@ -15,19 +14,50 @@
     --landing-block-gap: {{ section.settings.block_gap }}px;
   "
 >
+  {% assign order_form_open = false %}
   {% if section.blocks.size > 0 %}
     {% for block in section.blocks %}
       {% case block.type %}
+        {% when 'order_form' %}
+          {% if order_form_open %}
+            {% render 'product-landing-order-form', product: product, section: section, part: 'close' %}
+          {% endif %}
+          {% render 'product-landing-order-form', product: product, section: section, block: block, part: 'open' %}
+          {% assign order_form_open = true %}
+
+        {% when '@app' %}
+          {% if order_form_open %}
+            <div class="ishraq-product-landing__app" {{ block.shopify_attributes }}>
+              {% render block %}
+            </div>
+          {% else %}
+            <div class="ishraq-product-landing__inner" {{ block.shopify_attributes }}>
+              <section id="cod-order" class="ishraq-product-landing__order">
+                <div class="ishraq-product-landing__card">
+                  {% render block %}
+                </div>
+              </section>
+            </div>
+          {% endif %}
+
         {% when 'fullscreen_image' %}
+          {% if order_form_open %}
+            {% render 'product-landing-order-form', product: product, section: section, part: 'close' %}
+            {% assign order_form_open = false %}
+          {% endif %}
           {% render 'product-landing-fullscreen-image', block: block, alt_fallback: product.title %}
 
-        {% when 'order_form' %}
-          {% render 'product-landing-order-form', product: product, section: section, block: block %}
-
         {% when 'product_image' %}
+          {% if order_form_open %}
+            {% render 'product-landing-order-form', product: product, section: section, part: 'close' %}
+            {% assign order_form_open = false %}
+          {% endif %}
           {% render 'product-landing-product-image', block: block, product: product %}
       {% endcase %}
     {% endfor %}
+    {% if order_form_open %}
+      {% render 'product-landing-order-form', product: product, section: section, part: 'close' %}
+    {% endif %}
   {% else %}
     {% comment %} Default layout when no blocks are configured {% endcomment %}
     {% if first_image %}
@@ -40,7 +70,8 @@
       </figure>
     {% endif %}
 
-    {% render 'product-landing-order-form', product: product, section: section %}
+    {% render 'product-landing-order-form', product: product, section: section, part: 'open' %}
+    {% render 'product-landing-order-form', product: product, section: section, part: 'close' %}
 
     {% if product.images.size > 1 %}
       <div class="ishraq-product-landing__stack" aria-label="صور إضافية للمنتوج">
@@ -63,26 +94,6 @@
     </a>
   </div>
 </div>
-
-<script>
-  (function () {
-    var form = document.querySelector('.ishraq-product-landing__form');
-    if (!form) return;
-
-    var totalEl = form.querySelector('[data-product-total]');
-
-    form.querySelectorAll('.ishraq-offer input[type="radio"]').forEach(function (input) {
-      input.addEventListener('change', function () {
-        form.querySelectorAll('.ishraq-offer').forEach(function (label) {
-          label.classList.toggle('is-selected', label.contains(input) && input.checked);
-        });
-        if (totalEl && input.dataset.price) {
-          totalEl.textContent = input.dataset.price;
-        }
-      });
-    });
-  })();
-</script>
 
 {% stylesheet %}
   .ishraq-product-landing {
@@ -196,94 +207,12 @@
     font-weight: 700;
   }
 
-  .ishraq-product-landing__form {
+  .ishraq-product-landing__app-slot {
     margin-top: 1.5rem;
   }
 
-  .ishraq-offers {
-    margin: 0;
-    border: 0;
-    padding: 0;
-  }
-
-  .ishraq-offers legend {
-    margin-bottom: 0.75rem;
-    font-weight: 900;
-    color: var(--brand-950);
-  }
-
-  .ishraq-offers__grid {
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .ishraq-offer {
-    position: relative;
-    display: grid;
-    gap: 0.25rem;
-    padding: 1rem;
-    border-radius: 1rem;
-    border: 2px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
-    background: var(--white);
-    cursor: pointer;
-  }
-
-  .ishraq-offer input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .ishraq-offer.is-selected {
-    border-color: var(--brand-800);
-    background: var(--ivory-50);
-  }
-
-  .ishraq-offer__title {
-    font-weight: 800;
-    color: var(--brand-950);
-  }
-
-  .ishraq-offer__price {
-    font-weight: 800;
-    color: var(--brand-800);
-  }
-
-  .ishraq-offer__badge {
-    position: absolute;
-    top: 0.75rem;
-    inset-inline-end: 0.75rem;
-    padding: 0.125rem 0.5rem;
-    border-radius: 9999px;
-    background: var(--brass-600);
-    color: var(--white);
-    font-size: 0.6875rem;
-    font-weight: 800;
-  }
-
-  .ishraq-product-landing__total {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1.25rem;
-    padding: 0.875rem 1rem;
-    border-radius: 1rem;
-    background: var(--ivory-100);
-    font-size: 0.875rem;
-    font-weight: 800;
-    color: var(--brand-950);
-  }
-
-  .ishraq-product-landing__total strong {
-    font-size: 1.25rem;
-    font-weight: 900;
-    color: var(--brand-800);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .ishraq-product-landing__submit {
-    width: 100%;
-    margin-top: 1.25rem;
+  .ishraq-product-landing__app {
+    margin-top: 0;
   }
 
   .ishraq-product-landing__trust {
@@ -372,12 +301,6 @@
     },
     {
       "type": "text",
-      "id": "submit_label",
-      "label": "Submit button",
-      "default": "أضيفي للسلة — الأداء عند الاستلام"
-    },
-    {
-      "type": "text",
       "id": "sticky_label",
       "label": "Mobile sticky button",
       "default": "كمّلي الطلب"
@@ -463,6 +386,9 @@
       "type": "order_form",
       "name": "Order form",
       "limit": 1
+    },
+    {
+      "type": "@app"
     },
     {
       "type": "product_image",

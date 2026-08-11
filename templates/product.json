@@ -11,55 +11,14 @@
   "sections": {
     "main": {
       "type": "product-image-landing",
-      "blocks": {
-        "order_form_inHexJ": {
-          "type": "order_form",
-          "settings": {}
-        },
-        "fullscreen_image_7KAzHL": {
-          "type": "fullscreen_image",
-          "settings": {
-            "image": "shopify://shop_images/01-_--_-Hero_6.webp",
-            "alt": "",
-            "mobile_full_screen": false
-          }
-        }
-      },
-      "block_order": [
-        "order_form_inHexJ",
-        "fullscreen_image_7KAzHL"
-      ],
       "settings": {
         "eyebrow": "أداء عند الاستلام · تأكيد قبل الإرسال",
-        "title": "",
-        "intro": "",
-        "submit_label": "أضيفي للسلة — الأداء عند الاستلام",
         "sticky_label": "كمّلي الطلب",
-        "trust_note": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب",
-        "spacing_before_form": 0,
-        "spacing_after_form": 40,
-        "block_gap": 0,
-        "form_padding_inline": 16
+        "trust_note": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب"
       }
-    },
-    "178648170024f3199a": {
-      "type": "apps",
-      "blocks": {
-        "easysell_cod_form_app_block_nGPfDm": {
-          "type": "shopify://apps/easysell-cod-form/blocks/app-block/7bfd0a95-6839-4f02-b2ee-896832dbe67e",
-          "settings": {
-            "product": "ماغنيسيوم-غليسينات"
-          }
-        }
-      },
-      "block_order": [
-        "easysell_cod_form_app_block_nGPfDm"
-      ],
-      "settings": {}
     }
   },
   "order": [
-    "main",
-    "178648170024f3199a"
+    "main"
   ]
 }

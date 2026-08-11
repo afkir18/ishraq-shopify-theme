@@ -1,0 +1,200 @@
+{% comment %}
+  Product image landing 1 — top image stack (no form).
+{% endcomment %}
+
+<div
+  class="ishraq-product-landing ishraq-product-gallery full-width"
+  style="--landing-block-gap: {{ section.settings.block_gap }}px;"
+>
+  {% if section.blocks.size > 0 %}
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'fullscreen_image' %}
+          {% render 'product-landing-fullscreen-image', block: block, alt_fallback: product.title %}
+
+        {% when 'product_image' %}
+          {% render 'product-landing-product-image', block: block, product: product %}
+      {% endcase %}
+    {% endfor %}
+  {% else %}
+    <div class="ishraq-product-landing__stack" aria-label="صور المنتوج">
+      {% for image in product.images %}
+        {% assign figure_class = 'ishraq-product-landing__figure ishraq-product-landing__figure--bleed' %}
+        {% if section.settings.fallback_full_screen %}
+          {% assign figure_class = figure_class | append: ' ishraq-product-landing__figure--fullscreen' %}
+        {% endif %}
+        <figure class="{{ figure_class }}">
+          {{
+            image
+            | image_url: width: 2000
+            | image_tag: loading: 'lazy', alt: product.title, class: 'ishraq-product-landing__image'
+          }}
+        </figure>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ishraq-product-gallery {
+    padding-bottom: 0;
+  }
+
+  .ishraq-product-landing__figure {
+    margin: 0;
+  }
+
+  .ishraq-product-landing__figure + .ishraq-product-landing__figure {
+    margin-top: var(--landing-block-gap, 0);
+  }
+
+  .ishraq-product-landing__figure--bleed {
+    width: 100%;
+    max-width: none;
+  }
+
+  .ishraq-product-landing__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .ishraq-product-landing__stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 767px) {
+    .ishraq-product-gallery {
+      padding-inline: 0;
+      overflow-x: clip;
+    }
+
+    .ishraq-product-landing__figure--bleed {
+      width: 100vw;
+      max-width: 100vw;
+      margin-inline: calc(50% - 50vw);
+    }
+
+    .ishraq-product-landing__figure--bleed .ishraq-product-landing__image {
+      width: 100%;
+      max-width: none;
+      height: auto;
+      border-radius: 0;
+    }
+
+    .ishraq-product-landing__figure--fullscreen {
+      min-height: 100svh;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .ishraq-product-landing__figure--fullscreen .ishraq-product-landing__image {
+      width: 100%;
+      min-height: 100svh;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .ishraq-product-landing__stack .ishraq-product-landing__figure--bleed + .ishraq-product-landing__figure--bleed {
+      margin-top: var(--landing-block-gap, 0);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .ishraq-product-landing__figure--fullscreen {
+      min-height: auto;
+    }
+
+    .ishraq-product-landing__figure--fullscreen .ishraq-product-landing__image {
+      min-height: auto;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product image landing 1",
+  "tag": "section",
+  "class": "product-image-landing-1-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Top image section — no order form. Add full screen images above the form section."
+    },
+    {
+      "type": "checkbox",
+      "id": "fallback_full_screen",
+      "label": "Full screen on mobile (default stack)",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "block_gap",
+      "label": "Space between images",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "fullscreen_image",
+      "name": "Full screen image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt text"
+        },
+        {
+          "type": "checkbox",
+          "id": "mobile_full_screen",
+          "label": "Full screen on mobile",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "product_image",
+      "name": "Product image",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "use_featured",
+          "label": "Use featured product image",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "image_index",
+          "label": "Product image number",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "checkbox",
+          "id": "mobile_full_screen",
+          "label": "Full screen on mobile",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

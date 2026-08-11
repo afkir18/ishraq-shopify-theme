@@ -1,0 +1,41 @@
+{% comment %}
+  App blocks slot between landing image sections.
+{% endcomment %}
+
+<div class="product-landing-apps full-width">
+  {%- for block in section.blocks -%}
+    {%- render block -%}
+  {%- endfor -%}
+</div>
+
+{% stylesheet %}
+  .product-landing-apps {
+    width: 100%;
+  }
+
+  .product-landing-apps:empty {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Apps",
+  "tag": "section",
+  "class": "product-landing-apps-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Add app blocks from installed Shopify apps (reviews, upsells, etc.)."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

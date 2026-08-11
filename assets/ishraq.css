@@ -1,0 +1,134 @@
+/** Ishraq brand theme — Arabic RTL storefront */
+
+:root {
+  --brand-950: #321520;
+  --brand-800: #5a2638;
+  --brand-700: #713149;
+  --brass-600: #a87838;
+  --brass-300: #d8b77a;
+  --ivory-50: #fcf9f3;
+  --ivory-100: #f5eee3;
+  --ink-950: #211b1d;
+  --ink-600: #685e62;
+  --success-700: #28704a;
+  --danger-700: #b42333;
+  --white: #ffffff;
+  --radius-lg: 1.5rem;
+  --radius-xl: 1.75rem;
+  --shadow-soft: 0 24px 60px -32px rgba(50, 21, 32, 0.45);
+  --shadow-hero: 0 40px 80px -40px rgba(0, 0, 0, 0.65);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.7;
+  background: var(--ivory-50);
+  color: var(--ink-950);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 800;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand-800) 20%, white);
+}
+
+.page-width {
+  width: min(var(--page-width), 100% - var(--page-margin) * 2);
+  margin-inline: auto;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn--primary {
+  background: var(--brass-600);
+  color: var(--white);
+}
+
+.btn--primary:hover {
+  background: color-mix(in srgb, var(--brass-600) 90%, black);
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--brand-800);
+  border: 1px solid color-mix(in srgb, var(--brand-800) 15%, transparent);
+}
+
+.btn--secondary:hover {
+  border-color: color-mix(in srgb, var(--brand-800) 40%, transparent);
+}
+
+.btn--white {
+  background: var(--white);
+  color: var(--brand-950);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.25);
+}
+
+.btn--white:hover {
+  background: var(--ivory-100);
+}
+
+.btn--lg {
+  min-height: 3rem;
+  padding: 0.875rem 1.75rem;
+  font-size: 1rem;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--brass-600);
+}
+
+.section-label::before {
+  content: "";
+  display: inline-block;
+  width: 2rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--brass-600) 70%, transparent);
+}
+
+.card {
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--brand-800) 8%, transparent);
+  background: var(--ivory-50);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

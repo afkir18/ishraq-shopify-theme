@@ -1,0 +1,237 @@
+{% comment %}
+  Ishraq product page with variant offer selector (1/2/3 packs).
+{% endcomment %}
+
+<div class="ishraq-product page-width">
+  <div class="ishraq-product__grid">
+    <div class="ishraq-product__gallery">
+      {% if product.featured_image %}
+        {{ product.featured_image | image_url: width: 1200 | image_tag: loading: 'eager', alt: product.title, class: 'ishraq-product__main-image' }}
+      {% endif %}
+      {% if product.images.size > 1 %}
+        <div class="ishraq-product__thumbs">
+          {% for image in product.images %}
+            {{ image | image_url: width: 200 | image_tag: loading: 'lazy', alt: product.title }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="ishraq-product__info">
+      <p class="ishraq-product__category">{{ product.type | default: "مكمل غذائي" }}</p>
+      <h1>{{ product.title }}</h1>
+      <div class="ishraq-product__description rte">
+        {{ product.description }}
+      </div>
+
+      {% form 'product', product, class: 'ishraq-product__form' %}
+        {% assign current_variant = product.selected_or_first_available_variant %}
+
+        {% if product.variants.size > 1 %}
+          <fieldset class="ishraq-offers">
+            <legend>اختاري العرض</legend>
+            <div class="ishraq-offers__grid">
+              {% for variant in product.variants %}
+                {% assign is_recommended = false %}
+                {% if variant.title contains '3' or variant.title contains 'ثلاث' %}
+                  {% assign is_recommended = true %}
+                {% endif %}
+                <label class="ishraq-offer{% if variant == current_variant %} is-selected{% endif %}">
+                  <input
+                    type="radio"
+                    name="id"
+                    value="{{ variant.id }}"
+                    {% if variant == current_variant %}checked{% endif %}
+                    {% unless variant.available %}disabled{% endunless %}
+                  >
+                  <span class="ishraq-offer__title">{{ variant.title }}</span>
+                  <span class="ishraq-offer__price">{{ variant.price | money }}</span>
+                  {% if is_recommended %}
+                    <span class="ishraq-offer__badge">أفضل قيمة</span>
+                  {% endif %}
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        {% else %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          <p class="ishraq-product__price">{{ current_variant.price | money }}</p>
+        {% endif %}
+
+        <input type="hidden" name="quantity" value="1">
+
+        <button type="submit" class="btn btn--primary btn--lg ishraq-product__submit" {% unless current_variant.available %}disabled{% endunless %}>
+          {% if current_variant.available %}
+            أضيفي للسلة — الأداء عند الاستلام
+          {% else %}
+            غير متوفر حالياً
+          {% endif %}
+        </button>
+
+        <p class="ishraq-product__cod-note">
+          ✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب
+        </p>
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var form = document.querySelector('.ishraq-product__form');
+    if (!form) return;
+    form.querySelectorAll('.ishraq-offer input[type="radio"]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        form.querySelectorAll('.ishraq-offer').forEach(function (label) {
+          label.classList.toggle('is-selected', label.contains(input) && input.checked);
+        });
+      });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .ishraq-product {
+    padding-block: 2.5rem 4rem;
+  }
+
+  .ishraq-product__grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .ishraq-product__main-image {
+    width: 100%;
+    border-radius: 1.75rem;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .ishraq-product__thumbs {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    overflow-x: auto;
+  }
+
+  .ishraq-product__thumbs img {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 0.75rem;
+    object-fit: cover;
+  }
+
+  .ishraq-product__category {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--brass-600);
+  }
+
+  .ishraq-product h1 {
+    margin-top: 0.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    color: var(--brand-950);
+  }
+
+  .ishraq-product__description {
+    margin-top: 1rem;
+    color: var(--ink-600);
+  }
+
+  .ishraq-offers {
+    margin-top: 1.5rem;
+    border: 0;
+    padding: 0;
+  }
+
+  .ishraq-offers legend {
+    margin-bottom: 0.75rem;
+    font-weight: 800;
+    color: var(--brand-950);
+  }
+
+  .ishraq-offers__grid {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .ishraq-offer {
+    position: relative;
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 2px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    background: var(--white);
+    cursor: pointer;
+  }
+
+  .ishraq-offer input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ishraq-offer.is-selected {
+    border-color: var(--brand-800);
+    background: var(--ivory-50);
+  }
+
+  .ishraq-offer__title {
+    font-weight: 800;
+    color: var(--brand-950);
+  }
+
+  .ishraq-offer__price {
+    font-weight: 800;
+    color: var(--brand-800);
+  }
+
+  .ishraq-offer__badge {
+    position: absolute;
+    top: 0.75rem;
+    inset-inline-end: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background: var(--brass-600);
+    color: var(--white);
+    font-size: 0.6875rem;
+    font-weight: 800;
+  }
+
+  .ishraq-product__price {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--brand-950);
+  }
+
+  .ishraq-product__submit {
+    width: 100%;
+    margin-top: 1.25rem;
+  }
+
+  .ishraq-product__cod-note {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ink-600);
+    text-align: center;
+  }
+
+  @media (min-width: 900px) {
+    .ishraq-product__grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

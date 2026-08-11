@@ -1,0 +1,228 @@
+<section class="ishraq-hero full-width">
+  <div class="ishraq-hero__bg"></div>
+  <div class="ishraq-hero__grid page-width">
+    <div class="ishraq-hero__content">
+      <p class="ishraq-hero__badge">
+        <span aria-hidden="true">🇲🇦</span>
+        {{ section.settings.badge | default: "مكملات موثوقة · صنعت للمغرب" }}
+      </p>
+      <h1>
+        {{ section.settings.heading_line_1 | default: "ثقة الصيدلية." }}
+        <br>
+        <span class="ishraq-hero__accent">{{ section.settings.heading_line_2 | default: "فبيتك." }}</span>
+      </h1>
+      <p class="ishraq-hero__lead">
+        {{ section.settings.lead | default: "إشراق — دار مغربية للمكملات الغذائية. تركيبة واضحة، إرشاد صادق، وطلب بالأداء عند الاستلام مع تأكيد قبل الإرسال." }}
+      </p>
+      <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary btn--lg">
+        {{ section.settings.cta_label | default: "شوفي منتجاتنا" }}
+      </a>
+      <div class="ishraq-hero__stats">
+        <div><strong>COD</strong><span>أداء عند الاستلام</span></div>
+        <div><strong>100%</strong><span>تأكيد قبل الإرسال</span></div>
+        <div><strong>MAD</strong><span>أسعار واضحة</span></div>
+      </div>
+    </div>
+
+    <div class="ishraq-hero__media">
+      <div class="ishraq-hero__image-wrap">
+        {% if section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'eager', alt: section.settings.image.alt | default: shop.name }}
+        {% else %}
+          <img src="{{ 'home-hero.jpg' | asset_url }}" alt="إشراق — مكملات غذائية" width="720" height="900" loading="eager">
+        {% endif %}
+        <div class="ishraq-hero__chips">
+          <span>✓ تركيبة واضحة</span>
+          <span>✓ توصيل المغرب</span>
+        </div>
+      </div>
+      <div class="ishraq-hero__float-card">
+        <p class="ishraq-hero__float-label">معيار إشراق</p>
+        <p>بلا وعود سحرية — وضوح قبل الوعد</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .ishraq-hero {
+    position: relative;
+    overflow: hidden;
+    color: var(--ivory-50);
+    background: var(--brand-950);
+    padding-block: 3rem 4rem;
+  }
+
+  .ishraq-hero__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, #d8b77a22, transparent 55%),
+      radial-gradient(ellipse at 90% 0%, #71314955, transparent 45%);
+  }
+
+  .ishraq-hero__grid {
+    position: relative;
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .ishraq-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--brass-300) 30%, transparent);
+    background: color-mix(in srgb, var(--white) 10%, transparent);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--brass-300);
+  }
+
+  .ishraq-hero h1 {
+    margin-top: 1.25rem;
+    font-size: clamp(2.2rem, 5vw, 3.25rem);
+    line-height: 1.15;
+  }
+
+  .ishraq-hero__accent {
+    color: var(--brass-300);
+  }
+
+  .ishraq-hero__lead {
+    margin-top: 1.25rem;
+    max-width: 32rem;
+    color: color-mix(in srgb, var(--ivory-50) 85%, transparent);
+  }
+
+  .ishraq-hero__grid .btn {
+    margin-top: 2rem;
+  }
+
+  .ishraq-hero__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    max-width: 24rem;
+    margin-top: 2rem;
+  }
+
+  .ishraq-hero__stats div {
+    padding: 0.75rem;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in srgb, var(--white) 15%, transparent);
+    background: color-mix(in srgb, var(--white) 10%, transparent);
+    text-align: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .ishraq-hero__stats strong {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 900;
+  }
+
+  .ishraq-hero__stats span {
+    display: block;
+    margin-top: 0.125rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--ivory-50) 85%, transparent);
+  }
+
+  .ishraq-hero__media {
+    position: relative;
+  }
+
+  .ishraq-hero__image-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.75rem;
+    border: 1px solid color-mix(in srgb, var(--white) 10%, transparent);
+    box-shadow: var(--shadow-hero);
+  }
+
+  .ishraq-hero__image-wrap img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .ishraq-hero__chips {
+    position: absolute;
+    inset-inline: 1rem;
+    bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .ishraq-hero__chips span {
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--white) 95%, transparent);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--brand-950);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .ishraq-hero__float-card {
+    display: none;
+    position: absolute;
+    bottom: -1rem;
+    inset-inline-start: -0.75rem;
+    max-width: 16rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    background: var(--white);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.25);
+  }
+
+  .ishraq-hero__float-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--brass-600);
+  }
+
+  .ishraq-hero__float-card p:last-child {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: var(--brand-950);
+  }
+
+  @media (min-width: 768px) {
+    .ishraq-hero {
+      padding-block: 5rem;
+    }
+
+    .ishraq-hero__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .ishraq-hero__float-card {
+      display: block;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ishraq Hero",
+  "settings": [
+    { "type": "text", "id": "badge", "label": "Badge text" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading line 1" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading accent" },
+    { "type": "textarea", "id": "lead", "label": "Lead paragraph" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "شوفي منتجاتنا" },
+    { "type": "url", "id": "cta_link", "label": "CTA link" },
+    { "type": "image_picker", "id": "image", "label": "Hero image" }
+  ],
+  "presets": [{ "name": "Ishraq Hero" }]
+}
+{% endschema %}

@@ -1,0 +1,96 @@
+<section class="ishraq-trust full-width">
+  <div class="ishraq-trust__grid page-width">
+    {% for block in section.blocks %}
+      <div class="ishraq-trust__item card" {{ block.shopify_attributes }}>
+        <span class="ishraq-trust__icon" aria-hidden="true">{{ block.settings.icon }}</span>
+        <div>
+          <h2>{{ block.settings.title }}</h2>
+          <p>{{ block.settings.body }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .ishraq-trust {
+    border-bottom: 1px solid color-mix(in srgb, var(--brand-800) 8%, transparent);
+    background: var(--white);
+    padding-block: 2rem;
+  }
+
+  .ishraq-trust__grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .ishraq-trust__item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .ishraq-trust__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--brand-800) 10%, transparent);
+    font-size: 1.125rem;
+  }
+
+  .ishraq-trust__item h2 {
+    font-size: 0.875rem;
+    color: var(--brand-950);
+  }
+
+  .ishraq-trust__item p {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--ink-600);
+  }
+
+  @media (min-width: 640px) {
+    .ishraq-trust__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ishraq-trust__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ishraq Trust Pillars",
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pillar",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon", "default": "✓" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ishraq Trust Pillars",
+      "blocks": [
+        { "type": "pillar", "settings": { "icon": "💳", "title": "الأداء عند الاستلام", "body": "ما كندفعوش Online — كتخلّصي غير ملي يوصل الطلب." } },
+        { "type": "pillar", "settings": { "icon": "📞", "title": "تأكيد قبل الإرسال", "body": "كنعيطو ليك باش نأكّدو الطلب والعنوان قبل ما يخرج." } },
+        { "type": "pillar", "settings": { "icon": "✓", "title": "تركيبة واضحة", "body": "المكوّن، الاستعمال، والتحذيرات — بلا غموض ولا وعود سحرية." } },
+        { "type": "pillar", "settings": { "icon": "🇲🇦", "title": "خدمة مغربية", "body": "من الطلب للتوصيل — تجربة محلية كتبان فالثقة." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,129 @@
+<footer class="ishraq-footer full-width">
+  <div class="ishraq-footer__grid page-width">
+    <div class="ishraq-footer__brand">
+      <a href="{{ routes.root_url }}">
+        <img
+          src="{{ 'logo-ishraq.png' | asset_url }}"
+          alt="{{ shop.name }}"
+          width="120"
+          height="40"
+          loading="lazy"
+        >
+      </a>
+      <p>دار مغربية للمكملات الموثوقة — ثقة الصيدلية لروتينك اليومي فالدار.</p>
+      <p class="ishraq-footer__tagline">تركيبة واضحة · تأكيد قبل الإرسال · أداء عند الاستلام</p>
+    </div>
+
+    <div>
+      <h2>تسوقي</h2>
+      <ul>
+        <li><a href="{{ routes.all_products_collection_url }}">كل المنتجات</a></li>
+        {% for product in collections.all.products limit: 4 %}
+          <li><a href="{{ product.url }}">{{ product.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div>
+      <h2>مساعدة</h2>
+      <ul>
+        {% if pages.faq %}
+          <li><a href="{{ pages.faq.url }}">أسئلة شائعة</a></li>
+        {% endif %}
+        {% if pages.shipping %}
+          <li><a href="{{ pages.shipping.url }}">التوصيل والإرجاع</a></li>
+        {% endif %}
+        {% if pages.contact %}
+          <li><a href="{{ pages.contact.url }}">تواصل معنا</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="ishraq-footer__legal page-width">
+    <p>© {{ 'now' | date: '%Y' }} إشراق · Ishraq · ishraq.ma</p>
+    <p>
+      المكملات الغذائية لا تحل محل نظام غذائي متنوع ولا تُستخدم لتشخيص أو علاج الأمراض.
+      راجعي صيدلي/طبيب عند الحاجة.
+    </p>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .ishraq-footer {
+    margin-top: 5rem;
+    border-top: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    background: var(--ivory-100);
+  }
+
+  .ishraq-footer__grid {
+    display: grid;
+    gap: 2.5rem;
+    padding-block: 3.5rem;
+  }
+
+  .ishraq-footer__brand img {
+    height: 2.5rem;
+    width: auto;
+  }
+
+  .ishraq-footer__brand p,
+  .ishraq-footer__tagline {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--ink-600);
+  }
+
+  .ishraq-footer h2 {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    color: var(--brand-950);
+  }
+
+  .ishraq-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ishraq-footer li + li {
+    margin-top: 0.5rem;
+  }
+
+  .ishraq-footer a {
+    font-size: 0.875rem;
+    color: var(--ink-950);
+    text-decoration: none;
+  }
+
+  .ishraq-footer a:hover {
+    color: var(--brand-800);
+  }
+
+  .ishraq-footer__legal {
+    border-top: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    padding-block: 1.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--ink-600);
+  }
+
+  .ishraq-footer__legal p + p {
+    margin-top: 0.5rem;
+    max-width: 42rem;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .ishraq-footer__grid {
+      grid-template-columns: 1.2fr 1fr 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": []
+}
+{% endschema %}

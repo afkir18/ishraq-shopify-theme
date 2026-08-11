@@ -11,6 +11,22 @@
   "sections": {
     "main": {
       "type": "product-image-landing",
+      "blocks": {
+        "hero_image": {
+          "type": "fullscreen_image",
+          "settings": {
+            "mobile_full_screen": true
+          }
+        },
+        "order_form": {
+          "type": "order_form",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "hero_image",
+        "order_form"
+      ],
       "settings": {
         "eyebrow": "أداء عند الاستلام · تأكيد قبل الإرسال",
         "submit_label": "أضيفي للسلة — الأداء عند الاستلام",

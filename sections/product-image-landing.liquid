@@ -1,107 +1,70 @@
 {% comment %}
-  Ishraq product landing — first image, order form, then remaining images.
+  Ishraq product landing — block-based image list + order form.
+  Add "Full screen image" blocks in the theme editor; drag to reorder.
 {% endcomment %}
 
 {% assign current_variant = product.selected_or_first_available_variant %}
 {% assign first_image = product.featured_image | default: product.images.first %}
 
 <div class="ishraq-product-landing full-width">
-  {% if first_image %}
-    <figure class="ishraq-product-landing__figure ishraq-product-landing__figure--bleed">
-      {{
-        first_image
-        | image_url: width: 1600
-        | image_tag: loading: 'eager', alt: product.title, class: 'ishraq-product-landing__image'
-      }}
-    </figure>
-  {% endif %}
+  {% if section.blocks.size > 0 %}
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'fullscreen_image' %}
+          {% render 'product-landing-fullscreen-image', block: block, alt_fallback: product.title %}
 
-  <div class="ishraq-product-landing__inner">
-    <section id="cod-order" class="ishraq-product-landing__order">
-      <div class="ishraq-product-landing__card">
-        <p class="ishraq-product-landing__eyebrow">
-          {{ section.settings.eyebrow | default: 'أداء عند الاستلام · تأكيد قبل الإرسال' }}
-        </p>
-        <h1 class="ishraq-product-landing__title">
-          {{ section.settings.title | default: product.title }}
-        </h1>
-        {% assign intro = section.settings.intro | default: product.description | strip_html | truncate: 220 %}
-        {% if intro != blank %}
-          <p class="ishraq-product-landing__intro">{{ intro }}</p>
-        {% endif %}
+        {% when 'order_form' %}
+          {% render 'product-landing-order-form', product: product, section: section, block: block %}
 
-        {% form 'product', product, class: 'ishraq-product-landing__form' %}
-          {% if product.variants.size > 1 %}
-            <fieldset class="ishraq-offers">
-              <legend>اختاري العرض</legend>
-              <div class="ishraq-offers__grid">
-                {% for variant in product.variants %}
-                  {% assign is_recommended = false %}
-                  {% if variant.title contains '3' or variant.title contains 'ثلاث' %}
-                    {% assign is_recommended = true %}
-                  {% endif %}
-                  <label class="ishraq-offer{% if variant == current_variant %} is-selected{% endif %}">
-                    <input
-                      type="radio"
-                      name="id"
-                      value="{{ variant.id }}"
-                      data-price="{{ variant.price | money }}"
-                      {% if variant == current_variant %}checked{% endif %}
-                      {% unless variant.available %}disabled{% endunless %}
-                    >
-                    <span class="ishraq-offer__title">{{ variant.title }}</span>
-                    <span class="ishraq-offer__price">{{ variant.price | money }}</span>
-                    {% if is_recommended %}
-                      <span class="ishraq-offer__badge">أفضل قيمة</span>
-                    {% endif %}
-                  </label>
-                {% endfor %}
-              </div>
-            </fieldset>
+        {% when 'product_image' %}
+          {% if block.settings.use_featured %}
+            {% assign block_image = product.featured_image | default: product.images.first %}
           {% else %}
-            <input type="hidden" name="id" value="{{ current_variant.id }}">
+            {% assign image_index = block.settings.image_index | minus: 1 %}
+            {% assign block_image = product.images[image_index] %}
           {% endif %}
-
-          <input type="hidden" name="quantity" value="1">
-
-          <div class="ishraq-product-landing__total">
-            <span>المجموع</span>
-            <strong data-product-total>{{ current_variant.price | money }}</strong>
-          </div>
-
-          <button
-            type="submit"
-            class="btn btn--primary btn--lg ishraq-product-landing__submit"
-            data-product-submit
-            {% unless current_variant.available %}disabled{% endunless %}
-          >
-            {% if current_variant.available %}
-              {{ section.settings.submit_label | default: 'أضيفي للسلة — الأداء عند الاستلام' }}
-            {% else %}
-              غير متوفر حالياً
+          {% if block_image %}
+            {% assign figure_class = 'ishraq-product-landing__figure ishraq-product-landing__figure--bleed' %}
+            {% if block.settings.mobile_full_screen %}
+              {% assign figure_class = figure_class | append: ' ishraq-product-landing__figure--fullscreen' %}
             {% endif %}
-          </button>
+            <figure class="{{ figure_class }}" {{ block.shopify_attributes }}>
+              {{
+                block_image
+                | image_url: width: 2000
+                | image_tag: loading: 'lazy', alt: product.title, class: 'ishraq-product-landing__image'
+              }}
+            </figure>
+          {% endif %}
+      {% endcase %}
+    {% endfor %}
+  {% else %}
+    {% comment %} Default layout when no blocks are configured {% endcomment %}
+    {% if first_image %}
+      <figure class="ishraq-product-landing__figure ishraq-product-landing__figure--bleed">
+        {{
+          first_image
+          | image_url: width: 1600
+          | image_tag: loading: 'eager', alt: product.title, class: 'ishraq-product-landing__image'
+        }}
+      </figure>
+    {% endif %}
 
-          <p class="ishraq-product-landing__trust">
-            {{ section.settings.trust_note | default: '✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب' }}
-          </p>
-        {% endform %}
+    {% render 'product-landing-order-form', product: product, section: section %}
+
+    {% if product.images.size > 1 %}
+      <div class="ishraq-product-landing__stack" aria-label="صور إضافية للمنتوج">
+        {% for image in product.images offset: 1 %}
+          <figure class="ishraq-product-landing__figure ishraq-product-landing__figure--bleed">
+            {{
+              image
+              | image_url: width: 1600
+              | image_tag: loading: 'lazy', alt: product.title, class: 'ishraq-product-landing__image'
+            }}
+          </figure>
+        {% endfor %}
       </div>
-    </section>
-  </div>
-
-  {% if product.images.size > 1 %}
-    <div class="ishraq-product-landing__stack" aria-label="صور إضافية للمنتوج">
-      {% for image in product.images offset: 1 %}
-        <figure class="ishraq-product-landing__figure ishraq-product-landing__figure--bleed">
-          {{
-            image
-            | image_url: width: 1600
-            | image_tag: loading: 'lazy', alt: product.title, class: 'ishraq-product-landing__image'
-          }}
-        </figure>
-      {% endfor %}
-    </div>
+    {% endif %}
   {% endif %}
 
   <div class="ishraq-product-landing__sticky">
@@ -173,6 +136,20 @@
       max-width: none;
       height: auto;
       border-radius: 0;
+    }
+
+    .ishraq-product-landing__figure--fullscreen {
+      min-height: 100svh;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .ishraq-product-landing__figure--fullscreen .ishraq-product-landing__image {
+      width: 100%;
+      min-height: 100svh;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
 
     .ishraq-product-landing__stack .ishraq-product-landing__figure--bleed + .ishraq-product-landing__figure--bleed {
@@ -351,6 +328,16 @@
     .ishraq-product-landing__card {
       padding: 2rem;
     }
+
+    .ishraq-product-landing__figure--fullscreen {
+      min-height: auto;
+    }
+
+    .ishraq-product-landing__figure--fullscreen .ishraq-product-landing__image {
+      min-height: auto;
+      height: auto;
+      object-fit: contain;
+    }
   }
 
   @media (max-width: 767px) {
@@ -366,6 +353,10 @@
   "tag": "section",
   "class": "product-image-landing-section",
   "settings": [
+    {
+      "type": "paragraph",
+      "content": "Add blocks below to build your landing page. Drag blocks to reorder. Use “Full screen image” to upload campaign images."
+    },
     {
       "type": "text",
       "id": "eyebrow",
@@ -401,6 +392,64 @@
       "id": "trust_note",
       "label": "Trust note",
       "default": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "fullscreen_image",
+      "name": "Full screen image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt text"
+        },
+        {
+          "type": "checkbox",
+          "id": "mobile_full_screen",
+          "label": "Full screen on mobile",
+          "info": "Image fills the entire phone screen (edge to edge, full height).",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "order_form",
+      "name": "Order form",
+      "limit": 1
+    },
+    {
+      "type": "product_image",
+      "name": "Product image",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "use_featured",
+          "label": "Use featured product image",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "image_index",
+          "label": "Product image number",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 1,
+          "info": "Used when featured image is off (1 = first image)."
+        },
+        {
+          "type": "checkbox",
+          "id": "mobile_full_screen",
+          "label": "Full screen on mobile",
+          "default": false
+        }
+      ]
     }
   ],
   "disabled_on": {

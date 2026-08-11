@@ -12,9 +12,33 @@
     "main": {
       "type": "product",
       "settings": {}
+    },
+    "178647748236b3853a": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_a3b49f8_PKe3zy": {
+          "type": "ai_gen_block_a3b49f8",
+          "settings": {
+            "image": "shopify://shop_images/01-_--_-Hero_6.webp",
+            "image_fit": "cover",
+            "aspect_ratio": "3 / 4",
+            "desktop_width_percent": 100,
+            "border_radius": 0,
+            "enable_link": false,
+            "image_link": "",
+            "hover_opacity": 1
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_a3b49f8_PKe3zy"
+      ],
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "178647748236b3853a"
   ]
 }

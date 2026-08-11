@@ -12,25 +12,35 @@
     "main": {
       "type": "product-image-gallery",
       "blocks": {
+        "fullscreen_image_zYmLXq": {
+          "type": "fullscreen_image",
+          "settings": {
+            "alt": "",
+            "mobile_full_screen": true
+          }
+        },
         "image_1": {
           "type": "fullscreen_image",
           "settings": {
+            "alt": "",
             "mobile_full_screen": true
           }
         },
         "image_2": {
           "type": "fullscreen_image",
           "settings": {
+            "alt": "",
             "mobile_full_screen": true
           }
         }
       },
       "block_order": [
+        "fullscreen_image_zYmLXq",
         "image_1",
         "image_2"
       ],
       "settings": {
-        "fallback_full_screen": true
+        "fallback_full_screen": false
       }
     }
   },

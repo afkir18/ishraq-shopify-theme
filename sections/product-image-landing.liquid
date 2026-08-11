@@ -1,0 +1,410 @@
+{% comment %}
+  Ishraq product landing — first image, order form, then remaining images.
+{% endcomment %}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign first_image = product.featured_image | default: product.images.first %}
+
+<div class="ishraq-product-landing full-width">
+  {% if first_image %}
+    <figure class="ishraq-product-landing__figure ishraq-product-landing__figure--bleed">
+      {{
+        first_image
+        | image_url: width: 1600
+        | image_tag: loading: 'eager', alt: product.title, class: 'ishraq-product-landing__image'
+      }}
+    </figure>
+  {% endif %}
+
+  <div class="ishraq-product-landing__inner">
+    <section id="cod-order" class="ishraq-product-landing__order">
+      <div class="ishraq-product-landing__card">
+        <p class="ishraq-product-landing__eyebrow">
+          {{ section.settings.eyebrow | default: 'أداء عند الاستلام · تأكيد قبل الإرسال' }}
+        </p>
+        <h1 class="ishraq-product-landing__title">
+          {{ section.settings.title | default: product.title }}
+        </h1>
+        {% assign intro = section.settings.intro | default: product.description | strip_html | truncate: 220 %}
+        {% if intro != blank %}
+          <p class="ishraq-product-landing__intro">{{ intro }}</p>
+        {% endif %}
+
+        {% form 'product', product, class: 'ishraq-product-landing__form' %}
+          {% if product.variants.size > 1 %}
+            <fieldset class="ishraq-offers">
+              <legend>اختاري العرض</legend>
+              <div class="ishraq-offers__grid">
+                {% for variant in product.variants %}
+                  {% assign is_recommended = false %}
+                  {% if variant.title contains '3' or variant.title contains 'ثلاث' %}
+                    {% assign is_recommended = true %}
+                  {% endif %}
+                  <label class="ishraq-offer{% if variant == current_variant %} is-selected{% endif %}">
+                    <input
+                      type="radio"
+                      name="id"
+                      value="{{ variant.id }}"
+                      data-price="{{ variant.price | money }}"
+                      {% if variant == current_variant %}checked{% endif %}
+                      {% unless variant.available %}disabled{% endunless %}
+                    >
+                    <span class="ishraq-offer__title">{{ variant.title }}</span>
+                    <span class="ishraq-offer__price">{{ variant.price | money }}</span>
+                    {% if is_recommended %}
+                      <span class="ishraq-offer__badge">أفضل قيمة</span>
+                    {% endif %}
+                  </label>
+                {% endfor %}
+              </div>
+            </fieldset>
+          {% else %}
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
+          {% endif %}
+
+          <input type="hidden" name="quantity" value="1">
+
+          <div class="ishraq-product-landing__total">
+            <span>المجموع</span>
+            <strong data-product-total>{{ current_variant.price | money }}</strong>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn--primary btn--lg ishraq-product-landing__submit"
+            data-product-submit
+            {% unless current_variant.available %}disabled{% endunless %}
+          >
+            {% if current_variant.available %}
+              {{ section.settings.submit_label | default: 'أضيفي للسلة — الأداء عند الاستلام' }}
+            {% else %}
+              غير متوفر حالياً
+            {% endif %}
+          </button>
+
+          <p class="ishraq-product-landing__trust">
+            {{ section.settings.trust_note | default: '✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب' }}
+          </p>
+        {% endform %}
+      </div>
+    </section>
+  </div>
+
+  {% if product.images.size > 1 %}
+    <div class="ishraq-product-landing__stack" aria-label="صور إضافية للمنتوج">
+      {% for image in product.images offset: 1 %}
+        <figure class="ishraq-product-landing__figure ishraq-product-landing__figure--bleed">
+          {{
+            image
+            | image_url: width: 1600
+            | image_tag: loading: 'lazy', alt: product.title, class: 'ishraq-product-landing__image'
+          }}
+        </figure>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="ishraq-product-landing__sticky">
+    <a href="#cod-order" class="btn btn--primary btn--lg ishraq-product-landing__sticky-btn">
+      {{ section.settings.sticky_label | default: 'كمّلي الطلب' }}
+    </a>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var form = document.querySelector('.ishraq-product-landing__form');
+    if (!form) return;
+
+    var totalEl = form.querySelector('[data-product-total]');
+
+    form.querySelectorAll('.ishraq-offer input[type="radio"]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        form.querySelectorAll('.ishraq-offer').forEach(function (label) {
+          label.classList.toggle('is-selected', label.contains(input) && input.checked);
+        });
+        if (totalEl && input.dataset.price) {
+          totalEl.textContent = input.dataset.price;
+        }
+      });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .ishraq-product-landing {
+    padding-bottom: 5.5rem;
+  }
+
+  .ishraq-product-landing__inner {
+    width: min(100%, 48rem);
+    margin-inline: auto;
+  }
+
+  .ishraq-product-landing__figure {
+    margin: 0;
+  }
+
+  .ishraq-product-landing__figure--bleed {
+    width: 100%;
+    max-width: none;
+  }
+
+  .ishraq-product-landing__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 767px) {
+    .ishraq-product-landing {
+      padding-inline: 0;
+      overflow-x: clip;
+    }
+
+    .ishraq-product-landing__figure--bleed {
+      width: 100vw;
+      max-width: 100vw;
+      margin-inline: calc(50% - 50vw);
+    }
+
+    .ishraq-product-landing__figure--bleed .ishraq-product-landing__image {
+      width: 100%;
+      max-width: none;
+      height: auto;
+      border-radius: 0;
+    }
+
+    .ishraq-product-landing__stack .ishraq-product-landing__figure--bleed + .ishraq-product-landing__figure--bleed {
+      margin-top: 0;
+    }
+  }
+
+  .ishraq-product-landing__order {
+    border-block: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    background: var(--ivory-100);
+    padding: 2.5rem 1rem;
+  }
+
+  .ishraq-product-landing__card {
+    max-width: 36rem;
+    margin-inline: auto;
+    padding: 1.25rem;
+    border-radius: 1.75rem;
+    border: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    background: var(--white);
+    box-shadow: 0 24px 60px -38px color-mix(in srgb, var(--brand-950) 45%, transparent);
+  }
+
+  .ishraq-product-landing__eyebrow {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: var(--brass-600);
+  }
+
+  .ishraq-product-landing__title {
+    margin: 0.5rem 0 0;
+    font-size: clamp(1.5rem, 4.5vw, 1.875rem);
+    font-weight: 900;
+    line-height: 1.35;
+    color: var(--brand-950);
+  }
+
+  .ishraq-product-landing__intro {
+    margin: 0.75rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--ink-600);
+    font-weight: 700;
+  }
+
+  .ishraq-product-landing__form {
+    margin-top: 1.5rem;
+  }
+
+  .ishraq-offers {
+    margin: 0;
+    border: 0;
+    padding: 0;
+  }
+
+  .ishraq-offers legend {
+    margin-bottom: 0.75rem;
+    font-weight: 900;
+    color: var(--brand-950);
+  }
+
+  .ishraq-offers__grid {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .ishraq-offer {
+    position: relative;
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 2px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    background: var(--white);
+    cursor: pointer;
+  }
+
+  .ishraq-offer input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ishraq-offer.is-selected {
+    border-color: var(--brand-800);
+    background: var(--ivory-50);
+  }
+
+  .ishraq-offer__title {
+    font-weight: 800;
+    color: var(--brand-950);
+  }
+
+  .ishraq-offer__price {
+    font-weight: 800;
+    color: var(--brand-800);
+  }
+
+  .ishraq-offer__badge {
+    position: absolute;
+    top: 0.75rem;
+    inset-inline-end: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background: var(--brass-600);
+    color: var(--white);
+    font-size: 0.6875rem;
+    font-weight: 800;
+  }
+
+  .ishraq-product-landing__total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.25rem;
+    padding: 0.875rem 1rem;
+    border-radius: 1rem;
+    background: var(--ivory-100);
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: var(--brand-950);
+  }
+
+  .ishraq-product-landing__total strong {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--brand-800);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ishraq-product-landing__submit {
+    width: 100%;
+    margin-top: 1.25rem;
+  }
+
+  .ishraq-product-landing__trust {
+    margin: 0.75rem 0 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.6;
+    text-align: center;
+    color: var(--ink-600);
+  }
+
+  .ishraq-product-landing__stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ishraq-product-landing__sticky {
+    display: none;
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 30;
+    padding: 0.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    background: color-mix(in srgb, var(--ivory-50) 95%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .ishraq-product-landing__sticky-btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-decoration: none;
+  }
+
+  @media (min-width: 768px) {
+    .ishraq-product-landing__order {
+      padding-inline: 2.5rem;
+      padding-block: 3.5rem;
+    }
+
+    .ishraq-product-landing__card {
+      padding: 2rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ishraq-product-landing__sticky {
+      display: block;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product image landing",
+  "tag": "section",
+  "class": "product-image-landing-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "أداء عند الاستلام · تأكيد قبل الإرسال"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title override",
+      "info": "Leave blank to use product title."
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro override",
+      "info": "Leave blank to use product description excerpt."
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit button",
+      "default": "أضيفي للسلة — الأداء عند الاستلام"
+    },
+    {
+      "type": "text",
+      "id": "sticky_label",
+      "label": "Mobile sticky button",
+      "default": "كمّلي الطلب"
+    },
+    {
+      "type": "text",
+      "id": "trust_note",
+      "label": "Trust note",
+      "default": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

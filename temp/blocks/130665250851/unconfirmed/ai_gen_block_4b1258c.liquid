@@ -1,6 +1,214 @@
+{% doc %}
+  @prompt
+    image with full screen in mobile
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-fullscreen-image-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ai-fullscreen-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .ai-fullscreen-image-img-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .ai-fullscreen-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100vh;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-fullscreen-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  .ai-fullscreen-image-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-fullscreen-image-wrapper-{{ ai_gen_id }} {
+      height: {{ block.settings.mobile_height }}vh;
+    }
+
+    .ai-fullscreen-image-img-{{ ai_gen_id }} {
+      height: 100%;
+      object-fit: {{ block.settings.mobile_image_fit }};
+    }
+
+    .ai-fullscreen-image-placeholder-{{ ai_gen_id }} {
+      height: {{ block.settings.mobile_height }}vh;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .ai-fullscreen-image-wrapper-{{ ai_gen_id }} {
+      width: {{ block.settings.desktop_width_percent }}%;
+      height: {{ block.settings.desktop_height }}vh;
+    }
+
+    .ai-fullscreen-image-img-{{ ai_gen_id }} {
+      height: 100%;
+      object-fit: {{ block.settings.desktop_image_fit }};
+    }
+
+    .ai-fullscreen-image-placeholder-{{ ai_gen_id }} {
+      height: {{ block.settings.desktop_height }}vh;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-fullscreen-image-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-fullscreen-image-wrapper-{{ ai_gen_id }}">
+    {% if block.settings.image %}
+      <img
+        src="{{ block.settings.image | image_url: width: 2000 }}"
+        srcset="{{ block.settings.image | image_url: width: 750 }} 750w,
+                {{ block.settings.image | image_url: width: 1500 }} 1500w,
+                {{ block.settings.image | image_url: width: 2000 }} 2000w"
+        sizes="100vw"
+        alt="{{ block.settings.image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.image.width }}"
+        height="{{ block.settings.image.height }}"
+        class="ai-fullscreen-image-img-{{ ai_gen_id }}"
+      >
+    {% else %}
+      <div class="ai-fullscreen-image-placeholder-{{ ai_gen_id }}">
+        {{ 'image' | placeholder_svg_tag }}
+        <div class="ai-fullscreen-image-empty-state-{{ ai_gen_id }}">
+          Add an image to display
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Fullscreen image",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        },
+        {
+          "value": "fill",
+          "label": "Fill"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "header",
+      "content": "Desktop settings"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Height",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 60
+    },
+    {
+      "type": "select",
+      "id": "desktop_image_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        },
+        {
+          "value": "fill",
+          "label": "Fill"
+        }
+      ],
+      "default": "cover"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fullscreen image"
+    }
+  ]
+}
 {% endschema %}

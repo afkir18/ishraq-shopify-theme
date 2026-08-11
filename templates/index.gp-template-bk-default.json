@@ -1,0 +1,185 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "order": [
+    "hero",
+    "trust_pillars",
+    "featured_products",
+    "trust_story",
+    "benefits",
+    "how_it_works",
+    "cta"
+  ],
+  "sections": {
+    "benefits": {
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3"
+      ],
+      "blocks": {
+        "tile_1": {
+          "settings": {
+            "fallback_asset": "home-benefits.jpg",
+            "title": "فوائد واضحة"
+          },
+          "type": "tile"
+        },
+        "tile_2": {
+          "settings": {
+            "fallback_asset": "home-how-to-use.jpg",
+            "title": "استعمال مفهوم"
+          },
+          "type": "tile"
+        },
+        "tile_3": {
+          "settings": {
+            "fallback_asset": "home-routine.jpg",
+            "title": "روتين يومي"
+          },
+          "type": "tile"
+        }
+      },
+      "settings": {},
+      "type": "ishraq-benefits"
+    },
+    "cta": {
+      "settings": {},
+      "type": "ishraq-cta"
+    },
+    "featured_products": {
+      "settings": {
+        "products_to_show": 2
+      },
+      "type": "ishraq-featured-products"
+    },
+    "hero": {
+      "settings": {},
+      "type": "ishraq-hero"
+    },
+    "how_it_works": {
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4"
+      ],
+      "blocks": {
+        "step_1": {
+          "settings": {
+            "body": "كولاجين بحري أو ماغنيسيوم غليسينات — حسب هدفك.",
+            "number": "01",
+            "title": "اختاري المنتوج"
+          },
+          "type": "step"
+        },
+        "step_2": {
+          "settings": {
+            "body": "الاسم، الهاتف، والعنوان. بلا بطاقة بنكية.",
+            "number": "02",
+            "title": "كمّلي الطلب"
+          },
+          "type": "step"
+        },
+        "step_3": {
+          "settings": {
+            "body": "فريق إشراق كيتواصل معاك قبل ما يتسيّط الطلب.",
+            "number": "03",
+            "title": "تأكيد بالهاتف"
+          },
+          "type": "step"
+        },
+        "step_4": {
+          "settings": {
+            "body": "توصيل لباب الدار والأداء عند الاستلام.",
+            "number": "04",
+            "title": "استلام ودفع"
+          },
+          "type": "step"
+        }
+      },
+      "settings": {},
+      "type": "ishraq-how-it-works"
+    },
+    "trust_pillars": {
+      "block_order": [
+        "pillar_1",
+        "pillar_2",
+        "pillar_3",
+        "pillar_4"
+      ],
+      "blocks": {
+        "pillar_1": {
+          "settings": {
+            "body": "ما كندفعوش Online — كتخلّصي غير ملي يوصل الطلب.",
+            "icon": "💳",
+            "title": "الأداء عند الاستلام"
+          },
+          "type": "pillar"
+        },
+        "pillar_2": {
+          "settings": {
+            "body": "كنعيطو ليك باش نأكّدو الطلب والعنوان قبل ما يخرج.",
+            "icon": "📞",
+            "title": "تأكيد قبل الإرسال"
+          },
+          "type": "pillar"
+        },
+        "pillar_3": {
+          "settings": {
+            "body": "المكوّن، الاستعمال، والتحذيرات — بلا غموض ولا وعود سحرية.",
+            "icon": "✓",
+            "title": "تركيبة واضحة"
+          },
+          "type": "pillar"
+        },
+        "pillar_4": {
+          "settings": {
+            "body": "من الطلب للتوصيل — تجربة محلية كتبان فالثقة.",
+            "icon": "🇲🇦",
+            "title": "خدمة مغربية"
+          },
+          "type": "pillar"
+        }
+      },
+      "settings": {},
+      "type": "ishraq-trust-pillars"
+    },
+    "trust_story": {
+      "block_order": [
+        "point_1",
+        "point_2",
+        "point_3"
+      ],
+      "blocks": {
+        "point_1": {
+          "settings": {
+            "text": "ملصق ومكوّن مفهومين قبل ما تشري."
+          },
+          "type": "point"
+        },
+        "point_2": {
+          "settings": {
+            "text": "ما كنعدّوش المكمل علاج — كنشرحو الروتين بصدق."
+          },
+          "type": "point"
+        },
+        "point_3": {
+          "settings": {
+            "text": "COD + تأكيد هاتفي — باش ما تبقيش فالشك."
+          },
+          "type": "point"
+        }
+      },
+      "settings": {},
+      "type": "ishraq-trust-story"
+    }
+  }
+}

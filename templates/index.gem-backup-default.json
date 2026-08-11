@@ -1,0 +1,185 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "ishraq-hero",
+      "settings": {}
+    },
+    "trust_pillars": {
+      "type": "ishraq-trust-pillars",
+      "blocks": {
+        "pillar_1": {
+          "type": "pillar",
+          "settings": {
+            "icon": "💳",
+            "title": "الأداء عند الاستلام",
+            "body": "ما كندفعوش Online — كتخلّصي غير ملي يوصل الطلب."
+          }
+        },
+        "pillar_2": {
+          "type": "pillar",
+          "settings": {
+            "icon": "📞",
+            "title": "تأكيد قبل الإرسال",
+            "body": "كنعيطو ليك باش نأكّدو الطلب والعنوان قبل ما يخرج."
+          }
+        },
+        "pillar_3": {
+          "type": "pillar",
+          "settings": {
+            "icon": "✓",
+            "title": "تركيبة واضحة",
+            "body": "المكوّن، الاستعمال، والتحذيرات — بلا غموض ولا وعود سحرية."
+          }
+        },
+        "pillar_4": {
+          "type": "pillar",
+          "settings": {
+            "icon": "🇲🇦",
+            "title": "خدمة مغربية",
+            "body": "من الطلب للتوصيل — تجربة محلية كتبان فالثقة."
+          }
+        }
+      },
+      "block_order": [
+        "pillar_1",
+        "pillar_2",
+        "pillar_3",
+        "pillar_4"
+      ],
+      "settings": {}
+    },
+    "featured_products": {
+      "type": "ishraq-featured-products",
+      "settings": {
+        "products_to_show": 2
+      }
+    },
+    "trust_story": {
+      "type": "ishraq-trust-story",
+      "blocks": {
+        "point_1": {
+          "type": "point",
+          "settings": {
+            "text": "ملصق ومكوّن مفهومين قبل ما تشري."
+          }
+        },
+        "point_2": {
+          "type": "point",
+          "settings": {
+            "text": "ما كنعدّوش المكمل علاج — كنشرحو الروتين بصدق."
+          }
+        },
+        "point_3": {
+          "type": "point",
+          "settings": {
+            "text": "COD + تأكيد هاتفي — باش ما تبقيش فالشك."
+          }
+        }
+      },
+      "block_order": [
+        "point_1",
+        "point_2",
+        "point_3"
+      ],
+      "settings": {}
+    },
+    "benefits": {
+      "type": "ishraq-benefits",
+      "blocks": {
+        "tile_1": {
+          "type": "tile",
+          "settings": {
+            "title": "فوائد واضحة",
+            "fallback_asset": "home-benefits.jpg"
+          }
+        },
+        "tile_2": {
+          "type": "tile",
+          "settings": {
+            "title": "استعمال مفهوم",
+            "fallback_asset": "home-how-to-use.jpg"
+          }
+        },
+        "tile_3": {
+          "type": "tile",
+          "settings": {
+            "title": "روتين يومي",
+            "fallback_asset": "home-routine.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3"
+      ],
+      "settings": {}
+    },
+    "how_it_works": {
+      "type": "ishraq-how-it-works",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "اختاري المنتوج",
+            "body": "كولاجين بحري أو ماغنيسيوم غليسينات — حسب هدفك."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "كمّلي الطلب",
+            "body": "الاسم، الهاتف، والعنوان. بلا بطاقة بنكية."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "تأكيد بالهاتف",
+            "body": "فريق إشراق كيتواصل معاك قبل ما يتسيّط الطلب."
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "number": "04",
+            "title": "استلام ودفع",
+            "body": "توصيل لباب الدار والأداء عند الاستلام."
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4"
+      ],
+      "settings": {}
+    },
+    "cta": {
+      "type": "ishraq-cta",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "trust_pillars",
+    "featured_products",
+    "trust_story",
+    "benefits",
+    "how_it_works",
+    "cta"
+  ]
+}

@@ -12,11 +12,11 @@
     "main": {
       "type": "product-image-landing",
       "settings": {
-        "eyebrow": "أداء عند الاستلام · تأكيد قبل الإرسال",
+        "eyebrow": "",
         "title": "",
         "intro": "",
-        "sticky_label": "كمّلي الطلب",
-        "trust_note": "✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب",
+        "sticky_label": "",
+        "trust_note": "",
         "spacing_before_form": 0,
         "spacing_after_form": 40,
         "block_gap": 0,

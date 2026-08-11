@@ -1,0 +1,20 @@
+{% comment %}
+  Full-width / full-screen image block for product landing.
+  Accepts: block, alt_fallback
+{% endcomment %}
+
+{% if block.settings.image != blank %}
+  {% assign image_alt = block.settings.alt | default: alt_fallback | default: '' %}
+  {% assign figure_class = 'ishraq-product-landing__figure ishraq-product-landing__figure--bleed' %}
+  {% if block.settings.mobile_full_screen %}
+    {% assign figure_class = figure_class | append: ' ishraq-product-landing__figure--fullscreen' %}
+  {% endif %}
+
+  <figure class="{{ figure_class }}" {{ block.shopify_attributes }}>
+    {{
+      block.settings.image
+      | image_url: width: 2000
+      | image_tag: loading: 'lazy', alt: image_alt, class: 'ishraq-product-landing__image'
+    }}
+  </figure>
+{% endif %}

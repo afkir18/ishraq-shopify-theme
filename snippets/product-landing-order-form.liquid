@@ -1,0 +1,80 @@
+{% comment %}
+  Order form card for product image landing.
+  Accepts: product, section
+{% endcomment %}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<div class="ishraq-product-landing__inner"{% if block %} {{ block.shopify_attributes }}{% endif %}>
+  <section id="cod-order" class="ishraq-product-landing__order">
+    <div class="ishraq-product-landing__card">
+      <p class="ishraq-product-landing__eyebrow">
+        {{ section.settings.eyebrow | default: 'أداء عند الاستلام · تأكيد قبل الإرسال' }}
+      </p>
+      <h1 class="ishraq-product-landing__title">
+        {{ section.settings.title | default: product.title }}
+      </h1>
+      {% assign intro = section.settings.intro | default: product.description | strip_html | truncate: 220 %}
+      {% if intro != blank %}
+        <p class="ishraq-product-landing__intro">{{ intro }}</p>
+      {% endif %}
+
+      {% form 'product', product, class: 'ishraq-product-landing__form' %}
+        {% if product.variants.size > 1 %}
+          <fieldset class="ishraq-offers">
+            <legend>اختاري العرض</legend>
+            <div class="ishraq-offers__grid">
+              {% for variant in product.variants %}
+                {% assign is_recommended = false %}
+                {% if variant.title contains '3' or variant.title contains 'ثلاث' %}
+                  {% assign is_recommended = true %}
+                {% endif %}
+                <label class="ishraq-offer{% if variant == current_variant %} is-selected{% endif %}">
+                  <input
+                    type="radio"
+                    name="id"
+                    value="{{ variant.id }}"
+                    data-price="{{ variant.price | money }}"
+                    {% if variant == current_variant %}checked{% endif %}
+                    {% unless variant.available %}disabled{% endunless %}
+                  >
+                  <span class="ishraq-offer__title">{{ variant.title }}</span>
+                  <span class="ishraq-offer__price">{{ variant.price | money }}</span>
+                  {% if is_recommended %}
+                    <span class="ishraq-offer__badge">أفضل قيمة</span>
+                  {% endif %}
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        {% else %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {% endif %}
+
+        <input type="hidden" name="quantity" value="1">
+
+        <div class="ishraq-product-landing__total">
+          <span>المجموع</span>
+          <strong data-product-total>{{ current_variant.price | money }}</strong>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn--primary btn--lg ishraq-product-landing__submit"
+          data-product-submit
+          {% unless current_variant.available %}disabled{% endunless %}
+        >
+          {% if current_variant.available %}
+            {{ section.settings.submit_label | default: 'أضيفي للسلة — الأداء عند الاستلام' }}
+          {% else %}
+            غير متوفر حالياً
+          {% endif %}
+        </button>
+
+        <p class="ishraq-product-landing__trust">
+          {{ section.settings.trust_note | default: '✓ تأكيد هاتفي قبل الإرسال · ✓ الدفع عند الاستلام · ✓ توصيل المغرب' }}
+        </p>
+      {% endform %}
+    </div>
+  </section>
+</div>

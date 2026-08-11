@@ -1,0 +1,40 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "product-image-gallery",
+      "blocks": {
+        "image_1": {
+          "type": "fullscreen_image",
+          "settings": {
+            "mobile_full_screen": true
+          }
+        },
+        "image_2": {
+          "type": "fullscreen_image",
+          "settings": {
+            "mobile_full_screen": true
+          }
+        }
+      },
+      "block_order": [
+        "image_1",
+        "image_2"
+      ],
+      "settings": {
+        "fallback_full_screen": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

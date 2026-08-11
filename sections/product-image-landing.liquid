@@ -17,25 +17,7 @@
           {% render 'product-landing-order-form', product: product, section: section, block: block %}
 
         {% when 'product_image' %}
-          {% if block.settings.use_featured %}
-            {% assign block_image = product.featured_image | default: product.images.first %}
-          {% else %}
-            {% assign image_index = block.settings.image_index | minus: 1 %}
-            {% assign block_image = product.images[image_index] %}
-          {% endif %}
-          {% if block_image %}
-            {% assign figure_class = 'ishraq-product-landing__figure ishraq-product-landing__figure--bleed' %}
-            {% if block.settings.mobile_full_screen %}
-              {% assign figure_class = figure_class | append: ' ishraq-product-landing__figure--fullscreen' %}
-            {% endif %}
-            <figure class="{{ figure_class }}" {{ block.shopify_attributes }}>
-              {{
-                block_image
-                | image_url: width: 2000
-                | image_tag: loading: 'lazy', alt: product.title, class: 'ishraq-product-landing__image'
-              }}
-            </figure>
-          {% endif %}
+          {% render 'product-landing-product-image', block: block, product: product %}
       {% endcase %}
     {% endfor %}
   {% else %}

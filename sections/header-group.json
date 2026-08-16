@@ -13,10 +13,15 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "menu": "main-menu",
+        "collection_skincare": "العناية-بالبشرة",
+        "collection_hair": "العناية-بالشعر",
+        "collection_supplements": "المكملات-الغذائية"
+      }
     }
   },
   "order": [
     "header"
-  ],
+  ]
 }

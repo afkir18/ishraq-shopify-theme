@@ -1,0 +1,26 @@
+{% comment %}
+  Outputs the product card click URL.
+  Collagen gummies → https://ishraq.ma/pages/collagen-gummies
+  Accepts: product
+{% endcomment %}
+
+{% if product.metafields.custom.external_url != blank %}
+  {{- product.metafields.custom.external_url.value | default: product.metafields.custom.external_url -}}
+{% else %}
+  {% assign handle_l = product.handle | downcase %}
+  {% assign title_l = product.title | downcase %}
+  {% if handle_l == 'collagen-gummies'
+    or handle_l contains 'collagen-gummi'
+    or handle_l contains 'gummies-collagen'
+    or title_l contains 'collagen gummies'
+    or title_l contains 'collagen gummi'
+    or product.title contains 'غوميز الكولاجين'
+    or product.title contains 'كولاجين غومي'
+    or product.title contains 'غومي كولاجين'
+    or product.title contains 'غوميز كولاجين'
+  %}
+    {{- 'https://ishraq.ma/pages/collagen-gummies' -}}
+  {% else %}
+    {{- product.url -}}
+  {% endif %}
+{% endif %}

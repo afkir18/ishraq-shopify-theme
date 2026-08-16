@@ -16,8 +16,10 @@
     {% endif %}
     {% if featured_collection != blank and featured_collection.products_count > 0 %}
       {% for product in featured_collection.products limit: section.settings.products_to_show %}
+        {% capture product_link %}{% render 'product-card-link', product: product %}{% endcapture %}
+        {% assign product_link = product_link | strip %}
         <article class="ishraq-product-card card">
-          <a href="{{ product.url }}" class="ishraq-product-card__media">
+          <a href="{{ product_link }}" class="ishraq-product-card__media">
             {% if product.featured_image %}
               {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: product.title }}
             {% endif %}
@@ -28,10 +30,10 @@
             {% elsif product.tags.size > 0 %}
               <span class="ishraq-product-card__badge">{{ product.tags.first }}</span>
             {% endif %}
-            <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
+            <h3><a href="{{ product_link }}">{{ product.title }}</a></h3>
             <p>{{ product.description | strip_html | truncate: 120 }}</p>
             <p class="ishraq-product-card__price">من {{ product.price_min | money }}</p>
-            <a href="{{ product.url }}" class="btn btn--secondary">شوفي التفاصيل</a>
+            <a href="{{ product_link }}" class="btn btn--secondary">شوفي التفاصيل</a>
           </div>
         </article>
       {% endfor %}

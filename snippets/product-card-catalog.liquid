@@ -21,8 +21,11 @@
   {% endif %}
 {% endif %}
 
+{% capture product_link %}{% render 'product-card-link', product: product %}{% endcapture %}
+{% assign product_link = product_link | strip %}
+
 <article class="ishraq-catalog-card{% unless product.available %} is-unavailable{% endunless %}">
-  <a href="{{ product.url }}" class="ishraq-catalog-card__link">
+  <a href="{{ product_link }}" class="ishraq-catalog-card__link">
     <div class="ishraq-catalog-card__media">
       {% if product.featured_image %}
         {{

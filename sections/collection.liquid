@@ -5,14 +5,11 @@
 <section class="ishraq-catalog page-width">
   {% if section.settings.heading != blank %}
     {% assign catalog_title = section.settings.heading %}
-  {% elsif collection.handle == 'all' %}
-    {% assign catalog_title = 'منتجاتنا' %}
   {% else %}
     {% assign catalog_title = collection.title %}
   {% endif %}
 
   <header class="ishraq-catalog__hero">
-    <p class="section-label">{{ section.settings.label | default: "منتجاتنا" }}</p>
     <h1>{{ catalog_title }}</h1>
     <p class="ishraq-catalog__intro">
       {{ section.settings.subheading | default: "اختاري منتوجك، شوفي السعر، وكمّلي الطلب بأداء عند الاستلام." }}
@@ -159,12 +156,6 @@
 {
   "name": "Collection",
   "settings": [
-    {
-      "type": "text",
-      "id": "label",
-      "label": "Section label",
-      "default": "منتجاتنا"
-    },
     {
       "type": "text",
       "id": "heading",

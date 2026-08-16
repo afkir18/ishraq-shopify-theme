@@ -5,12 +5,12 @@
         <img
           src="{{ 'logo-ishraq.png' | asset_url }}"
           alt="{{ shop.name }}"
-          width="120"
-          height="40"
+          width="128"
+          height="31"
           loading="lazy"
         >
       </a>
-      <p>دار مغربية للمكملات الموثوقة — ثقة الصيدلية لروتينك اليومي فالدار.</p>
+      <p>دار مغربية للعناية والجمال — بشرة، شعر، ومكملات موثوقة لروتينك اليومي فالدار.</p>
       <p class="ishraq-footer__tagline">تركيبة واضحة · تأكيد قبل الإرسال · أداء عند الاستلام</p>
     </div>
 
@@ -18,9 +18,9 @@
       <h2>تسوقي</h2>
       <ul>
         <li><a href="{{ routes.all_products_collection_url }}">كل المنتجات</a></li>
-        {% for product in collections.all.products limit: 4 %}
-          <li><a href="{{ product.url }}">{{ product.title }}</a></li>
-        {% endfor %}
+        <li><a href="{{ collections['skincare'].url | default: routes.all_products_collection_url }}">العناية بالبشرة</a></li>
+        <li><a href="{{ collections['hair-care'].url | default: routes.all_products_collection_url }}">العناية بالشعر</a></li>
+        <li><a href="{{ collections['supplements'].url | default: routes.all_products_collection_url }}">المكملات الغذائية</a></li>
       </ul>
     </div>
 
@@ -43,8 +43,7 @@
   <div class="ishraq-footer__legal page-width">
     <p>© {{ 'now' | date: '%Y' }} إشراق · Ishraq · ishraq.ma</p>
     <p>
-      المكملات الغذائية لا تحل محل نظام غذائي متنوع ولا تُستخدم لتشخيص أو علاج الأمراض.
-      راجعي صيدلي/طبيب عند الحاجة.
+      المكملات ومنتجات العناية لا تحل محل استشارة مختص. راجعي صيدلي/طبيب عند الحاجة.
     </p>
   </div>
 </footer>
@@ -63,7 +62,7 @@
   }
 
   .ishraq-footer__brand img {
-    height: 2.5rem;
+    height: 1.75rem;
     width: auto;
   }
 

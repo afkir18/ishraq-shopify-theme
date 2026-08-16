@@ -4,19 +4,26 @@
     <div class="ishraq-hero__content">
       <p class="ishraq-hero__badge">
         <span aria-hidden="true">🇲🇦</span>
-        {{ section.settings.badge | default: "مكملات موثوقة · صنعت للمغرب" }}
+        {{ section.settings.badge | default: "دار مغربية للعناية والجمال" }}
       </p>
       <h1>
-        {{ section.settings.heading_line_1 | default: "ثقة الصيدلية." }}
+        {{ section.settings.heading_line_1 | default: "جمالك. صحتك." }}
         <br>
-        <span class="ishraq-hero__accent">{{ section.settings.heading_line_2 | default: "فبيتك." }}</span>
+        <span class="ishraq-hero__accent">{{ section.settings.heading_line_2 | default: "من إشراق." }}</span>
       </h1>
       <p class="ishraq-hero__lead">
-        {{ section.settings.lead | default: "إشراق — دار مغربية للمكملات الغذائية. تركيبة واضحة، إرشاد صادق، وطلب بالأداء عند الاستلام مع تأكيد قبل الإرسال." }}
+        {{ section.settings.lead | default: "إشراق — دار مغربية للعناية بالبشرة، الشعر، والمكملات الغذائية. غوميز لذيذة، روتين يومي واضح، وتركيبة مفهومة — مع الأداء عند الاستلام وتأكيد قبل الإرسال." }}
       </p>
-      <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary btn--lg">
-        {{ section.settings.cta_label | default: "شوفي منتجاتنا" }}
-      </a>
+      <div class="ishraq-hero__actions">
+        <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary btn--lg">
+          {{ section.settings.cta_label | default: "شوفي منتجاتنا" }}
+        </a>
+        {% if section.settings.cta_secondary_label != blank %}
+          <a href="{{ section.settings.cta_secondary_link | default: '#ishraq-categories' }}" class="btn btn--ghost btn--lg">
+            {{ section.settings.cta_secondary_label }}
+          </a>
+        {% endif %}
+      </div>
       <div class="ishraq-hero__stats">
         <div><strong>COD</strong><span>أداء عند الاستلام</span></div>
         <div><strong>100%</strong><span>تأكيد قبل الإرسال</span></div>
@@ -29,16 +36,16 @@
         {% if section.settings.image != blank %}
           {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'eager', alt: section.settings.image.alt | default: shop.name }}
         {% else %}
-          <img src="{{ 'home-hero.jpg' | asset_url }}" alt="إشراق — مكملات غذائية" width="720" height="900" loading="eager">
+          <img src="{{ 'home-hero.jpg' | asset_url }}" alt="إشراق — عناية بالبشرة والشعر والمكملات" width="720" height="900" loading="eager">
         {% endif %}
         <div class="ishraq-hero__chips">
-          <span>✓ تركيبة واضحة</span>
-          <span>✓ توصيل المغرب</span>
+          <span>{{ section.settings.chip_1 | default: '✓ غوميز ومكملات' }}</span>
+          <span>{{ section.settings.chip_2 | default: '✓ بشرة وشعر' }}</span>
         </div>
       </div>
       <div class="ishraq-hero__float-card">
-        <p class="ishraq-hero__float-label">معيار إشراق</p>
-        <p>بلا وعود سحرية — وضوح قبل الوعد</p>
+        <p class="ishraq-hero__float-label">{{ section.settings.float_label | default: 'عالم إشراق' }}</p>
+        <p>{{ section.settings.float_text | default: 'بشرة · شعر · مكملات — بلا وعود سحرية' }}</p>
       </div>
     </div>
   </div>
@@ -97,8 +104,22 @@
     color: color-mix(in srgb, var(--ivory-50) 85%, transparent);
   }
 
-  .ishraq-hero__grid .btn {
+  .ishraq-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     margin-top: 2rem;
+  }
+
+  .ishraq-hero .btn--ghost {
+    border: 1px solid color-mix(in srgb, var(--white) 40%, transparent);
+    background: color-mix(in srgb, var(--white) 8%, transparent);
+    color: var(--ivory-50);
+  }
+
+  .ishraq-hero .btn--ghost:hover {
+    border-color: var(--white);
+    background: color-mix(in srgb, var(--white) 16%, transparent);
   }
 
   .ishraq-hero__stats {
@@ -221,6 +242,12 @@
     { "type": "textarea", "id": "lead", "label": "Lead paragraph" },
     { "type": "text", "id": "cta_label", "label": "CTA label", "default": "شوفي منتجاتنا" },
     { "type": "url", "id": "cta_link", "label": "CTA link" },
+    { "type": "text", "id": "cta_secondary_label", "label": "Secondary CTA label", "default": "شوفي الفئات" },
+    { "type": "url", "id": "cta_secondary_link", "label": "Secondary CTA link" },
+    { "type": "text", "id": "chip_1", "label": "Image chip 1" },
+    { "type": "text", "id": "chip_2", "label": "Image chip 2" },
+    { "type": "text", "id": "float_label", "label": "Float card label" },
+    { "type": "text", "id": "float_text", "label": "Float card text" },
     { "type": "image_picker", "id": "image", "label": "Hero image" }
   ],
   "presets": [{ "name": "Ishraq Hero" }]

@@ -19,16 +19,30 @@
       <img
         src="{{ 'logo-ishraq.png' | asset_url }}"
         alt="{{ shop.name }}"
-        width="120"
-        height="40"
+        width="128"
+        height="31"
         loading="eager"
       >
     </a>
 
     <nav class="ishraq-header__nav" aria-label="القائمة الرئيسية">
       {% assign contact_url = pages.contact.url | default: '/pages/contact' %}
+      {% assign skin_url = collections['skincare'].url | default: routes.all_products_collection_url %}
+      {% assign hair_url = collections['hair-care'].url | default: routes.all_products_collection_url %}
+      {% assign supplements_url = collections['supplements'].url | default: routes.all_products_collection_url %}
+      {% if section.settings.collection_skincare != blank %}
+        {% assign skin_url = section.settings.collection_skincare.url %}
+      {% endif %}
+      {% if section.settings.collection_hair != blank %}
+        {% assign hair_url = section.settings.collection_hair.url %}
+      {% endif %}
+      {% if section.settings.collection_supplements != blank %}
+        {% assign supplements_url = section.settings.collection_supplements.url %}
+      {% endif %}
       <a href="{{ routes.root_url }}" class="ishraq-header__link">الرئيسية</a>
-      <a href="{{ routes.all_products_collection_url }}" class="ishraq-header__link">منتجاتنا</a>
+      <a href="{{ skin_url }}" class="ishraq-header__link">العناية بالبشرة</a>
+      <a href="{{ hair_url }}" class="ishraq-header__link">العناية بالشعر</a>
+      <a href="{{ supplements_url }}" class="ishraq-header__link">المكملات الغذائية</a>
       <a href="{{ contact_url }}" class="ishraq-header__link">تواصل معنا</a>
     </nav>
 
@@ -50,7 +64,9 @@
 
   <nav id="mobile-nav" class="ishraq-header__mobile" hidden data-mobile-nav aria-label="القائمة الرئيسية">
     <a href="{{ routes.root_url }}">الرئيسية</a>
-    <a href="{{ routes.all_products_collection_url }}">منتجاتنا</a>
+    <a href="{{ skin_url }}">العناية بالبشرة</a>
+    <a href="{{ hair_url }}">العناية بالشعر</a>
+    <a href="{{ supplements_url }}">المكملات الغذائية</a>
     <a href="{{ contact_url }}">تواصل معنا</a>
   </nav>
 
@@ -265,7 +281,9 @@
   .ishraq-header__nav {
     display: none;
     align-items: center;
-    gap: 1.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem 1.5rem;
   }
 
   .ishraq-header__link {
@@ -280,8 +298,9 @@
   }
 
   .ishraq-header__logo img {
-    height: 2.5rem;
+    height: 1.75rem;
     width: auto;
+    max-width: 8rem;
   }
 
   @media (max-width: 420px) {
@@ -352,6 +371,25 @@
       "id": "menu",
       "label": "Menu",
       "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Categories"
+    },
+    {
+      "type": "collection",
+      "id": "collection_skincare",
+      "label": "العناية بالبشرة"
+    },
+    {
+      "type": "collection",
+      "id": "collection_hair",
+      "label": "العناية بالشعر"
+    },
+    {
+      "type": "collection",
+      "id": "collection_supplements",
+      "label": "المكملات الغذائية"
     }
   ]
 }

@@ -2,7 +2,18 @@
   "sections": {
     "hero": {
       "type": "ishraq-hero",
-      "settings": {}
+      "settings": {
+        "badge": "دار مغربية للعناية والجمال",
+        "heading_line_1": "جمالك. صحتك.",
+        "heading_line_2": "من إشراق.",
+        "lead": "إشراق — دار مغربية للعناية بالبشرة، الشعر، والمكملات الغذائية. غوميز لذيذة، روتين يومي واضح، وتركيبة مفهومة — مع الأداء عند الاستلام وتأكيد قبل الإرسال.",
+        "cta_label": "شوفي منتجاتنا",
+        "cta_secondary_label": "شوفي الفئات",
+        "chip_1": "✓ غوميز ومكملات",
+        "chip_2": "✓ بشرة وشعر",
+        "float_label": "عالم إشراق",
+        "float_text": "بشرة · شعر · مكملات — بلا وعود سحرية"
+      }
     },
     "trust_pillars": {
       "type": "ishraq-trust-pillars",
@@ -28,7 +39,7 @@
           "settings": {
             "icon": "✓",
             "title": "تركيبة واضحة",
-            "body": "المكوّن، الاستعمال، والتحذيرات — بلا غموض ولا وعود سحرية."
+            "body": "من البشرة للمكملات — المكوّن والاستعمال واضحين، بلا وعود سحرية."
           }
         },
         "pillar_4": {
@@ -42,20 +53,64 @@
       },
       "block_order": ["pillar_1", "pillar_2", "pillar_3", "pillar_4"]
     },
+    "categories": {
+      "type": "ishraq-categories",
+      "blocks": {
+        "cat_skin": {
+          "type": "category",
+          "settings": {
+            "title": "العناية بالبشرة",
+            "body": "ترطيب، نضارة، وروتين يومي واضح للبشرة.",
+            "handle": "skincare"
+          }
+        },
+        "cat_hair": {
+          "type": "category",
+          "settings": {
+            "title": "العناية بالشعر",
+            "body": "قوة ولمعان وروتين مفهوم من الجذور للأطراف.",
+            "handle": "hair-care"
+          }
+        },
+        "cat_supplements": {
+          "type": "category",
+          "settings": {
+            "title": "المكملات الغذائية",
+            "badge": "غوميز جديدة",
+            "body": "غوميز ومكملات بتركيبة مفهومة — بلا وعود سحرية.",
+            "handle": "supplements"
+          }
+        }
+      },
+      "block_order": ["cat_skin", "cat_hair", "cat_supplements"],
+      "settings": {
+        "label": "عالم إشراق",
+        "heading": "كل روتينك — من البشرة للشعر للمكملات",
+        "subheading": "إشراق دار واحدة لعدة احتياجات. اختاري الفئة اللي تناسبك اليوم — وغادي تلقاي غوميز، عناية يومية، ومكملات بتركيبة واضحة.",
+        "card_cta": "اكتشفي الفئة"
+      }
+    },
     "featured_products": {
       "type": "ishraq-featured-products",
       "settings": {
-        "products_to_show": 2
+        "heading": "غوميز، عناية، ومكملات مختارة",
+        "subheading": "منتجات كتخدم روتينك — بشرة، شعر، أو مكملات من الداخل. كل واحد بهدف واضح وبلا وعود سحرية.",
+        "products_to_show": 4
       }
     },
     "trust_story": {
       "type": "ishraq-trust-story",
       "blocks": {
         "point_1": { "type": "point", "settings": { "text": "ملصق ومكوّن مفهومين قبل ما تشري." } },
-        "point_2": { "type": "point", "settings": { "text": "ما كنعدّوش المكمل علاج — كنشرحو الروتين بصدق." } },
+        "point_2": { "type": "point", "settings": { "text": "عناية بالبشرة والشعر والمكملات — بصدق، بلا وعود سحرية." } },
         "point_3": { "type": "point", "settings": { "text": "COD + تأكيد هاتفي — باش ما تبقيش فالشك." } }
       },
-      "block_order": ["point_1", "point_2", "point_3"]
+      "block_order": ["point_1", "point_2", "point_3"],
+      "settings": {
+        "label": "علاش الثقة مهمة",
+        "heading": "فالمغرب، الثقة هي اللي كتبيع — مشي الوعود الفاضية.",
+        "lead": "إشراق مشي غير مكملات. دار للعناية اليومية — بشرة، شعر، ومكملات — بنفس الإحساس ديال الكاونتر المحترم. غوميز وتركيبة واضحة، بلا غموض."
+      }
     },
     "benefits": {
       "type": "ishraq-benefits",
@@ -64,12 +119,16 @@
         "tile_2": { "type": "tile", "settings": { "title": "استعمال مفهوم", "fallback_asset": "home-how-to-use.jpg" } },
         "tile_3": { "type": "tile", "settings": { "title": "روتين يومي", "fallback_asset": "home-routine.jpg" } }
       },
-      "block_order": ["tile_1", "tile_2", "tile_3"]
+      "block_order": ["tile_1", "tile_2", "tile_3"],
+      "settings": {
+        "label": "جودة كتبان",
+        "heading": "منتجات كتخدم الروتين ديالك — بشرة، شعر، ومكملات بتركيبة مفهومة"
+      }
     },
     "how_it_works": {
       "type": "ishraq-how-it-works",
       "blocks": {
-        "step_1": { "type": "step", "settings": { "number": "01", "title": "اختاري المنتوج", "body": "كولاجين بحري أو ماغنيسيوم غليسينات — حسب هدفك." } },
+        "step_1": { "type": "step", "settings": { "number": "01", "title": "اختاري الفئة", "body": "بشرة، شعر، أو مكملات وغوميز — حسب روتينك." } },
         "step_2": { "type": "step", "settings": { "number": "02", "title": "كمّلي الطلب", "body": "الاسم، الهاتف، والعنوان. بلا بطاقة بنكية." } },
         "step_3": { "type": "step", "settings": { "number": "03", "title": "تأكيد بالهاتف", "body": "فريق إشراق كيتواصل معاك قبل ما يتسيّط الطلب." } },
         "step_4": { "type": "step", "settings": { "number": "04", "title": "استلام ودفع", "body": "توصيل لباب الدار والأداء عند الاستلام." } }
@@ -78,12 +137,18 @@
     },
     "cta": {
       "type": "ishraq-cta",
-      "settings": {}
+      "settings": {
+        "label": "وعد إشراق للمغرب",
+        "heading": "منتوج يستاهل الثقة — مشي تجربة كتندمي عليها",
+        "subheading": "عناية بالبشرة · عناية بالشعر · مكملات وغوميز · أداء عند الاستلام",
+        "primary_label": "ابدئي الطلب الآن"
+      }
     }
   },
   "order": [
     "hero",
     "trust_pillars",
+    "categories",
     "featured_products",
     "trust_story",
     "benefits",

@@ -31,13 +31,13 @@
       {%- liquid
         if request.page_type == 'product'
           if 'static' == 'static'
-            if '7265998569507' == 'latest'
+            if '7267279568931' == 'latest'
               paginate collections.all.products by 100000
                 assign product = collections.all.products | sort: 'created_at' | reverse | first
               endpaginate
             else
-              assign product = all_products['كولاجين-بحري-محلّل']
-              assign productId = '7265998569507' | times: 1
+              assign product = all_products['collagen-gummies']
+              assign productId = '7267279568931' | times: 1
               if product == empty or product == null
                 paginate collections.all.products by 100000
                   for item in collections.all.products
@@ -50,13 +50,13 @@
             endif
           endif
         else
-          if '7265998569507' == 'latest'
+          if '7267279568931' == 'latest'
             paginate collections.all.products by 100000
               assign product = collections.all.products | sort: 'created_at'| reverse | first
             endpaginate
           else
-            assign product = all_products['كولاجين-بحري-محلّل']
-            assign productId = '7265998569507' | times: 1
+            assign product = all_products['collagen-gummies']
+            assign productId = '7267279568931' | times: 1
             if product == empty or product == null
               paginate collections.all.products by 100000
                 for item in collections.all.products
@@ -92,7 +92,7 @@
         data-id="guWt0Smn0V"
         
         
-        gp-context='{"productId": {{ product.id }}, "preSelectedOptionIds": [], "isSyncProduct": "true", "hasPreSelected": true, "variantSelected": {{ variant | json | escape }},  "inventory_management": {{ variant.inventory_management | json | escape  }}, "inventory_policy": {{ variant.inventory_policy | json | escape }}, "inventoryQuantity": {{ variant.inventory_quantity | default: 0 }}, "quantity": 1, "formId": "{{ product_form_id }}" }'
+        gp-context='{"productId": {{ product.id }}, "preSelectedOptionIds": [], "isSyncProduct": "true", "hasPreSelected": false, "variantSelected": {{ variant | json | escape }},  "inventory_management": {{ variant.inventory_management | json | escape  }}, "inventory_policy": {{ variant.inventory_policy | json | escape }}, "inventoryQuantity": {{ variant.inventory_quantity | default: 0 }}, "quantity": 1, "formId": "{{ product_form_id }}" }'
         gp-data='{"variantSelected": {{ variant | json | escape }}, "quantity": 1, "productUrl":{{ product.url | json | escape }}, "productHandle":{{ product.handle | json | escape }}, "collectionUrl": {{ collection.url | json | escape }}, "collectionHandle": {{ collection.handle | json | escape }}}'
       >
         <product-form class="product-form">

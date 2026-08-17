@@ -1,6 +1,7 @@
 {% comment %}
   Outputs the product card click URL.
   Collagen gummies → https://ishraq.ma/pages/collagen-gummies
+  Melatonin sleep → https://ishraq.ma/pages/melatonin-sleep
   Accepts: product
 {% endcomment %}
 
@@ -20,6 +21,15 @@
     or product.title contains 'غوميز كولاجين'
   %}
     {{- 'https://ishraq.ma/pages/collagen-gummies' -}}
+  {% elsif handle_l == 'melatonin-sleep'
+    or handle_l contains 'melatonin-sleep'
+    or handle_l contains 'sleep-melatonin'
+    or title_l contains 'melatonin sleep'
+    or title_l contains 'melatonin'
+    or product.title contains 'ميلاتونين'
+    or product.title contains 'الملاتونين'
+  %}
+    {{- 'https://ishraq.ma/pages/melatonin-sleep' -}}
   {% else %}
     {{- product.url -}}
   {% endif %}

@@ -1,0 +1,46 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "gp_section_633163685988140005": {
+      "settings": {
+        "checksum": "57d922001cc05d05014df73f9c016cf418ba8117a8af04842781b4cacd2bb63c_1_1_1_0__1",
+        "section_preload": "true"
+      },
+      "type": "gp-section-633163685988140005"
+    },
+    "gp_section_633163685988205541": {
+      "settings": {
+        "checksum": "0738cc1f23521c9bb9d6189573a4ebbb39b7440787d6c49c425e851326191d59_1_1_1_0__1",
+        "ggpEiVsD7o__srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/01-_--_-Hero_9.webp",
+        "section_preload": "true"
+      },
+      "type": "gp-section-633163685988205541"
+    },
+    "gp_section_633163685988271077": {
+      "settings": {
+        "checksum": "f9c5d053ad86f637ffff17f99a4a58718a76b4f07502c3382a9af014aa2b9b62_1_1_1_0__1",
+        "ggAFuIxJ3F6_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/03-_-_-How-to-Use_3.webp",
+        "ggPsQaZ5GAG_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/07-_-_-_-Final-CTA_2.webp",
+        "ggRwemuRNCg_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/05-_-_--_-_-Pain-Points_3.webp",
+        "ggZ7KkadMMh_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/02-_-_-Benefits_10.webp",
+        "gga4IucTOhq_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/04-_-_-_-BeforeAfter_3.webp",
+        "ggakKAe9k2u_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/06-_-_-Trust_3.webp"
+      },
+      "type": "gp-section-633163685988271077"
+    }
+  },
+  "order": [
+    "gp_section_633163685988205541",
+    "gp_section_633163685988140005",
+    "gp_section_633163685988271077"
+  ],
+  "layout": "theme.gempages.header"
+}

@@ -10,7 +10,6 @@
     assign whatsapp_url = whatsapp_url | append: '?text=' | append: whatsapp_message
   endif
   assign phone_display = section.settings.phone_display | default: section.settings.whatsapp_number
-  assign phone_href = section.settings.phone_number | default: section.settings.whatsapp_number | replace: ' ', '' | replace: '-', ''
 %}
 
 <section class="ishraq-contact full-width">
@@ -33,11 +32,6 @@
           </svg>
           {{ section.settings.whatsapp_label | default: 'راسلونا على واتساب' }}
         </a>
-        {% if phone_href != blank %}
-          <a href="tel:{{ phone_href }}" class="btn btn--secondary btn--lg">
-            {{ section.settings.phone_label | default: 'اتصلي بنا' }}
-          </a>
-        {% endif %}
       </div>
     {% endif %}
   </div>
@@ -462,12 +456,6 @@
     },
     {
       "type": "text",
-      "id": "phone_number",
-      "label": "Phone link (optional override)",
-      "info": "Used for tel: link. Defaults to WhatsApp number."
-    },
-    {
-      "type": "text",
       "id": "whatsapp_message",
       "label": "Prefilled WhatsApp message",
       "default": "مرحبا إشراق، عندي سؤال بخصوص الطلب."
@@ -483,12 +471,6 @@
       "id": "whatsapp_card_text",
       "label": "WhatsApp card text",
       "default": "رد سريع على أسئلة المنتجات والطلبات."
-    },
-    {
-      "type": "text",
-      "id": "phone_label",
-      "label": "Phone button label",
-      "default": "اتصلي بنا"
     },
     {
       "type": "checkbox",

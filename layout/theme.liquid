@@ -19,7 +19,7 @@
     {{ content_for_header }}
   </head>
 
-  <body{% if page.handle == 'contact' or page.handle == 'shipping' %} class="page-contact"{% endif %}>
+  <body{% if page.handle == 'contact' or page.handle == 'shipping' or page.template_suffix == 'shipping' %} class="page-contact"{% endif %}>
     {% sections 'header-group' %}
     <main id="main-content">
       {{ content_for_layout }}
@@ -27,7 +27,7 @@
     {% sections 'footer-group' %}
     {% render 'cart-drawer' %}
 
-    {% if page.handle == 'contact' or page.handle == 'shipping' %}
+    {% if page.handle == 'contact' or page.handle == 'shipping' or page.template_suffix == 'shipping' %}
       <style>
         .page-contact .es-popup-button,
         .page-contact .es-popup-button-product,

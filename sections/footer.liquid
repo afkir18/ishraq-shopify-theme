@@ -43,18 +43,18 @@
         {% assign faq_url = section.settings.faq_page.url %}
       {% endif %}
 
-      {% assign shipping_url = section.settings.shipping_page.url | default: pages.shipping.url %}
-      {% if shipping_url == blank %}
-        {% assign shipping_url = pages['shipping-returns'].url %}
-      {% endif %}
+      {% assign shipping_url = section.settings.shipping_page.url | default: pages['التوصيل-والإرجاع-1'].url %}
       {% if shipping_url == blank %}
         {% assign shipping_url = pages['التوصيل-والإرجاع'].url %}
       {% endif %}
       {% if shipping_url == blank %}
-        {% assign shipping_url = pages['التوصيل-والاسترجاع'].url %}
+        {% assign shipping_url = pages.shipping.url %}
       {% endif %}
       {% if shipping_url == blank %}
-        {% assign shipping_url = '/pages/shipping' %}
+        {% assign shipping_url = pages['shipping-returns'].url %}
+      {% endif %}
+      {% if shipping_url == blank %}
+        {% assign shipping_url = '/pages/التوصيل-والإرجاع-1' %}
       {% endif %}
 
       {% assign contact_url = section.settings.contact_page.url | default: pages.contact.url | default: '/pages/contact' %}

@@ -5,7 +5,7 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
 {% endcomment %}
 
-{% unless page.handle == 'contact' or page.handle == 'shipping' %}
+{% unless page.handle == 'contact' or page.handle == 'shipping' or page.template_suffix == 'shipping' %}
   <h1>{{ page.title }}</h1>
 {% endunless %}
 

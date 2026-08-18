@@ -8,18 +8,16 @@
  * ------------------------------------------------------------
  */
 {
-  "type": "footer",
-  "name": "t:general.footer",
   "sections": {
-    "footer": {
-      "type": "footer",
+    "main": {
+      "type": "ishraq-shipping",
       "settings": {
-        "collection_skincare": "العناية-بالبشرة",
-        "collection_hair": "العناية-بالشعر"
+        "whatsapp_number": "212708257675",
+        "whatsapp_message": "مرحبا إشراق، عندي سؤال على التوصيل أو الإرجاع."
       }
     }
   },
   "order": [
-    "footer"
+    "main"
   ]
 }

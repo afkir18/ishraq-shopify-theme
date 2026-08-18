@@ -19,12 +19,41 @@
     {{ content_for_header }}
   </head>
 
-  <body>
+  <body{% if page.handle == 'contact' or page.handle == 'shipping' %} class="page-contact"{% endif %}>
     {% sections 'header-group' %}
     <main id="main-content">
       {{ content_for_layout }}
     </main>
     {% sections 'footer-group' %}
     {% render 'cart-drawer' %}
+
+    {% if page.handle == 'contact' or page.handle == 'shipping' %}
+      <style>
+        .page-contact .es-popup-button,
+        .page-contact .es-popup-button-product,
+        .page-contact .es-popup-button-overwrite,
+        .page-contact [class*="es-popup-button"],
+        .page-contact [class*="es-sticky"],
+        .page-contact [id^="es-"] {
+          display: none !important;
+        }
+      </style>
+      <script>
+        (function () {
+          function hideEasySellOrderButton() {
+            document.querySelectorAll('a, button').forEach(function (el) {
+              var text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+              if (text.indexOf('اضغط هنا للطلب') !== -1) {
+                el.style.setProperty('display', 'none', 'important');
+              }
+            });
+          }
+          hideEasySellOrderButton();
+          document.addEventListener('DOMContentLoaded', hideEasySellOrderButton);
+          setTimeout(hideEasySellOrderButton, 800);
+          setTimeout(hideEasySellOrderButton, 2000);
+        })();
+      </script>
+    {% endif %}
   </body>
 </html>

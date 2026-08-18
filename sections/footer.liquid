@@ -16,26 +16,54 @@
 
     <div>
       <h2>تسوقي</h2>
+      {% assign skin_url = collections['العناية-بالبشرة'].url | default: collections['skincare'].url | default: routes.all_products_collection_url %}
+      {% assign hair_url = collections['العناية-بالشعر'].url | default: collections['hair-care'].url | default: routes.all_products_collection_url %}
+      {% assign supplements_url = collections['المكملات-الغذائية'].url | default: collections['supplements'].url | default: routes.all_products_collection_url %}
+      {% if section.settings.collection_skincare != blank %}
+        {% assign skin_url = section.settings.collection_skincare.url %}
+      {% endif %}
+      {% if section.settings.collection_hair != blank %}
+        {% assign hair_url = section.settings.collection_hair.url %}
+      {% endif %}
+      {% if section.settings.collection_supplements != blank %}
+        {% assign supplements_url = section.settings.collection_supplements.url %}
+      {% endif %}
       <ul>
         <li><a href="{{ routes.all_products_collection_url }}">كل المنتجات</a></li>
-        <li><a href="{{ collections['skincare'].url | default: routes.all_products_collection_url }}">العناية بالبشرة</a></li>
-        <li><a href="{{ collections['hair-care'].url | default: routes.all_products_collection_url }}">العناية بالشعر</a></li>
-        <li><a href="{{ collections['supplements'].url | default: routes.all_products_collection_url }}">المكملات الغذائية</a></li>
+        <li><a href="{{ skin_url }}">العناية بالبشرة</a></li>
+        <li><a href="{{ hair_url }}">العناية بالشعر</a></li>
+        <li><a href="{{ supplements_url }}">المكملات الغذائية</a></li>
       </ul>
     </div>
 
     <div>
       <h2>مساعدة</h2>
+      {% assign faq_url = pages.faq.url %}
+      {% if section.settings.faq_page != blank %}
+        {% assign faq_url = section.settings.faq_page.url %}
+      {% endif %}
+
+      {% assign shipping_url = section.settings.shipping_page.url | default: pages.shipping.url %}
+      {% if shipping_url == blank %}
+        {% assign shipping_url = pages['shipping-returns'].url %}
+      {% endif %}
+      {% if shipping_url == blank %}
+        {% assign shipping_url = pages['التوصيل-والإرجاع'].url %}
+      {% endif %}
+      {% if shipping_url == blank %}
+        {% assign shipping_url = pages['التوصيل-والاسترجاع'].url %}
+      {% endif %}
+      {% if shipping_url == blank %}
+        {% assign shipping_url = '/pages/shipping' %}
+      {% endif %}
+
+      {% assign contact_url = section.settings.contact_page.url | default: pages.contact.url | default: '/pages/contact' %}
       <ul>
-        {% if pages.faq %}
-          <li><a href="{{ pages.faq.url }}">أسئلة شائعة</a></li>
+        {% if faq_url != blank %}
+          <li><a href="{{ faq_url }}">أسئلة شائعة</a></li>
         {% endif %}
-        {% if pages.shipping %}
-          <li><a href="{{ pages.shipping.url }}">التوصيل والإرجاع</a></li>
-        {% endif %}
-        {% if pages.contact %}
-          <li><a href="{{ pages.contact.url }}">تواصل معنا</a></li>
-        {% endif %}
+        <li><a href="{{ shipping_url }}">التوصيل والإرجاع</a></li>
+        <li><a href="{{ contact_url }}">تواصل معنا</a></li>
       </ul>
     </div>
   </div>
@@ -123,6 +151,40 @@
 {% schema %}
 {
   "name": "Footer",
-  "settings": []
+  "settings": [
+    {
+      "type": "header",
+      "content": "Categories"
+    },
+    {
+      "type": "collection",
+      "id": "collection_skincare",
+      "label": "العناية بالبشرة"
+    },
+    {
+      "type": "collection",
+      "id": "collection_hair",
+      "label": "العناية بالشعر"
+    },
+    {
+      "type": "header",
+      "content": "Help pages"
+    },
+    {
+      "type": "page",
+      "id": "shipping_page",
+      "label": "التوصيل والإرجاع"
+    },
+    {
+      "type": "page",
+      "id": "contact_page",
+      "label": "تواصل معنا"
+    },
+    {
+      "type": "page",
+      "id": "faq_page",
+      "label": "أسئلة شائعة"
+    }
+  ]
 }
 {% endschema %}

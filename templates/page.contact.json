@@ -1,0 +1,27 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "ishraq-contact",
+      "settings": {
+        "whatsapp_number": "212708257675",
+        "phone_display": "+212 7 08 25 76 75",
+        "whatsapp_message": "مرحبا إشراق، عندي سؤال بخصوص الطلب.",
+        "email": "contact@ishraq.ma",
+        "show_form": false,
+        "show_floating_whatsapp": false
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

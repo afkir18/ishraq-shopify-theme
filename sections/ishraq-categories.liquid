@@ -12,8 +12,18 @@
       {% assign cat_url = routes.all_products_collection_url %}
       {% if block.settings.collection != blank %}
         {% assign cat_url = block.settings.collection.url %}
-      {% elsif block.settings.handle != blank and collections[block.settings.handle] != blank %}
-        {% assign cat_url = collections[block.settings.handle].url %}
+      {% elsif block.settings.handle != blank %}
+        {% assign cat_handle = block.settings.handle %}
+        {% if cat_handle == 'skincare' %}
+          {% assign cat_handle = 'العناية-بالبشرة' %}
+        {% elsif cat_handle == 'hair-care' %}
+          {% assign cat_handle = 'العناية-بالشعر' %}
+        {% elsif cat_handle == 'supplements' %}
+          {% assign cat_handle = 'المكملات-الغذائية' %}
+        {% endif %}
+        {% if collections[cat_handle] != blank %}
+          {% assign cat_url = collections[cat_handle].url %}
+        {% endif %}
       {% endif %}
       <a
         href="{{ cat_url }}"
@@ -202,7 +212,7 @@
         { "type": "text", "id": "title", "label": "Title" },
         { "type": "textarea", "id": "body", "label": "Description" },
         { "type": "text", "id": "badge", "label": "Badge" },
-        { "type": "text", "id": "handle", "label": "Collection handle", "info": "Example: skincare, hair-care, supplements" },
+        { "type": "text", "id": "handle", "label": "Collection handle", "info": "Example: العناية-بالبشرة" },
         { "type": "collection", "id": "collection", "label": "Collection" },
         { "type": "image_picker", "id": "image", "label": "Image" }
       ]

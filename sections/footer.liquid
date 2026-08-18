@@ -38,11 +38,6 @@
 
     <div>
       <h2>مساعدة</h2>
-      {% assign faq_url = pages.faq.url %}
-      {% if section.settings.faq_page != blank %}
-        {% assign faq_url = section.settings.faq_page.url %}
-      {% endif %}
-
       {% assign shipping_url = section.settings.shipping_page.url | default: pages['التوصيل-والإرجاع-1'].url %}
       {% if shipping_url == blank %}
         {% assign shipping_url = pages['التوصيل-والإرجاع'].url %}
@@ -57,12 +52,18 @@
         {% assign shipping_url = '/pages/التوصيل-والإرجاع-1' %}
       {% endif %}
 
+      {% assign faq_url = section.settings.faq_page.url | default: pages.faq.url %}
+      {% if faq_url == blank %}
+        {% assign faq_url = pages['أسئلة-شائعة'].url %}
+      {% endif %}
+      {% if faq_url == blank %}
+        {% assign faq_url = '/pages/faq' %}
+      {% endif %}
+
       {% assign contact_url = section.settings.contact_page.url | default: pages.contact.url | default: '/pages/contact' %}
       <ul>
-        {% if faq_url != blank %}
-          <li><a href="{{ faq_url }}">أسئلة شائعة</a></li>
-        {% endif %}
         <li><a href="{{ shipping_url }}">التوصيل والإرجاع</a></li>
+        <li><a href="{{ faq_url }}">أسئلة شائعة</a></li>
         <li><a href="{{ contact_url }}">تواصل معنا</a></li>
       </ul>
     </div>
@@ -177,13 +178,13 @@
     },
     {
       "type": "page",
-      "id": "contact_page",
-      "label": "تواصل معنا"
+      "id": "faq_page",
+      "label": "أسئلة شائعة"
     },
     {
       "type": "page",
-      "id": "faq_page",
-      "label": "أسئلة شائعة"
+      "id": "contact_page",
+      "label": "تواصل معنا"
     }
   ]
 }

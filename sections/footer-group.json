@@ -16,8 +16,8 @@
       "settings": {
         "collection_skincare": "العناية-بالبشرة",
         "collection_hair": "العناية-بالشعر",
-        "collection_supplements": "المكملات-الغذائية",
-        "shipping_page": "التوصيل-والإرجاع-1"
+        "shipping_page": "التوصيل-والإرجاع-1",
+        "faq_page": "faq"
       }
     }
   },

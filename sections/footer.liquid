@@ -52,12 +52,12 @@
         {% assign shipping_url = '/pages/التوصيل-والإرجاع-1' %}
       {% endif %}
 
-      {% assign faq_url = section.settings.faq_page.url | default: pages.faq.url %}
+      {% assign faq_url = section.settings.faq_page.url | default: pages['أسئلة-شائعة'].url %}
       {% if faq_url == blank %}
-        {% assign faq_url = pages['أسئلة-شائعة'].url %}
+        {% assign faq_url = pages.faq.url %}
       {% endif %}
       {% if faq_url == blank %}
-        {% assign faq_url = '/pages/faq' %}
+        {% assign faq_url = '/pages/أسئلة-شائعة' %}
       {% endif %}
 
       {% assign contact_url = section.settings.contact_page.url | default: pages.contact.url | default: '/pages/contact' %}

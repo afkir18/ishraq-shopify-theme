@@ -16,7 +16,7 @@
           style="--w:100%;--w-tablet:calc(var(--g-ct-w, 100%) + 2 * var(--g-ct-p, 15px));--w-mobile:calc(var(--g-ct-w, 100%) + 2 * var(--g-ct-p, 15px));--pl:none;--pl-tablet:none;--pl-mobile:none;--pr:none;--pr-tablet:none;--pr-mobile:none"
         >
           
-    <gp-row gp-data='{"background":{"desktop":{"type":"color","color":"#0D0805","image":{"src":"","width":0,"height":0},"size":"cover","position":{"x":50,"y":50},"repeat":"no-repeat","attachment":"scroll","preload":false},"mobile":{"type":"color","color":"#0D0805","image":{"src":"","width":0,"height":0},"size":"cover","position":{"x":50,"y":50},"repeat":"no-repeat","attachment":"scroll","preload":false}},"uid":"gz6MNrrfjN"}' data-id="gz6MNrrfjN" id="gz6MNrrfjN" data-same-height-subgrid-container class="gz6MNrrfjN gp-relative gp-mx-auto gp-mb-0 gp-grid gp-max-w-full gp-transition-colors gp-duration-200 gp-ease-in-out [&_*]:gp-max-w-full gp-grid-rows-[1fr]" style="--blockPadding:base;--mb:0px;--pt:10px;--pl:10px;--pb:10px;--pr:10px;--mb-tablet:0px;--pt-tablet:10px;--pl-tablet:10px;--pb-tablet:10px;--pr-tablet:10px;--mb-mobile:0px;--pt-mobile:10px;--pl-mobile:10px;--pb-mobile:10px;--pr-mobile:10px;--d:grid;--d-tablet:grid;--d-mobile:grid;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--op:100%;--cg:16px;--rg:0px;--gtc:minmax(0, 12fr);--w:100%;--bgc:#0D0805;--bgc-mobile:#0D0805;--bgi:url();--bgi-mobile:url();--bgp:50% 50%;--bgp-mobile:50% 50%;--bgs:cover;--bgs-mobile:cover;--bgr:no-repeat;--bgr-mobile:no-repeat;--bga:scroll;--bga-mobile:scroll;--pc:start">
+    <gp-row gp-data='{"background":{"desktop":{"type":"color","color":"#0D0805","image":{"src":"","width":0,"height":0},"size":"cover","position":{"x":50,"y":50},"repeat":"no-repeat","attachment":"scroll","preload":false},"mobile":{"type":"color","color":"#0D0805","image":{"src":"","width":0,"height":0},"size":"cover","position":{"x":50,"y":50},"repeat":"no-repeat","attachment":"scroll","preload":false}},"uid":"gz6MNrrfjN"}' data-id="gz6MNrrfjN" id="gz6MNrrfjN" data-same-height-subgrid-container class="gz6MNrrfjN gp-relative gp-mx-auto gp-mb-0 gp-grid gp-max-w-full gp-transition-colors gp-duration-200 gp-ease-in-out [&_*]:gp-max-w-full gp-grid-rows-[1fr]" style="--blockPadding:base;--mb:0px;--pt:10px;--pl:20px;--pb:10px;--pr:20px;--mb-tablet:0px;--pt-tablet:10px;--pl-tablet:20px;--pb-tablet:10px;--pr-tablet:20px;--mb-mobile:0px;--pt-mobile:10px;--pl-mobile:20px;--pb-mobile:10px;--pr-mobile:20px;--d:grid;--d-tablet:grid;--d-mobile:grid;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--op:100%;--cg:16px;--rg:0px;--gtc:minmax(0, 12fr);--w:100%;--bgc:#0D0805;--bgc-mobile:#0D0805;--bgi:url();--bgi-mobile:url();--bgp:50% 50%;--bgp-mobile:50% 50%;--bgs:cover;--bgs-mobile:cover;--bgr:no-repeat;--bgr-mobile:no-repeat;--bga:scroll;--bga-mobile:scroll;--pc:start">
       
 
       <div
@@ -31,13 +31,13 @@
       {%- liquid
         if request.page_type == 'product'
           if 'static' == 'static'
-            if '7267279568931' == 'latest'
+            if '7265998569507' == 'latest'
               paginate collections.all.products by 100000
                 assign product = collections.all.products | sort: 'created_at' | reverse | first
               endpaginate
             else
-              assign product = all_products['collagen-gummies']
-              assign productId = '7267279568931' | times: 1
+              assign product = all_products['كولاجين-بحري-محلّل']
+              assign productId = '7265998569507' | times: 1
               if product == empty or product == null
                 paginate collections.all.products by 100000
                   for item in collections.all.products
@@ -50,13 +50,13 @@
             endif
           endif
         else
-          if '7267279568931' == 'latest'
+          if '7265998569507' == 'latest'
             paginate collections.all.products by 100000
               assign product = collections.all.products | sort: 'created_at'| reverse | first
             endpaginate
           else
-            assign product = all_products['collagen-gummies']
-            assign productId = '7267279568931' | times: 1
+            assign product = all_products['كولاجين-بحري-محلّل']
+            assign productId = '7265998569507' | times: 1
             if product == empty or product == null
               paginate collections.all.products by 100000
                 for item in collections.all.products
@@ -73,7 +73,7 @@
     
     {% if product != empty and product != null %}
       
-      {%- assign initVariantId =  -%}
+      {%- assign initVariantId = blank -%}
       {%- assign product_form_id = 'product-form-' | append: "guWt0Smn0V" -%}
       {%- assign variant = product.selected_or_first_available_variant -%}
       {%- assign productSelectedVariant = product.selected_or_first_available_variant -%}
@@ -92,7 +92,7 @@
         data-id="guWt0Smn0V"
         
         
-        gp-context='{"productId": {{ product.id }}, "preSelectedOptionIds": [], "isSyncProduct": "true", "hasPreSelected": false, "variantSelected": {{ variant | json | escape }},  "inventory_management": {{ variant.inventory_management | json | escape  }}, "inventory_policy": {{ variant.inventory_policy | json | escape }}, "inventoryQuantity": {{ variant.inventory_quantity | default: 0 }}, "quantity": 1, "formId": "{{ product_form_id }}" }'
+        gp-context='{"productId": {{ product.id }}, "preSelectedOptionIds": [], "isSyncProduct": "true", "hasPreSelected": true, "variantSelected": {{ variant | json | escape }},  "inventory_management": {{ variant.inventory_management | json | escape  }}, "inventory_policy": {{ variant.inventory_policy | json | escape }}, "inventoryQuantity": {{ variant.inventory_quantity | default: 0 }}, "quantity": 1, "formId": "{{ product_form_id }}" }'
         gp-data='{"variantSelected": {{ variant | json | escape }}, "quantity": 1, "productUrl":{{ product.url | json | escape }}, "productHandle":{{ product.handle | json | escape }}, "collectionUrl": {{ collection.url | json | escape }}, "collectionHandle": {{ collection.handle | json | escape }}}'
       >
         <product-form class="product-form">

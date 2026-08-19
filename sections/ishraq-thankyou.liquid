@@ -1,0 +1,343 @@
+{% comment %}
+  Ishraq thank-you page — shown after COD order (EasySell / FormBoost redirect).
+  Dynamic fields filled via URL params or sessionStorage (ishraq_order).
+{% endcomment %}
+
+<section class="ishraq-thankyou full-width" dir="rtl">
+  <div class="ishraq-thankyou__wrap page-width">
+    <div class="ishraq-thankyou__card card">
+      <div class="ishraq-thankyou__icon" aria-hidden="true">✓</div>
+
+      <h1 class="ishraq-thankyou__title">
+        {{ section.settings.greeting_prefix | default: 'شكرا !' }}
+        <span id="ishraq-thankyou-name" data-fallback="{{ section.settings.name_fallback | default: 'عزيزتي' }}">{{ section.settings.name_fallback | default: 'عزيزتي' }}</span>
+        🎉
+      </h1>
+
+      <p class="ishraq-thankyou__subtitle">
+        {{ section.settings.subtitle | default: 'توصلنا بطلبك' }}
+      </p>
+
+      <p class="ishraq-thankyou__status">
+        {{ section.settings.status_line | default: 'طلبك قيد المراجعة حاليا و يمر بالخطوات التالية' }}
+      </p>
+
+      <ol class="ishraq-thankyou__steps">
+        <li>
+          <span class="ishraq-thankyou__step-num">١</span>
+          <span>{{ section.settings.step_1 | default: 'أولا : سنتصل بك هاتفيا من أجل تآكيد طلبك' }}</span>
+        </li>
+        <li>
+          <span class="ishraq-thankyou__step-num">٢</span>
+          <span>{{ section.settings.step_2 | default: 'ثانيا : سنقوم بإرسال طلبك إلى العنوان الدي قمت بتعبئته' }}</span>
+        </li>
+        <li>
+          <span class="ishraq-thankyou__step-num">٣</span>
+          <span>{{ section.settings.step_3 | default: 'ثالثا : ستتوصل بطلبك من طرف أحد موزعينا' }}</span>
+        </li>
+      </ol>
+
+      <div class="ishraq-thankyou__summary">
+        <h2>{{ section.settings.summary_title | default: 'ملخص طلبك 🛍️' }}</h2>
+        <p class="ishraq-thankyou__product" id="ishraq-thankyou-product" hidden></p>
+        <p class="ishraq-thankyou__qty-line">
+          <span id="ishraq-thankyou-qty" data-fallback="1">1</span>
+        </p>
+        <p class="ishraq-thankyou__total">
+          {{ section.settings.total_label | default: 'المجموع عند الاستلام :' }}
+          <strong id="ishraq-thankyou-total" data-fallback="">—</strong>
+        </p>
+      </div>
+
+      {% if section.settings.show_home_cta %}
+        <a href="{{ routes.root_url }}" class="btn btn--primary btn--lg ishraq-thankyou__cta">
+          {{ section.settings.home_label | default: 'متابعة التسوق' }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    function qp(key) {
+      try {
+        return new URLSearchParams(window.location.search).get(key);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function firstNonEmpty() {
+      for (var i = 0; i < arguments.length; i++) {
+        var v = arguments[i];
+        if (v != null && String(v).trim() !== '') return String(v).trim();
+      }
+      return '';
+    }
+
+    var stored = null;
+    try {
+      stored = JSON.parse(sessionStorage.getItem('ishraq_order') || 'null');
+    } catch (e) {}
+
+    var name = firstNonEmpty(
+      qp('first_name'),
+      qp('name'),
+      qp('customer_name'),
+      stored && stored.first_name,
+      stored && stored.name
+    );
+
+    var total = firstNonEmpty(
+      qp('total'),
+      qp('order_total'),
+      stored && stored.total
+    );
+
+    var qty = firstNonEmpty(
+      qp('quantity'),
+      qp('qty'),
+      stored && stored.quantity
+    );
+
+    var product = firstNonEmpty(
+      qp('product'),
+      qp('product_name'),
+      stored && stored.product
+    );
+
+    var nameEl = document.getElementById('ishraq-thankyou-name');
+    var totalEl = document.getElementById('ishraq-thankyou-total');
+    var qtyEl = document.getElementById('ishraq-thankyou-qty');
+    var productEl = document.getElementById('ishraq-thankyou-product');
+
+    if (nameEl && name) nameEl.textContent = name;
+    if (totalEl && total) {
+      totalEl.textContent = total.indexOf('MAD') !== -1 || total.indexOf('dh') !== -1 || total.indexOf('درهم') !== -1
+        ? total
+        : total + ' MAD';
+    }
+    if (qtyEl && qty) qtyEl.textContent = qty;
+    if (productEl && product) {
+      productEl.textContent = product;
+      productEl.hidden = false;
+    }
+  })();
+</script>
+
+{% stylesheet %}
+  .ishraq-thankyou {
+    padding-block: 2.5rem 4rem;
+    min-height: 60vh;
+    background: linear-gradient(180deg, var(--ivory-50) 0%, var(--ivory-100) 100%);
+  }
+
+  .ishraq-thankyou__wrap {
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+
+  .ishraq-thankyou__card {
+    padding: 2rem 1.75rem 2.25rem;
+    text-align: center;
+    border-radius: 1.25rem;
+    box-shadow: 0 12px 40px -12px color-mix(in srgb, var(--brand-950) 18%, transparent);
+  }
+
+  .ishraq-thankyou__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, #2e7d32 12%, white);
+    color: #2e7d32;
+    font-size: 1.5rem;
+    font-weight: 900;
+  }
+
+  .ishraq-thankyou__title {
+    font-size: clamp(1.5rem, 4.5vw, 1.875rem);
+    font-weight: 900;
+    color: var(--brand-950);
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+  }
+
+  .ishraq-thankyou__subtitle {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--brand-800);
+    margin-bottom: 1.25rem;
+  }
+
+  .ishraq-thankyou__status {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--ink-600);
+    margin-bottom: 1.5rem;
+  }
+
+  .ishraq-thankyou__steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.75rem;
+    text-align: right;
+  }
+
+  .ishraq-thankyou__steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--ink-700, var(--ink-600));
+    border-bottom: 1px solid color-mix(in srgb, var(--brand-800) 8%, transparent);
+  }
+
+  .ishraq-thankyou__steps li:last-child {
+    border-bottom: none;
+  }
+
+  .ishraq-thankyou__step-num {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--brand-800) 10%, white);
+    color: var(--brand-800);
+    font-size: 0.8125rem;
+    font-weight: 800;
+  }
+
+  .ishraq-thankyou__summary {
+    padding: 1.25rem 1rem;
+    border-radius: 0.875rem;
+    background: var(--ivory-50);
+    border: 1px solid color-mix(in srgb, var(--brand-800) 10%, transparent);
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .ishraq-thankyou__summary h2 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--brand-950);
+    margin-bottom: 0.75rem;
+  }
+
+  .ishraq-thankyou__product {
+    font-size: 0.9375rem;
+    color: var(--ink-600);
+    margin-bottom: 0.35rem;
+  }
+
+  .ishraq-thankyou__qty-line {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: var(--brand-950);
+    margin-bottom: 0.5rem;
+  }
+
+  .ishraq-thankyou__total {
+    font-size: 1rem;
+    color: var(--brand-950);
+    margin: 0;
+  }
+
+  .ishraq-thankyou__total strong {
+    font-weight: 900;
+    font-size: 1.125rem;
+  }
+
+  .ishraq-thankyou__cta {
+    width: 100%;
+    justify-content: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ishraq thank you",
+  "settings": [
+    {
+      "type": "text",
+      "id": "greeting_prefix",
+      "label": "Greeting prefix",
+      "default": "شكرا !"
+    },
+    {
+      "type": "text",
+      "id": "name_fallback",
+      "label": "Name fallback",
+      "default": "عزيزتي"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "توصلنا بطلبك"
+    },
+    {
+      "type": "text",
+      "id": "status_line",
+      "label": "Status line",
+      "default": "طلبك قيد المراجعة حاليا و يمر بالخطوات التالية"
+    },
+    {
+      "type": "textarea",
+      "id": "step_1",
+      "label": "Step 1",
+      "default": "أولا : سنتصل بك هاتفيا من أجل تآكيد طلبك"
+    },
+    {
+      "type": "textarea",
+      "id": "step_2",
+      "label": "Step 2",
+      "default": "ثانيا : سنقوم بإرسال طلبك إلى العنوان الدي قمت بتعبئته"
+    },
+    {
+      "type": "textarea",
+      "id": "step_3",
+      "label": "Step 3",
+      "default": "ثالثا : ستتوصل بطلبك من طرف أحد موزعينا"
+    },
+    {
+      "type": "text",
+      "id": "summary_title",
+      "label": "Summary title",
+      "default": "ملخص طلبك 🛍️"
+    },
+    {
+      "type": "text",
+      "id": "total_label",
+      "label": "Total label",
+      "default": "المجموع عند الاستلام :"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_home_cta",
+      "label": "Show continue shopping button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "home_label",
+      "label": "Home button label",
+      "default": "متابعة التسوق"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ishraq thank you"
+    }
+  ]
+}
+{% endschema %}

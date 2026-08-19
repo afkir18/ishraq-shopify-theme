@@ -79,5 +79,20 @@
         "default": 4
       }
     ]
+  },
+  {
+    "name": "Marketing & tracking",
+    "settings": [
+      {
+        "type": "header",
+        "content": "TikTok Pixel"
+      },
+      {
+        "type": "text",
+        "id": "tiktok_pixel_id",
+        "label": "TikTok Pixel ID",
+        "info": "Find it in TikTok Ads Manager → Assets → Events → Web Events → your pixel"
+      }
+    ]
   }
 ]

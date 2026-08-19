@@ -126,27 +126,6 @@
   })();
 </script>
 
-<script>
-  (function () {
-    document.documentElement.classList.add('ishraq-thankyou-page');
-    function hideOrderButtons() {
-      document.querySelectorAll('a, button, [role="button"], div, span').forEach(function (el) {
-        var text = (el.textContent || '').replace(/\s+/g, ' ').trim();
-        if (text === 'اضغط هنا للطلب' || text.indexOf('Order Now') !== -1) {
-          el.style.setProperty('display', 'none', 'important');
-          var parent = el.closest('[class*="es-"], [id^="es-"]');
-          if (parent) parent.style.setProperty('display', 'none', 'important');
-        }
-      });
-    }
-    hideOrderButtons();
-    document.addEventListener('DOMContentLoaded', hideOrderButtons);
-    setTimeout(hideOrderButtons, 500);
-    setTimeout(hideOrderButtons, 2000);
-    new MutationObserver(hideOrderButtons).observe(document.documentElement, { childList: true, subtree: true });
-  })();
-</script>
-
 {% stylesheet %}
   .ishraq-thankyou {
     padding-block: 2.5rem 4rem;
@@ -281,17 +260,6 @@
   .ishraq-thankyou__cta {
     width: 100%;
     justify-content: center;
-  }
-
-  html.ishraq-thankyou-page .es-popup-button,
-  html.ishraq-thankyou-page [class*="es-popup-button"],
-  html.ishraq-thankyou-page [class*="es-sticky"],
-  html.ishraq-thankyou-page [id^="es-popup"],
-  html.ishraq-thankyou-page .es-cpb-button,
-  html.ishraq-thankyou-page [class*="es-cpb"] {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
   }
 {% endstylesheet %}
 

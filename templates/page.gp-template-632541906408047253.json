@@ -10,32 +10,31 @@
 {
   "sections": {
     "gp_section_632541948468527701": {
-      "type": "gp-section-632541948468527701",
       "settings": {
-        "section_preload": "true",
         "checksum": "1ef9dba58bd0819b9ad6a8b6520365407290f1fa9b9f1ad2e5ff1267c5bcde31_1_1_1_0__1",
-        "ggpEiVsD7o__srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/01-_--_-Hero_8.webp"
-      }
+        "ggpEiVsD7o__srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/01-_--_-Hero_8.webp",
+        "section_preload": "true"
+      },
+      "type": "gp-section-632541948468527701"
     },
     "gp_section_632541968752182250": {
-      "type": "gp-section-632541968752182250",
       "settings": {
-        "section_preload": "true",
-        "checksum": "78ab9bda87d6391bd8ae557d4d06b96e57dbcee7e20a8016189920caf671351d_1_1_1_0__1"
-      }
+        "checksum": "cfd307330451452a8cccb45fdfd315307874080c979ffa2b8feafae7b78cc73a_1_1_1_0__1",
+        "section_preload": "true"
+      },
+      "type": "gp-section-632541968752182250"
     },
     "gp_section_632542097869636581": {
-      "type": "gp-section-632542097869636581",
       "settings": {
-        "section_preload": "false",
         "checksum": "384c2d11b4a1bdf716c0c095524ad23721c51ea7dac13a63c568bca01b5882d9_1_1_1_0__1",
-        "ggZ7KkadMMh_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/02-_-_-Benefits_9.webp",
         "ggAFuIxJ3F6_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/03-_-_-How-to-Use_2.webp",
-        "gga4IucTOhq_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/04-_-_-_-BeforeAfter_2.webp",
+        "ggPsQaZ5GAG_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/07-_-_-_-Final-CTA_2.webp",
         "ggRwemuRNCg_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/05-_-_--_-_-Pain-Points_2.webp",
-        "ggakKAe9k2u_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/06-_-_-Trust_2.webp",
-        "ggPsQaZ5GAG_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/07-_-_-_-Final-CTA_2.webp"
-      }
+        "ggZ7KkadMMh_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/02-_-_-Benefits_9.webp",
+        "gga4IucTOhq_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/04-_-_-_-BeforeAfter_2.webp",
+        "ggakKAe9k2u_srcSet_desktop_src": "https://cdn.shopify.com/s/files/1/0738/2047/1331/files/06-_-_-Trust_2.webp"
+      },
+      "type": "gp-section-632542097869636581"
     }
   },
   "order": [

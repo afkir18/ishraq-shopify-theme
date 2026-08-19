@@ -20,6 +20,11 @@
         "type": "shopify://apps/gempages-cro/blocks/embed-gp-script-head/20b379d4-1b20-474c-a6ca-665c331919f3",
         "disabled": false,
         "settings": {}
+      },
+      "1852671910890434511": {
+        "type": "shopify://apps/formboost/blocks/app-embed/019d7c6a-3c98-7651-8a91-01ebf925a1ff",
+        "disabled": false,
+        "settings": {}
       }
     }
   },

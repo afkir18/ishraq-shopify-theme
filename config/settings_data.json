@@ -11,11 +11,6 @@
   "current": {
     "content_for_index": [],
     "blocks": {
-      "17754088914158789468": {
-        "type": "shopify://apps/easysell-cod-form/blocks/app-embed/7bfd0a95-6839-4f02-b2ee-896832dbe67e",
-        "disabled": false,
-        "settings": {}
-      },
       "632426789456577509": {
         "type": "shopify://apps/gempages-cro/blocks/embed-gp-script-head/20b379d4-1b20-474c-a6ca-665c331919f3",
         "disabled": false,
@@ -24,6 +19,11 @@
       "1852671910890434511": {
         "type": "shopify://apps/formboost/blocks/app-embed/019d7c6a-3c98-7651-8a91-01ebf925a1ff",
         "disabled": false,
+        "settings": {}
+      },
+      "17754088914158789468": {
+        "type": "shopify://apps/easysell-cod-form/blocks/app-embed/7bfd0a95-6839-4f02-b2ee-896832dbe67e",
+        "disabled": true,
         "settings": {}
       }
     }

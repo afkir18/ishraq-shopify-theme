@@ -24,7 +24,48 @@
     <main id="main-content">
       {{ content_for_layout }}
     </main>
-    
-    
+    <script>
+      (function(){
+        var modal = document.getElementById('easysell-modal');
+        if (!modal) return;
+        var translations = {
+          'Thank You': 'شكراً لكِ',
+          'Order Summary': 'ملخص الطلب',
+          'Total:': 'المجموع:',
+          'Your order has been placed successfully': 'لقد تم طلبك بنجاح وسوف يتم الإتصال بك قريبا ✅',
+          'order has been placed': 'تم طلبك بنجاح',
+          'successfully': 'وسوف يتم الإتصال بك قريبا ✅',
+          'Continue Shopping': 'متابعة التسوق',
+          'Close': 'إغلاق'
+        };
+        function arabize(el) {
+          if (!el) return;
+          var walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+          while (walk.nextNode()) {
+            var node = walk.currentNode;
+            var txt = node.nodeValue;
+            for (var en in translations) {
+              if (txt.indexOf(en) !== -1) {
+                txt = txt.replace(en, translations[en]);
+              }
+            }
+            if (txt !== node.nodeValue) node.nodeValue = txt;
+          }
+          el.style.direction = 'rtl';
+          el.style.textAlign = 'center';
+        }
+        var obs = new MutationObserver(function(muts) {
+          muts.forEach(function(m) {
+            if (m.addedNodes.length || m.type === 'childList') {
+              var content = modal.querySelector('.es-modal-content');
+              if (content && content.innerHTML.trim().length > 10) {
+                setTimeout(function(){ arabize(content); }, 100);
+              }
+            }
+          });
+        });
+        obs.observe(modal, { childList: true, subtree: true, characterData: true });
+      })();
+    </script>
   </body>
 </html>

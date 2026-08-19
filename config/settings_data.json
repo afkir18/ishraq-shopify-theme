@@ -16,14 +16,9 @@
         "disabled": false,
         "settings": {}
       },
-      "1852671910890434511": {
-        "type": "shopify://apps/formboost/blocks/app-embed/019d7c6a-3c98-7651-8a91-01ebf925a1ff",
-        "disabled": false,
-        "settings": {}
-      },
       "17754088914158789468": {
         "type": "shopify://apps/easysell-cod-form/blocks/app-embed/7bfd0a95-6839-4f02-b2ee-896832dbe67e",
-        "disabled": true,
+        "disabled": false,
         "settings": {}
       }
     }

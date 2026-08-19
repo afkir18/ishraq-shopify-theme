@@ -103,5 +103,13 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "shopify": {
+    "checkout": {
+      "order_summary": {
+        "subtotal_label": "المجموع الفرعي",
+        "shipping_label": "التوصيل"
+      }
+    }
   }
 }

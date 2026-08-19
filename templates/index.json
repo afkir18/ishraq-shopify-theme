@@ -11,17 +11,42 @@
   "sections": {
     "hero": {
       "type": "ishraq-hero",
+      "blocks": {
+        "c1": {
+          "type": "counter",
+          "settings": {
+            "value": "960+",
+            "label": "طلب مكتمل"
+          }
+        },
+        "c2": {
+          "type": "counter",
+          "settings": {
+            "value": "90",
+            "label": "يوم ضمان استرداد"
+          }
+        },
+        "c3": {
+          "type": "counter",
+          "settings": {
+            "value": "3",
+            "label": "منتجات مختارة بعناية"
+          }
+        }
+      },
+      "block_order": ["c1", "c2", "c3"],
       "settings": {
         "badge": "دار مغربية للعناية والجمال",
-        "heading_line_1": "جمالك. صحتك.",
-        "heading_line_2": "من إشراق.",
-        "lead": "إشراق — دار مغربية للعناية بالبشرة، الشعر، والمكملات الغذائية. غوميز لذيذة، روتين يومي واضح، وتركيبة مفهومة — مع الأداء عند الاستلام وتأكيد قبل الإرسال.",
-        "cta_label": "شوفي منتجاتنا",
-        "cta_secondary_label": "شوفي الفئات",
-        "chip_1": "✓ غوميز ومكملات",
-        "chip_2": "✓ بشرة وشعر",
-        "float_label": "عالم إشراق",
-        "float_text": "بشرة · شعر · مكملات — بلا وعود سحرية"
+        "heading_line_1": "ماشي كل منتج يستاهل —",
+        "heading_line_2": "نوصّلك اللي يشتغل",
+        "lead": "كنفحصو ونختارو غير اللي كتبان نتيجتو — سيرومات ومكملات ديال الجمال للمرأة المغربية، من الداخل والخارج.",
+        "rating": "4.8",
+        "review_count": "340",
+        "orders_count": "960",
+        "show_onssa": true,
+        "show_lab": true,
+        "show_halal": true,
+        "cta_label": "بداي روتينك دابا"
       }
     },
     "trust_pillars": {
@@ -60,196 +85,96 @@
           }
         }
       },
-      "block_order": [
-        "pillar_1",
-        "pillar_2",
-        "pillar_3",
-        "pillar_4"
-      ],
+      "block_order": ["pillar_1", "pillar_2", "pillar_3", "pillar_4"],
       "settings": {}
-    },
-    "categories": {
-      "type": "ishraq-categories",
-      "blocks": {
-        "cat_skin": {
-          "type": "category",
-          "settings": {
-            "title": "العناية بالبشرة",
-            "body": "ترطيب، نضارة، وروتين يومي واضح للبشرة.",
-            "handle": "العناية-بالبشرة",
-            "collection": "العناية-بالبشرة"
-          }
-        },
-        "cat_hair": {
-          "type": "category",
-          "settings": {
-            "title": "العناية بالشعر",
-            "body": "قوة ولمعان وروتين مفهوم من الجذور للأطراف.",
-            "handle": "العناية-بالشعر",
-            "collection": "العناية-بالشعر"
-          }
-        },
-        "cat_supplements": {
-          "type": "category",
-          "settings": {
-            "title": "المكملات الغذائية",
-            "body": "غوميز ومكملات بتركيبة مفهومة — بلا وعود سحرية.",
-            "badge": "غوميز جديدة",
-            "handle": "المكملات-الغذائية",
-            "collection": "المكملات-الغذائية"
-          }
-        }
-      },
-      "block_order": [
-        "cat_skin",
-        "cat_hair",
-        "cat_supplements"
-      ],
-      "settings": {
-        "label": "عالم إشراق",
-        "heading": "كل روتينك — من البشرة للشعر للمكملات",
-        "subheading": "إشراق دار واحدة لعدة احتياجات. اختاري الفئة اللي تناسبك اليوم — وغادي تلقاي غوميز، عناية يومية، ومكملات بتركيبة واضحة.",
-        "card_cta": "اكتشفي الفئة"
-      }
     },
     "featured_products": {
       "type": "ishraq-featured-products",
       "settings": {
-        "heading": "غوميز، عناية، ومكملات مختارة",
-        "subheading": "منتجات كتخدم روتينك — بشرة، شعر، أو مكملات من الداخل. كل واحد بهدف واضح وبلا وعود سحرية.",
-        "products_to_show": 4
+        "label": "الأكثر مبيعاً",
+        "heading": "منتجات مختارة للروتين ديالك",
+        "subheading": "كل منتوج بهدف واضح — بشرة، شعر، أو مكملات من الداخل. بلا وعود سحرية.",
+        "products_to_show": 3
       }
     },
-    "trust_story": {
-      "type": "ishraq-trust-story",
+    "comparison": {
+      "type": "ishraq-comparison",
       "blocks": {
-        "point_1": {
-          "type": "point",
-          "settings": {
-            "text": "ملصق ومكوّن مفهومين قبل ما تشري."
-          }
-        },
-        "point_2": {
-          "type": "point",
-          "settings": {
-            "text": "عناية بالبشرة والشعر والمكملات — بصدق، بلا وعود سحرية."
-          }
-        },
-        "point_3": {
-          "type": "point",
-          "settings": {
-            "text": "COD + تأكيد هاتفي — باش ما تبقيش فالشك."
-          }
-        }
+        "r1": { "type": "row", "settings": { "feature": "مكونات مدروسة", "us_check": true, "them_check": false } },
+        "r2": { "type": "row", "settings": { "feature": "متوافق مع ONSSA", "us_check": true, "them_check": false } },
+        "r3": { "type": "row", "settings": { "feature": "شحن مجاني", "us_check": true, "them_check": false } },
+        "r4": { "type": "row", "settings": { "feature": "دفع عند الاستلام", "us_check": true, "them_check": true } },
+        "r5": { "type": "row", "settings": { "feature": "تأكيد هاتفي قبل الإرسال", "us_check": true, "them_check": false } },
+        "r6": { "type": "row", "settings": { "feature": "منتجات مختارة يدوياً", "us_check": true, "them_check": false } },
+        "r7": { "type": "row", "settings": { "feature": "كلام طبي مبالغ فيه", "us_check": false, "them_check": true } }
       },
-      "block_order": [
-        "point_1",
-        "point_2",
-        "point_3"
-      ],
-      "settings": {
-        "label": "علاش الثقة مهمة",
-        "heading": "فالمغرب، الثقة هي اللي كتبيع — مشي الوعود الفاضية.",
-        "lead": "إشراق مشي غير مكملات. دار للعناية اليومية — بشرة، شعر، ومكملات — بنفس الإحساس ديال الكاونتر المحترم. غوميز وتركيبة واضحة، بلا غموض."
-      }
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6", "r7"],
+      "settings": {}
     },
-    "benefits": {
-      "type": "ishraq-benefits",
+    "journey": {
+      "type": "ishraq-journey",
       "blocks": {
-        "tile_1": {
-          "type": "tile",
-          "settings": {
-            "title": "فوائد واضحة",
-            "fallback_asset": "home-benefits.jpg"
-          }
-        },
-        "tile_2": {
-          "type": "tile",
-          "settings": {
-            "title": "استعمال مفهوم",
-            "fallback_asset": "home-how-to-use.jpg"
-          }
-        },
-        "tile_3": {
-          "type": "tile",
-          "settings": {
-            "title": "روتين يومي",
-            "fallback_asset": "home-routine.jpg"
-          }
-        }
+        "p1": { "type": "phase", "settings": { "day_label": "اليوم 1–7", "title": "الامتصاص", "body": "المكونات كيبداو الخدمة ديالهم على المستوى الخلوي فالبشرة." } },
+        "p2": { "type": "phase", "settings": { "day_label": "اليوم 7–21", "title": "الإصلاح الداخلي", "body": "الجسم كيبدا يرمم ويجدد البشرة من الداخل للخارج." } },
+        "p3": { "type": "phase", "settings": { "day_label": "اليوم 21–30", "title": "النتائج المرئية", "body": "فرق واضح غادي تلاحظيه نتي واللي حداك." } }
       },
-      "block_order": [
-        "tile_1",
-        "tile_2",
-        "tile_3"
-      ],
-      "settings": {
-        "label": "جودة كتبان",
-        "heading": "منتجات كتخدم الروتين ديالك — بشرة، شعر، ومكملات بتركيبة مفهومة"
-      }
+      "block_order": ["p1", "p2", "p3"],
+      "settings": {}
     },
     "how_it_works": {
       "type": "ishraq-how-it-works",
       "blocks": {
-        "step_1": {
-          "type": "step",
-          "settings": {
-            "number": "01",
-            "title": "اختاري الفئة",
-            "body": "بشرة، شعر، أو مكملات وغوميز — حسب روتينك."
-          }
-        },
-        "step_2": {
-          "type": "step",
-          "settings": {
-            "number": "02",
-            "title": "كمّلي الطلب",
-            "body": "الاسم، الهاتف، والعنوان. بلا بطاقة بنكية."
-          }
-        },
-        "step_3": {
-          "type": "step",
-          "settings": {
-            "number": "03",
-            "title": "تأكيد بالهاتف",
-            "body": "فريق إشراق كيتواصل معاك قبل ما يتسيّط الطلب."
-          }
-        },
-        "step_4": {
-          "type": "step",
-          "settings": {
-            "number": "04",
-            "title": "استلام ودفع",
-            "body": "توصيل لباب الدار والأداء عند الاستلام."
-          }
-        }
+        "step_1": { "type": "step", "settings": { "number": "01", "title": "اختاري المنتوج", "body": "بشرة، شعر، أو مكملات وغوميز — حسب روتينك." } },
+        "step_2": { "type": "step", "settings": { "number": "02", "title": "كمّلي الطلب", "body": "الاسم، الهاتف، والعنوان. بلا بطاقة بنكية." } },
+        "step_3": { "type": "step", "settings": { "number": "03", "title": "تأكيد بالهاتف", "body": "فريق إشراق كيتواصل معاك قبل ما يتسيّط الطلب." } },
+        "step_4": { "type": "step", "settings": { "number": "04", "title": "استلام ودفع", "body": "توصيل لباب الدار والأداء عند الاستلام." } }
       },
-      "block_order": [
-        "step_1",
-        "step_2",
-        "step_3",
-        "step_4"
-      ],
+      "block_order": ["step_1", "step_2", "step_3", "step_4"],
+      "settings": {}
+    },
+    "shipping_info": {
+      "type": "ishraq-shipping-info",
+      "blocks": {
+        "s1": { "type": "city", "settings": { "icon": "", "city": "الدار البيضاء", "time": "24–48 ساعة" } },
+        "s2": { "type": "city", "settings": { "icon": "", "city": "الرباط", "time": "24–48 ساعة" } },
+        "s3": { "type": "city", "settings": { "icon": "", "city": "مراكش", "time": "24–48 ساعة" } },
+        "s4": { "type": "city", "settings": { "icon": "", "city": "باقي المناطق", "time": "48–72 ساعة" } }
+      },
+      "block_order": ["s1", "s2", "s3", "s4"],
+      "settings": {}
+    },
+    "home_faq": {
+      "type": "ishraq-home-faq",
+      "blocks": {
+        "f1": { "type": "item", "settings": { "question": "كيف أدفع؟", "answer": "الدفع عند الاستلام (COD). ما كنطلبوش حتى بطاقة بنكية — كتخلّصي غير ملي يوصل الطلب لبابك." } },
+        "f2": { "type": "item", "settings": { "question": "كم يستغرق التوصيل؟", "answer": "24–48 ساعة للمدن الكبرى (كازا، الرباط، مراكش). 48–72 ساعة لباقي المناطق." } },
+        "f3": { "type": "item", "settings": { "question": "هل يمكنني طلب أكثر من منتج في نفس الطلب؟", "answer": "نعم! يمكنك إضافة عدة منتجات في نفس الطلب والاستفادة من الشحن المجاني." } },
+        "f4": { "type": "item", "settings": { "question": "هل المنتجات مصرّح بها لدى ONSSA؟", "answer": "نعم. منتجاتنا تُسوَّق كمكمّلات غذائية وتُوسم وفق المتطلبات التنظيمية المغربية، بالفرنسية والعربية." } },
+        "f5": { "type": "item", "settings": { "question": "ما هي سياسة الإرجاع؟", "answer": "إذا وصلك منتج تالف أو خاطئ، تواصل معنا خلال 48 ساعة ونرجعو ليك فلوسك أو نبدّلوه." } },
+        "f6": { "type": "item", "settings": { "question": "متى سأتلقّى التأكيد على طلبي؟", "answer": "فريقنا كيعيط ليك خلال ساعات من الطلب باش يأكّد العنوان والتفاصيل قبل الإرسال." } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4", "f5", "f6"],
       "settings": {}
     },
     "cta": {
       "type": "ishraq-cta",
       "settings": {
         "label": "وعد إشراق للمغرب",
-        "heading": "منتوج يستاهل الثقة — مشي تجربة كتندمي عليها",
-        "subheading": "عناية بالبشرة · عناية بالشعر · مكملات وغوميز · أداء عند الاستلام",
-        "primary_label": "ابدئي الطلب الآن"
+        "heading": "جاهزة تبداي روتين أحسن؟",
+        "subheading": "اختاري الروتين ديالك بين العناية الخارجية والمكملات، وخلصي عند الاستلام.",
+        "primary_label": "بداي دابا"
       }
     }
   },
   "order": [
     "hero",
     "trust_pillars",
-    "categories",
     "featured_products",
-    "trust_story",
-    "benefits",
+    "comparison",
+    "journey",
     "how_it_works",
+    "shipping_info",
+    "home_faq",
     "cta"
   ]
 }

@@ -1,0 +1,163 @@
+<section class="ishraq-journey page-width">
+  <p class="section-label">{{ section.settings.label | default: 'الرحلة ديالك' }}</p>
+  <h2>{{ section.settings.heading | default: 'الرحلة ديالك ف30 يوم' }}</h2>
+  <p class="ishraq-journey__lead">{{ section.settings.lead | default: 'الفرق الحقيقي خاصو التزام — هادشي لي يمكن تتوقعي.' }}</p>
+
+  <div class="ishraq-journey__timeline">
+    {% for block in section.blocks %}
+      <div class="ishraq-journey__step" {{ block.shopify_attributes }}>
+        <div class="ishraq-journey__marker">
+          <span class="ishraq-journey__dot"></span>
+          {% unless forloop.last %}<span class="ishraq-journey__line"></span>{% endunless %}
+        </div>
+        <div class="ishraq-journey__card card">
+          <span class="ishraq-journey__day">{{ block.settings.day_label }}</span>
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.body }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .ishraq-journey {
+    padding-block: 4rem 5rem;
+  }
+
+  .ishraq-journey h2 {
+    font-size: clamp(1.875rem, 4vw, 2.25rem);
+    color: var(--brand-950);
+  }
+
+  .ishraq-journey__lead {
+    margin-top: 0.75rem;
+    max-width: 36rem;
+    color: var(--ink-600);
+    margin-bottom: 2.5rem;
+  }
+
+  .ishraq-journey__timeline {
+    display: grid;
+    gap: 0;
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+
+  .ishraq-journey__step {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 1rem;
+  }
+
+  .ishraq-journey__marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ishraq-journey__dot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    background: var(--brand-800);
+    flex-shrink: 0;
+    margin-top: 1.25rem;
+  }
+
+  .ishraq-journey__line {
+    width: 2px;
+    flex: 1;
+    background: color-mix(in srgb, var(--brand-800) 20%, transparent);
+  }
+
+  .ishraq-journey__card {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .ishraq-journey__day {
+    display: inline-block;
+    padding: 0.2rem 0.625rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--brand-800) 10%, transparent);
+    font-size: 0.6875rem;
+    font-weight: 800;
+    color: var(--brand-800);
+    margin-bottom: 0.5rem;
+  }
+
+  .ishraq-journey__card h3 {
+    font-size: 1.0625rem;
+    color: var(--brand-950);
+  }
+
+  .ishraq-journey__card p {
+    margin-top: 0.35rem;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--ink-600);
+  }
+
+  @media (min-width: 768px) {
+    .ishraq-journey__timeline {
+      max-width: none;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .ishraq-journey__step {
+      display: block;
+    }
+
+    .ishraq-journey__marker {
+      flex-direction: row;
+      margin-bottom: 1rem;
+    }
+
+    .ishraq-journey__dot {
+      margin-top: 0;
+    }
+
+    .ishraq-journey__line {
+      width: auto;
+      height: 2px;
+      flex: 1;
+    }
+
+    .ishraq-journey__card {
+      margin-bottom: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ishraq Journey",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Section label" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "textarea", "id": "lead", "label": "Lead" }
+  ],
+  "blocks": [
+    {
+      "type": "phase",
+      "name": "Phase",
+      "settings": [
+        { "type": "text", "id": "day_label", "label": "Day label", "default": "اليوم 1-7" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Ishraq Journey",
+    "blocks": [
+      { "type": "phase", "settings": { "day_label": "اليوم 1–7", "title": "الامتصاص", "body": "المكونات كيبداو الخدمة ديالهم على المستوى الخلوي فالبشرة." } },
+      { "type": "phase", "settings": { "day_label": "اليوم 7–21", "title": "الإصلاح الداخلي", "body": "الجسم كيبدا يرمم ويجدد البشرة من الداخل للخارج." } },
+      { "type": "phase", "settings": { "day_label": "اليوم 21–30", "title": "النتائج المرئية", "body": "فرق واضح غادي تلاحظيه نتي واللي حداك." } }
+    ]
+  }]
+}
+{% endschema %}

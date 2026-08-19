@@ -1,6 +1,7 @@
 <section class="ishraq-products page-width">
   <div class="ishraq-products__head">
     <div>
+      <p class="section-label">{{ section.settings.label | default: 'الأكثر مبيعاً' }}</p>
       <h2>{{ section.settings.heading | default: "غوميز، عناية، ومكملات مختارة" }}</h2>
       <p>{{ section.settings.subheading | default: "منتجات كتخدم روتينك — بشرة، شعر، أو مكملات من الداخل. كل واحد بهدف واضح وبلا وعود سحرية." }}</p>
     </div>
@@ -23,22 +24,44 @@
             {% if product.featured_image %}
               {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: product.title }}
             {% endif %}
+            {% if product.metafields.custom.orders_count != blank %}
+              <span class="ishraq-product-card__orders-badge">+{{ product.metafields.custom.orders_count }} طلب</span>
+            {% endif %}
+            {% if product.tags contains 'bestseller' %}
+              <span class="ishraq-product-card__hot">الأكثر طلباً</span>
+            {% elsif product.tags contains 'new' %}
+              <span class="ishraq-product-card__hot ishraq-product-card__hot--new">جديد</span>
+            {% endif %}
           </a>
           <div class="ishraq-product-card__body">
-            {% if product.type != blank %}
-              <span class="ishraq-product-card__badge">{{ product.type }}</span>
-            {% elsif product.tags.size > 0 %}
-              <span class="ishraq-product-card__badge">{{ product.tags.first }}</span>
-            {% endif %}
             <h3><a href="{{ product_link }}">{{ product.title }}</a></h3>
-            <p>{{ product.description | strip_html | truncate: 120 }}</p>
-            <p class="ishraq-product-card__price">من {{ product.price_min | money }}</p>
-            <a href="{{ product_link }}" class="btn btn--secondary">شوفي التفاصيل</a>
+            <p class="ishraq-product-card__desc">{{ product.description | strip_html | truncate: 100 }}</p>
+            <div class="ishraq-product-card__rating">
+              <span class="ishraq-product-card__stars" aria-hidden="true">★★★★★</span>
+              {% if product.metafields.reviews.rating != blank %}
+                <span>{{ product.metafields.reviews.rating.value }}</span>
+              {% else %}
+                <span>4.7</span>
+              {% endif %}
+              {% if product.metafields.reviews.rating_count != blank %}
+                <span class="ishraq-product-card__review-count">({{ product.metafields.reviews.rating_count.value }})</span>
+              {% endif %}
+            </div>
+            <div class="ishraq-product-card__footer">
+              <p class="ishraq-product-card__price">{{ product.price | money }}</p>
+              <form method="post" action="/cart/add">
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn--primary ishraq-product-card__add">
+                  أضف 🛒
+                </button>
+              </form>
+            </div>
           </div>
         </article>
       {% endfor %}
     {% else %}
-      <p>ما كاين حتى منتوج للعرض دابا — زيد منتجات فالمجموعة أو فالكatalog.</p>
+      <p>ما كاين حتى منتوج للعرض دابا.</p>
     {% endif %}
   </div>
 </section>
@@ -63,7 +86,7 @@
     color: var(--brand-950);
   }
 
-  .ishraq-products__head p {
+  .ishraq-products__head > div > p:last-child {
     margin-top: 0.75rem;
     max-width: 32rem;
     color: var(--ink-600);
@@ -83,31 +106,65 @@
   .ishraq-product-card {
     overflow: hidden;
     background: var(--white);
+    transition: box-shadow 0.25s;
+  }
+
+  .ishraq-product-card:hover {
+    box-shadow: 0 12px 32px -8px rgba(0,0,0,0.12);
+  }
+
+  .ishraq-product-card__media {
+    display: block;
+    position: relative;
+    overflow: hidden;
   }
 
   .ishraq-product-card__media img {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .ishraq-product-card:hover .ishraq-product-card__media img {
+    transform: scale(1.04);
+  }
+
+  .ishraq-product-card__orders-badge {
+    position: absolute;
+    top: 0.75rem;
+    inset-inline-end: 0.75rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    background: var(--brand-800);
+    font-size: 0.6875rem;
+    font-weight: 800;
+    color: var(--white);
+  }
+
+  .ishraq-product-card__hot {
+    position: absolute;
+    top: 0.75rem;
+    inset-inline-start: 0.75rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    background: var(--brass-600);
+    font-size: 0.6875rem;
+    font-weight: 800;
+    color: var(--white);
+  }
+
+  .ishraq-product-card__hot--new {
+    background: #25d366;
   }
 
   .ishraq-product-card__body {
     padding: 1.25rem;
   }
 
-  .ishraq-product-card__badge {
-    display: inline-block;
-    margin-bottom: 0.5rem;
-    padding: 0.25rem 0.625rem;
-    border-radius: 9999px;
-    background: color-mix(in srgb, var(--brand-800) 10%, transparent);
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: var(--brand-800);
-  }
-
   .ishraq-product-card h3 {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
+    line-height: 1.4;
   }
 
   .ishraq-product-card h3 a {
@@ -115,20 +172,51 @@
     text-decoration: none;
   }
 
-  .ishraq-product-card__body > p {
-    margin-top: 0.5rem;
-    font-size: 0.875rem;
+  .ishraq-product-card__desc {
+    margin-top: 0.4rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
     color: var(--ink-600);
   }
 
-  .ishraq-product-card__price {
+  .ishraq-product-card__rating {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
     margin-top: 0.75rem;
-    font-weight: 800;
+    font-size: 0.8125rem;
+    font-weight: 700;
     color: var(--brand-950);
   }
 
-  .ishraq-product-card .btn {
-    margin-top: 1rem;
+  .ishraq-product-card__stars {
+    color: #f5c518;
+    letter-spacing: 1px;
+    font-size: 0.875rem;
+  }
+
+  .ishraq-product-card__review-count {
+    font-weight: 600;
+    color: var(--ink-500);
+  }
+
+  .ishraq-product-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .ishraq-product-card__price {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--brand-950);
+  }
+
+  .ishraq-product-card__add {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
   }
 
   @media (min-width: 768px) {
@@ -148,10 +236,11 @@
 {
   "name": "Ishraq Featured Products",
   "settings": [
+    { "type": "text", "id": "label", "label": "Section label", "default": "الأكثر مبيعاً" },
     { "type": "text", "id": "heading", "label": "Heading" },
     { "type": "textarea", "id": "subheading", "label": "Subheading" },
     { "type": "collection", "id": "collection", "label": "Collection" },
-    { "type": "range", "id": "products_to_show", "min": 2, "max": 8, "step": 1, "default": 4, "label": "Products to show" }
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 8, "step": 1, "default": 3, "label": "Products to show" }
   ],
   "presets": [{ "name": "Ishraq Featured Products" }]
 }

@@ -1,0 +1,135 @@
+<section class="ishraq-hfaq full-width">
+  <div class="page-width">
+    <p class="section-label">{{ section.settings.label | default: 'عندك سؤال؟' }}</p>
+    <h2>{{ section.settings.heading | default: 'أسئلة شائعة قبل الطلب' }}</h2>
+
+    <div class="ishraq-hfaq__list">
+      {% for block in section.blocks %}
+        {% if block.settings.question != blank %}
+          <details class="ishraq-hfaq__item card" {{ block.shopify_attributes }}>
+            <summary>
+              <span>{{ block.settings.question }}</span>
+              <span class="ishraq-hfaq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="ishraq-hfaq__answer">
+              {{ block.settings.answer | newline_to_br }}
+            </div>
+          </details>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .ishraq-hfaq {
+    background: var(--ivory-100);
+    padding-block: 4rem 5rem;
+  }
+
+  .ishraq-hfaq h2 {
+    font-size: clamp(1.875rem, 4vw, 2.25rem);
+    color: var(--brand-950);
+    margin-bottom: 2rem;
+  }
+
+  .ishraq-hfaq__list {
+    max-width: 42rem;
+    margin-inline: auto;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .ishraq-hfaq__item {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .ishraq-hfaq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 800;
+    color: var(--brand-950);
+  }
+
+  .ishraq-hfaq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ishraq-hfaq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--brand-800) 8%, transparent);
+  }
+
+  .ishraq-hfaq__icon::before,
+  .ishraq-hfaq__icon::after {
+    content: '';
+    position: absolute;
+    inset: 50%;
+    background: var(--brand-800);
+    border-radius: 1px;
+  }
+
+  .ishraq-hfaq__icon::before {
+    width: 0.65rem;
+    height: 2px;
+    margin: -1px -0.325rem;
+  }
+
+  .ishraq-hfaq__icon::after {
+    width: 2px;
+    height: 0.65rem;
+    margin: -0.325rem -1px;
+    transition: opacity 0.15s;
+  }
+
+  .ishraq-hfaq__item[open] .ishraq-hfaq__icon::after {
+    opacity: 0;
+  }
+
+  .ishraq-hfaq__answer {
+    padding: 0 1.25rem 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.85;
+    color: var(--ink-600);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ishraq Home FAQ",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Section label" },
+    { "type": "text", "id": "heading", "label": "Heading" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "سؤال",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "textarea", "id": "answer", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Ishraq Home FAQ",
+    "blocks": [
+      { "type": "item", "settings": { "question": "كيف أدفع؟", "answer": "الدفع عند الاستلام (COD). ما كنطلبوش حتى بطاقة بنكية — كتخلّصي غير ملي يوصل الطلب لبابك." } },
+      { "type": "item", "settings": { "question": "كم يستغرق التوصيل؟", "answer": "24–48 ساعة للمدن الكبرى (كازا، الرباط، مراكش). 48–72 ساعة لباقي المناطق." } },
+      { "type": "item", "settings": { "question": "هل يمكنني طلب أكثر من منتج؟", "answer": "نعم! يمكنك إضافة عدة منتجات في نفس الطلب والاستفادة من الشحن المجاني." } },
+      { "type": "item", "settings": { "question": "هل المنتجات مصرّح بها؟", "answer": "نعم. منتجاتنا تُسوَّق كمكمّلات غذائية وتُوسم وفق المتطلبات التنظيمية المغربية (ONSSA)." } },
+      { "type": "item", "settings": { "question": "ما هي سياسة الإرجاع؟", "answer": "إذا وصلك منتج تالف أو خاطئ، تواصل معنا خلال 48 ساعة ونرجعو ليك فلوسك أو نبدّلوه." } }
+    ]
+  }]
+}
+{% endschema %}

@@ -1,0 +1,194 @@
+<section class="ishraq-compare full-width">
+  <div class="page-width">
+    <p class="section-label">{{ section.settings.label | default: 'مقارنة واضحة' }}</p>
+    <h2>{{ section.settings.heading | default: 'إشراق قدام أي منتج عشوائي' }}</h2>
+
+    <div class="ishraq-compare__table" role="table">
+      <div class="ishraq-compare__header" role="row">
+        <div role="columnheader">{{ section.settings.col_feature | default: 'الميزة' }}</div>
+        <div class="ishraq-compare__col-us" role="columnheader">إشراق ✦</div>
+        <div class="ishraq-compare__col-them" role="columnheader">{{ section.settings.col_them | default: 'المنتجات العشوائية' }}</div>
+      </div>
+      {% for block in section.blocks %}
+        <div class="ishraq-compare__row" role="row" {{ block.shopify_attributes }}>
+          <div class="ishraq-compare__feature" role="cell">{{ block.settings.feature }}</div>
+          <div class="ishraq-compare__col-us" role="cell">
+            {% if block.settings.us_check %}
+              <span class="ishraq-compare__yes" aria-label="نعم">✓</span>
+            {% else %}
+              <span class="ishraq-compare__no" aria-label="لا">✗</span>
+            {% endif %}
+          </div>
+          <div class="ishraq-compare__col-them" role="cell">
+            {% if block.settings.them_check %}
+              <span class="ishraq-compare__yes" aria-label="نعم">✓</span>
+            {% else %}
+              <span class="ishraq-compare__no" aria-label="لا">✗</span>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .ishraq-compare {
+    background: var(--ivory-100);
+    padding-block: 4rem 5rem;
+  }
+
+  .ishraq-compare h2 {
+    font-size: clamp(1.875rem, 4vw, 2.25rem);
+    color: var(--brand-950);
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  .ishraq-compare .section-label {
+    text-align: center;
+  }
+
+  .ishraq-compare__table {
+    max-width: 40rem;
+    margin-inline: auto;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: var(--white);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .ishraq-compare__header,
+  .ishraq-compare__row {
+    display: grid;
+    grid-template-columns: 1fr 7rem 7rem;
+  }
+
+  .ishraq-compare__header {
+    background: var(--brand-950);
+    color: var(--ivory-50);
+    font-weight: 800;
+    font-size: 0.8125rem;
+  }
+
+  .ishraq-compare__header > div {
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ishraq-compare__header > div:first-child {
+    justify-content: flex-start;
+  }
+
+  .ishraq-compare__header .ishraq-compare__col-us {
+    background: var(--brand-800);
+  }
+
+  .ishraq-compare__row {
+    border-bottom: 1px solid color-mix(in srgb, var(--brand-800) 6%, transparent);
+  }
+
+  .ishraq-compare__row:last-child {
+    border-bottom: none;
+  }
+
+  .ishraq-compare__row > div {
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ishraq-compare__feature {
+    justify-content: flex-start !important;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--ink-800);
+  }
+
+  .ishraq-compare__row .ishraq-compare__col-us {
+    background: color-mix(in srgb, var(--brand-800) 4%, transparent);
+  }
+
+  .ishraq-compare__yes {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, #16a34a 12%, transparent);
+    font-size: 0.8125rem;
+    font-weight: 900;
+    color: #16a34a;
+  }
+
+  .ishraq-compare__no {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, #dc2626 10%, transparent);
+    font-size: 0.8125rem;
+    font-weight: 900;
+    color: #dc2626;
+  }
+
+  @media (max-width: 480px) {
+    .ishraq-compare__header,
+    .ishraq-compare__row {
+      grid-template-columns: 1fr 4.5rem 4.5rem;
+    }
+
+    .ishraq-compare__header > div,
+    .ishraq-compare__row > div {
+      padding: 0.75rem 0.625rem;
+    }
+
+    .ishraq-compare__header {
+      font-size: 0.6875rem;
+    }
+
+    .ishraq-compare__feature {
+      font-size: 0.8125rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ishraq Comparison",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Section label", "default": "مقارنة واضحة" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "إشراق قدام أي منتج عشوائي" },
+    { "type": "text", "id": "col_feature", "label": "Feature column", "default": "الميزة" },
+    { "type": "text", "id": "col_them", "label": "Them column", "default": "المنتجات العشوائية" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Row",
+      "settings": [
+        { "type": "text", "id": "feature", "label": "Feature" },
+        { "type": "checkbox", "id": "us_check", "label": "Ishraq ✓", "default": true },
+        { "type": "checkbox", "id": "them_check", "label": "Them ✓", "default": false }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Ishraq Comparison",
+    "blocks": [
+      { "type": "row", "settings": { "feature": "مكونات مدروسة", "us_check": true, "them_check": false } },
+      { "type": "row", "settings": { "feature": "متوافق مع ONSSA", "us_check": true, "them_check": false } },
+      { "type": "row", "settings": { "feature": "شحن مجاني", "us_check": true, "them_check": false } },
+      { "type": "row", "settings": { "feature": "دفع عند الاستلام", "us_check": true, "them_check": false } },
+      { "type": "row", "settings": { "feature": "تأكيد هاتفي قبل الإرسال", "us_check": true, "them_check": false } },
+      { "type": "row", "settings": { "feature": "كلام طبي مبالغ فيه", "us_check": false, "them_check": true } }
+    ]
+  }]
+}
+{% endschema %}

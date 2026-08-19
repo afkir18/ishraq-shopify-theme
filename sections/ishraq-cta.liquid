@@ -8,17 +8,21 @@
   </div>
   <div class="ishraq-cta__content page-width">
     <p class="ishraq-cta__label">{{ section.settings.label | default: "وعد إشراق للمغرب" }}</p>
-    <h2>{{ section.settings.heading | default: "منتوج يستاهل الثقة — مشي تجربة كتندمي عليها" }}</h2>
-    <p>{{ section.settings.subheading | default: "عناية بالبشرة · عناية بالشعر · مكملات وغوميز · أداء عند الاستلام" }}</p>
+    <h2>{{ section.settings.heading | default: "جاهزة تبداي روتين أحسن؟" }}</h2>
+    <p>{{ section.settings.subheading | default: "اختاري الروتين ديالك بين العناية الخارجية والمكملات، وخلصي عند الاستلام." }}</p>
     <div class="ishraq-cta__actions">
       <a href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}" class="btn btn--white btn--lg">
-        {{ section.settings.primary_label | default: "ابدئي الطلب الآن" }}
+        {{ section.settings.primary_label | default: "بداي دابا" }}
       </a>
       {% if section.settings.secondary_link != blank or pages.contact %}
         <a href="{{ section.settings.secondary_link | default: pages.contact.url }}" class="btn btn--secondary btn--lg ishraq-cta__secondary">
           {{ section.settings.secondary_label | default: "عندك سؤال؟" }}
         </a>
       {% endif %}
+    </div>
+    <div class="ishraq-cta__trust-row">
+      <span>💳 الدفع عند الاستلام</span>
+      <span>🚚 جميع مدن المغرب</span>
     </div>
   </div>
 </section>
@@ -58,7 +62,7 @@
 
   .ishraq-cta h2 {
     margin-top: 0.75rem;
-    font-size: clamp(1.875rem, 4vw, 2.25rem);
+    font-size: clamp(1.875rem, 4vw, 2.5rem);
   }
 
   .ishraq-cta__content > p {
@@ -84,6 +88,17 @@
   .ishraq-cta__secondary:hover {
     border-color: var(--white);
     background: color-mix(in srgb, var(--white) 20%, transparent);
+  }
+
+  .ishraq-cta__trust-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--ivory-50) 75%, transparent);
   }
 {% endstylesheet %}
 

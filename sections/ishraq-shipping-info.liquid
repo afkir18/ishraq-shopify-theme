@@ -1,0 +1,99 @@
+<section class="ishraq-ship full-width">
+  <div class="page-width">
+    <p class="section-label">{{ section.settings.label | default: 'التوصيل السريع' }}</p>
+    <h2>{{ section.settings.heading | default: 'شحن مجاني لجميع مدن المغرب' }}</h2>
+
+    <div class="ishraq-ship__grid">
+      {% for block in section.blocks %}
+        <div class="ishraq-ship__card card" {{ block.shopify_attributes }}>
+          {% if block.settings.icon != blank %}<span class="ishraq-ship__icon" aria-hidden="true">{{ block.settings.icon }}</span>{% endif %}
+          <h3>{{ block.settings.city }}</h3>
+          <p>{{ block.settings.time }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .ishraq-ship {
+    background: var(--white);
+    border-block: 1px solid color-mix(in srgb, var(--brand-800) 8%, transparent);
+    padding-block: 4rem 5rem;
+  }
+
+  .ishraq-ship h2 {
+    font-size: clamp(1.875rem, 4vw, 2.25rem);
+    color: var(--brand-950);
+    margin-bottom: 2.5rem;
+  }
+
+  .ishraq-ship__grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .ishraq-ship__card {
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .ishraq-ship__icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .ishraq-ship__card h3 {
+    font-size: 1.0625rem;
+    color: var(--brand-950);
+  }
+
+  .ishraq-ship__card p {
+    margin-top: 0.35rem;
+    font-size: 0.875rem;
+    color: var(--ink-600);
+  }
+
+  @media (min-width: 640px) {
+    .ishraq-ship__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ishraq-ship__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ishraq Shipping Info",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Section label" },
+    { "type": "text", "id": "heading", "label": "Heading" }
+  ],
+  "blocks": [
+    {
+      "type": "city",
+      "name": "City",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon", "default": "📦" },
+        { "type": "text", "id": "city", "label": "City" },
+        { "type": "text", "id": "time", "label": "Delivery time" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Ishraq Shipping Info",
+    "blocks": [
+      { "type": "city", "settings": { "icon": "🏙️", "city": "الدار البيضاء", "time": "24-48 ساعة" } },
+      { "type": "city", "settings": { "icon": "🏛️", "city": "الرباط", "time": "24-48 ساعة" } },
+      { "type": "city", "settings": { "icon": "🕌", "city": "مراكش", "time": "24-48 ساعة" } },
+      { "type": "city", "settings": { "icon": "📦", "city": "باقي المناطق", "time": "48-72 ساعة" } }
+    ]
+  }]
+}
+{% endschema %}

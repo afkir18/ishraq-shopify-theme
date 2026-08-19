@@ -31,13 +31,13 @@
       {%- liquid
         if request.page_type == 'product'
           if 'static' == 'static'
-            if '7267279568931' == 'latest'
+            if '7267302768675' == 'latest'
               paginate collections.all.products by 100000
                 assign product = collections.all.products | sort: 'created_at' | reverse | first
               endpaginate
             else
-              assign product = all_products['collagen-gummies']
-              assign productId = '7267279568931' | times: 1
+              assign product = all_products['melatonin-sleep']
+              assign productId = '7267302768675' | times: 1
               if product == empty or product == null
                 paginate collections.all.products by 100000
                   for item in collections.all.products
@@ -50,13 +50,13 @@
             endif
           endif
         else
-          if '7267279568931' == 'latest'
+          if '7267302768675' == 'latest'
             paginate collections.all.products by 100000
               assign product = collections.all.products | sort: 'created_at'| reverse | first
             endpaginate
           else
-            assign product = all_products['collagen-gummies']
-            assign productId = '7267279568931' | times: 1
+            assign product = all_products['melatonin-sleep']
+            assign productId = '7267302768675' | times: 1
             if product == empty or product == null
               paginate collections.all.products by 100000
                 for item in collections.all.products

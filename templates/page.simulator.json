@@ -3,7 +3,8 @@
     "main": {
       "type": "ishraq-space-seller-calculator",
       "settings": {
-        "page_password": "ishraq-sim-2026"
+        "page_username": "admin@ishraq.ma",
+        "page_password": "Medafkir@988"
       }
     }
   },

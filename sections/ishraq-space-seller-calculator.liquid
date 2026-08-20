@@ -3,7 +3,8 @@
   Soft password gate (theme setting). Not for high-security secrets.
 {% endcomment %}
 
-{% assign gate_password = section.settings.page_password | default: 'ishraq-sim-2026' %}
+{% assign gate_username = section.settings.page_username | default: 'admin@ishraq.ma' %}
+{% assign gate_password = section.settings.page_password | default: 'Medafkir@988' %}
 
 <meta name="robots" content="noindex, nofollow">
 
@@ -11,14 +12,25 @@
   class="ishraq-sim full-width"
   dir="ltr"
   id="ishraq-sim"
+  data-username="{{ gate_username | escape }}"
   data-password="{{ gate_password | escape }}"
 >
   <div class="ishraq-sim__gate" id="ishraq-sim-gate" hidden>
     <div class="ishraq-sim__gate-card">
       <p class="ishraq-sim__gate-brand">إشراق · Ishraq</p>
       <h1>Space Seller simulator</h1>
-      <p class="ishraq-sim__gate-sub">Private page — enter the access password</p>
+      <p class="ishraq-sim__gate-sub">Private page — sign in to continue</p>
       <form id="ishraq-sim-gate-form" class="ishraq-sim__gate-form">
+        <label>
+          Username
+          <input
+            type="email"
+            id="ishraq-sim-username"
+            name="username"
+            autocomplete="username"
+            required
+          >
+        </label>
         <label>
           Password
           <input
@@ -29,7 +41,7 @@
             required
           >
         </label>
-        <p class="ishraq-sim__gate-error" id="ishraq-sim-gate-error" hidden>Wrong password</p>
+        <p class="ishraq-sim__gate-error" id="ishraq-sim-gate-error" hidden>Wrong username or password</p>
         <button type="submit" class="ishraq-sim__btn">Unlock</button>
       </form>
     </div>
@@ -162,7 +174,8 @@
     var app = document.getElementById('ishraq-sim-app');
     var form = document.getElementById('ishraq-sim-gate-form');
     var errorEl = document.getElementById('ishraq-sim-gate-error');
-    var expected = (root && root.getAttribute('data-password')) || '';
+    var expectedUser = (root && root.getAttribute('data-username')) || '';
+    var expectedPass = (root && root.getAttribute('data-password')) || '';
 
     function showUnlocked(unlocked) {
       if (!gate || !app) return;
@@ -183,9 +196,11 @@
     if (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        var input = document.getElementById('ishraq-sim-password');
-        var value = input ? String(input.value || '') : '';
-        if (value === expected) {
+        var userInput = document.getElementById('ishraq-sim-username');
+        var passInput = document.getElementById('ishraq-sim-password');
+        var user = userInput ? String(userInput.value || '').trim() : '';
+        var pass = passInput ? String(passInput.value || '') : '';
+        if (user === expectedUser && pass === expectedPass) {
           try {
             sessionStorage.setItem(STORAGE_KEY, '1');
           } catch (err) {}
@@ -391,6 +406,10 @@
     font-size: 0.75rem;
     font-weight: 800;
     color: #71666a;
+  }
+
+  .ishraq-sim__gate-form label + label {
+    margin-top: 0.85rem;
   }
 
   .ishraq-sim__gate-form input {
@@ -663,10 +682,16 @@
   "settings": [
     {
       "type": "text",
+      "id": "page_username",
+      "label": "Username",
+      "default": "admin@ishraq.ma"
+    },
+    {
+      "type": "text",
       "id": "page_password",
       "label": "Page password",
-      "default": "ishraq-sim-2026",
-      "info": "Shared password to unlock this page. Change after publish."
+      "default": "Medafkir@988",
+      "info": "Soft client-side gate for private access."
     }
   ],
   "presets": [

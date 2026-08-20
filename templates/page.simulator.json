@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "ishraq-space-seller-calculator",
+      "settings": {
+        "page_password": "ishraq-sim-2026"
+      }
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,678 @@
+{% comment %}
+  Space Seller calculator — clone of admin /admin/calculator.
+  Soft password gate (theme setting). Not for high-security secrets.
+{% endcomment %}
+
+{% assign gate_password = section.settings.page_password | default: 'ishraq-sim-2026' %}
+
+<meta name="robots" content="noindex, nofollow">
+
+<section
+  class="ishraq-sim full-width"
+  dir="ltr"
+  id="ishraq-sim"
+  data-password="{{ gate_password | escape }}"
+>
+  <div class="ishraq-sim__gate" id="ishraq-sim-gate" hidden>
+    <div class="ishraq-sim__gate-card">
+      <p class="ishraq-sim__gate-brand">إشراق · Ishraq</p>
+      <h1>Space Seller simulator</h1>
+      <p class="ishraq-sim__gate-sub">Private page — enter the access password</p>
+      <form id="ishraq-sim-gate-form" class="ishraq-sim__gate-form">
+        <label>
+          Password
+          <input
+            type="password"
+            id="ishraq-sim-password"
+            name="password"
+            autocomplete="current-password"
+            required
+          >
+        </label>
+        <p class="ishraq-sim__gate-error" id="ishraq-sim-gate-error" hidden>Wrong password</p>
+        <button type="submit" class="ishraq-sim__btn">Unlock</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="ishraq-sim__app page-width" id="ishraq-sim-app" hidden>
+    <header class="ishraq-sim__header">
+      <div>
+        <p class="ishraq-sim__eyebrow">Space Seller calculator</p>
+        <h1>Model COD profit</h1>
+        <p class="ishraq-sim__lede">
+          2 MAD / lead + 63 MAD / delivered order · amounts in MAD (dh)
+        </p>
+      </div>
+      <button type="button" class="ishraq-sim__lockout" id="ishraq-sim-lock">Lock page</button>
+    </header>
+
+    <div class="ishraq-sim__grid">
+      <article class="ishraq-sim__card">
+        <h2>Campaign inputs</h2>
+        <p class="ishraq-sim__hint">
+          Space Seller dropshipping model: 2 MAD per imported lead, 63 MAD per
+          delivered parcel (confirmation, packing, shipping), 0 MAD returns.
+          Product cost is separate.
+        </p>
+        <div class="ishraq-sim__fields">
+          <label>
+            Total leads
+            <input type="number" min="0" step="1" data-field="totalLeads" value="100">
+          </label>
+          <label>
+            Confirmation rate (%)
+            <span class="ishraq-sim__field-wrap">
+              <input type="number" min="0" max="100" step="0.1" data-field="confirmationRate" value="60">
+              <span class="ishraq-sim__suffix">%</span>
+            </span>
+          </label>
+          <label>
+            Delivery rate (%)
+            <span class="ishraq-sim__field-wrap">
+              <input type="number" min="0" max="100" step="0.1" data-field="deliveryRate" value="65">
+              <span class="ishraq-sim__suffix">%</span>
+            </span>
+          </label>
+          <label>
+            Cost per lead
+            <span class="ishraq-sim__field-wrap">
+              <input type="number" min="0" step="0.01" data-field="costPerLead" value="25">
+              <span class="ishraq-sim__suffix">dh</span>
+            </span>
+          </label>
+          <label>
+            Product cost
+            <span class="ishraq-sim__field-wrap">
+              <input type="number" min="0" step="0.01" data-field="productCost" value="120">
+              <span class="ishraq-sim__suffix">dh</span>
+            </span>
+          </label>
+          <label>
+            Selling price
+            <span class="ishraq-sim__field-wrap">
+              <input type="number" min="0" step="0.01" data-field="sellingPrice" value="349">
+              <span class="ishraq-sim__suffix">dh</span>
+            </span>
+          </label>
+        </div>
+      </article>
+
+      <article class="ishraq-sim__card ishraq-sim__card--dark">
+        <h2>Space Seller simulation</h2>
+        <p class="ishraq-sim__hint ishraq-sim__hint--dark" id="sim-price-line"></p>
+
+        <div class="ishraq-sim__block">
+          <p class="ishraq-sim__block-title">Advertising</p>
+          <div class="ishraq-sim__row"><span>Cost per lead</span><strong id="out-cpl"></strong></div>
+          <div class="ishraq-sim__row"><span>Total leads</span><strong id="out-total-leads"></strong></div>
+          <div class="ishraq-sim__row"><span>Cost per confirmed lead</span><strong id="out-cpc"></strong></div>
+          <div class="ishraq-sim__row"><span>Cost per delivered lead</span><strong id="out-cpd"></strong></div>
+          <div class="ishraq-sim__row ishraq-sim__row--strong"><span>Target cost per lead — CPA</span><strong id="out-cpa"></strong></div>
+        </div>
+
+        <div class="ishraq-sim__block">
+          <p class="ishraq-sim__block-title">Funnel</p>
+          <div class="ishraq-sim__row"><span>Leads confirmed</span><strong id="out-confirmed"></strong></div>
+          <div class="ishraq-sim__row"><span>Delivered orders</span><strong id="out-delivered"></strong></div>
+          <div class="ishraq-sim__row"><span>Returned orders</span><strong id="out-returned"></strong></div>
+        </div>
+
+        <div class="ishraq-sim__block">
+          <p class="ishraq-sim__block-title">Cash &amp; costs</p>
+          <div class="ishraq-sim__row"><span>Total cash collected</span><strong id="out-cash"></strong></div>
+          <div class="ishraq-sim__row"><span>Ads</span><strong id="out-ads"></strong></div>
+          <div class="ishraq-sim__row"><span>Product cost</span><strong id="out-product"></strong></div>
+          <div class="ishraq-sim__row"><span>Space Seller fees (63 dh / delivered)</span><strong id="out-ss-fees"></strong></div>
+          <div class="ishraq-sim__row"><span>Lead import fees (2 dh / lead)</span><strong id="out-lead-fees"></strong></div>
+        </div>
+
+        <div class="ishraq-sim__block">
+          <p class="ishraq-sim__block-title">Profit</p>
+          <div class="ishraq-sim__row ishraq-sim__row--strong"><span>ROI %</span><strong id="out-roi"></strong></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="ishraq-sim__summary">
+      <div class="ishraq-sim__summary-box ishraq-sim__summary-box--accent" id="box-net">
+        <p>Net profit</p>
+        <strong id="out-net"></strong>
+      </div>
+      <div class="ishraq-sim__summary-box" id="box-margin">
+        <p>Profit margin rate %</p>
+        <strong id="out-margin"></strong>
+      </div>
+      <div class="ishraq-sim__summary-box" id="box-per-order">
+        <p>Profit per 1 order delivered</p>
+        <strong id="out-per-order"></strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var SPACE_SELLER_FEE_DH = 63;
+    var LEADS_ENTERED_FEE_DH = 2;
+    var STORAGE_KEY = 'ishraq_sim_unlocked';
+
+    var root = document.getElementById('ishraq-sim');
+    var gate = document.getElementById('ishraq-sim-gate');
+    var app = document.getElementById('ishraq-sim-app');
+    var form = document.getElementById('ishraq-sim-gate-form');
+    var errorEl = document.getElementById('ishraq-sim-gate-error');
+    var expected = (root && root.getAttribute('data-password')) || '';
+
+    function showUnlocked(unlocked) {
+      if (!gate || !app) return;
+      gate.hidden = unlocked;
+      app.hidden = !unlocked;
+    }
+
+    function isUnlocked() {
+      try {
+        return sessionStorage.getItem(STORAGE_KEY) === '1';
+      } catch (e) {
+        return false;
+      }
+    }
+
+    showUnlocked(isUnlocked());
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var input = document.getElementById('ishraq-sim-password');
+        var value = input ? String(input.value || '') : '';
+        if (value === expected) {
+          try {
+            sessionStorage.setItem(STORAGE_KEY, '1');
+          } catch (err) {}
+          if (errorEl) errorEl.hidden = true;
+          showUnlocked(true);
+          recalc();
+        } else if (errorEl) {
+          errorEl.hidden = false;
+        }
+      });
+    }
+
+    var lockBtn = document.getElementById('ishraq-sim-lock');
+    if (lockBtn) {
+      lockBtn.addEventListener('click', function () {
+        try {
+          sessionStorage.removeItem(STORAGE_KEY);
+        } catch (e) {}
+        showUnlocked(false);
+      });
+    }
+
+    function num(field) {
+      var el = root.querySelector('[data-field="' + field + '"]');
+      var v = el ? Number(el.value) : 0;
+      return Number.isFinite(v) ? v : 0;
+    }
+
+    function formatDh(amount) {
+      return (
+        new Intl.NumberFormat('en-MA', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(amount) + ' dh'
+      );
+    }
+
+    function formatCount(value) {
+      return new Intl.NumberFormat('en-MA', {
+        maximumFractionDigits: 2,
+      }).format(value);
+    }
+
+    function formatPercent(value) {
+      return (
+        new Intl.NumberFormat('en-MA', {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        }).format(value) + ' %'
+      );
+    }
+
+    function setText(id, text) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
+    function setPositive(boxId, positive) {
+      var box = document.getElementById(boxId);
+      if (!box) return;
+      box.classList.toggle('is-negative', !positive);
+    }
+
+    function recalc() {
+      var totalLeads = num('totalLeads');
+      var confirmationRate = num('confirmationRate');
+      var deliveryRate = num('deliveryRate');
+      var costPerLead = num('costPerLead');
+      var productCost = num('productCost');
+      var sellingPrice = num('sellingPrice');
+
+      var confirmedLeads = totalLeads * (confirmationRate / 100);
+      var deliveredOrders = confirmedLeads * (deliveryRate / 100);
+      var returnedOrders = Math.max(0, confirmedLeads - deliveredOrders);
+
+      var ads = totalLeads * costPerLead;
+      var costPerConfirmedLead = confirmedLeads > 0 ? ads / confirmedLeads : 0;
+      var costPerDeliveredLead = deliveredOrders > 0 ? ads / deliveredOrders : 0;
+
+      var targetCpa =
+        (confirmationRate / 100) *
+          (deliveryRate / 100) *
+          (sellingPrice - productCost - SPACE_SELLER_FEE_DH) -
+        LEADS_ENTERED_FEE_DH;
+
+      var totalCashCollected = deliveredOrders * sellingPrice;
+      var productCostTotal = deliveredOrders * productCost;
+      var spaceSellerFees = deliveredOrders * SPACE_SELLER_FEE_DH;
+      var leadsEnteredFees = totalLeads * LEADS_ENTERED_FEE_DH;
+
+      var netProfit =
+        totalCashCollected -
+        productCostTotal -
+        spaceSellerFees -
+        leadsEnteredFees -
+        ads;
+      var profitPerDeliveredOrder =
+        deliveredOrders > 0 ? netProfit / deliveredOrders : 0;
+      var profitMarginRate =
+        totalCashCollected > 0 ? (netProfit / totalCashCollected) * 100 : 0;
+      var roi = ads > 0 ? (netProfit / ads) * 100 : 0;
+
+      setText(
+        'sim-price-line',
+        'Product price: ' +
+          formatDh(sellingPrice) +
+          ' · Space Seller: ' +
+          formatDh(SPACE_SELLER_FEE_DH) +
+          ' / delivered · Lead import: ' +
+          formatDh(LEADS_ENTERED_FEE_DH) +
+          ' / lead · Returns: 0 MAD'
+      );
+      setText('out-cpl', formatDh(costPerLead));
+      setText('out-total-leads', formatCount(totalLeads));
+      setText('out-cpc', formatDh(costPerConfirmedLead));
+      setText('out-cpd', formatDh(costPerDeliveredLead));
+      setText('out-cpa', formatDh(targetCpa));
+      setText('out-confirmed', formatCount(confirmedLeads));
+      setText('out-delivered', formatCount(deliveredOrders));
+      setText('out-returned', formatCount(returnedOrders));
+      setText('out-cash', formatDh(totalCashCollected));
+      setText('out-ads', formatDh(ads));
+      setText('out-product', formatDh(productCostTotal));
+      setText('out-ss-fees', formatDh(spaceSellerFees));
+      setText('out-lead-fees', formatDh(leadsEnteredFees));
+      setText('out-roi', formatPercent(roi));
+      setText('out-net', formatDh(netProfit));
+      setText('out-margin', formatPercent(profitMarginRate));
+      setText('out-per-order', formatDh(profitPerDeliveredOrder));
+
+      setPositive('box-net', netProfit >= 0);
+      setPositive('box-margin', profitMarginRate >= 0);
+      setPositive('box-per-order', profitPerDeliveredOrder >= 0);
+    }
+
+    root.querySelectorAll('[data-field]').forEach(function (el) {
+      el.addEventListener('input', recalc);
+      el.addEventListener('change', recalc);
+    });
+
+    if (isUnlocked()) recalc();
+  })();
+</script>
+
+{% stylesheet %}
+  .ishraq-sim {
+    min-height: 80vh;
+    padding-block: 2rem 4rem;
+    background: #fcf9f3;
+    color: #211b1d;
+  }
+
+  .ishraq-sim__gate {
+    display: grid;
+    place-items: center;
+    min-height: 70vh;
+    padding: 1.5rem;
+  }
+
+  .ishraq-sim__gate[hidden],
+  .ishraq-sim__app[hidden] {
+    display: none !important;
+  }
+
+  .ishraq-sim__gate-card {
+    width: min(100%, 24rem);
+    padding: 2rem 1.5rem;
+    border-radius: 1.25rem;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 16px 40px -20px rgba(36, 0, 10, 0.25);
+    text-align: center;
+  }
+
+  .ishraq-sim__gate-brand {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #590828;
+    margin-bottom: 0.75rem;
+  }
+
+  .ishraq-sim__gate-card h1 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #24000a;
+    margin-bottom: 0.5rem;
+  }
+
+  .ishraq-sim__gate-sub {
+    font-size: 0.9rem;
+    color: #71666a;
+    margin-bottom: 1.25rem;
+  }
+
+  .ishraq-sim__gate-form {
+    text-align: left;
+  }
+
+  .ishraq-sim__gate-form label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #71666a;
+  }
+
+  .ishraq-sim__gate-form input {
+    margin-top: 0.4rem;
+    width: 100%;
+    height: 2.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0 0.85rem;
+    font: inherit;
+  }
+
+  .ishraq-sim__gate-error {
+    margin-top: 0.65rem;
+    color: #b91c1c;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .ishraq-sim__btn {
+    margin-top: 1rem;
+    width: 100%;
+    height: 2.75rem;
+    border: 0;
+    border-radius: 0.75rem;
+    background: #590828;
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .ishraq-sim__btn:hover {
+    background: #24000a;
+  }
+
+  .ishraq-sim__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ishraq-sim__eyebrow {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #590828;
+  }
+
+  .ishraq-sim__header h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    color: #24000a;
+    margin: 0.25rem 0;
+  }
+
+  .ishraq-sim__lede {
+    color: #71666a;
+    font-size: 0.95rem;
+  }
+
+  .ishraq-sim__lockout {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #fff;
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #71666a;
+    cursor: pointer;
+  }
+
+  .ishraq-sim__grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 1100px) {
+    .ishraq-sim__grid {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+  }
+
+  .ishraq-sim__card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 1.25rem;
+    padding: 1.35rem;
+    box-shadow: 0 10px 30px -18px rgba(36, 0, 10, 0.2);
+  }
+
+  .ishraq-sim__card h2 {
+    font-size: 1.05rem;
+    font-weight: 900;
+    margin-bottom: 0.65rem;
+  }
+
+  .ishraq-sim__card--dark {
+    background: #321520;
+    color: #fff;
+    border-color: #4b2130;
+  }
+
+  .ishraq-sim__hint {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #71666a;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+
+  .ishraq-sim__hint--dark {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .ishraq-sim__fields {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  @media (min-width: 640px) {
+    .ishraq-sim__fields {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .ishraq-sim__fields label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #71666a;
+  }
+
+  .ishraq-sim__fields input {
+    margin-top: 0.4rem;
+    width: 100%;
+    height: 2.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0 0.85rem;
+    font: inherit;
+    font-size: 0.9rem;
+  }
+
+  .ishraq-sim__field-wrap {
+    position: relative;
+    display: block;
+  }
+
+  .ishraq-sim__field-wrap input {
+    padding-inline-end: 2.75rem;
+  }
+
+  .ishraq-sim__suffix {
+    position: absolute;
+    inset-inline-end: 0.75rem;
+    top: 50%;
+    transform: translateY(-35%);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #71666a;
+    pointer-events: none;
+  }
+
+  .ishraq-sim__block {
+    margin-top: 1.25rem;
+  }
+
+  .ishraq-sim__block-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 0.35rem;
+  }
+
+  .ishraq-sim__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .ishraq-sim__row strong {
+    color: #fff;
+    font-weight: 800;
+    text-align: end;
+  }
+
+  .ishraq-sim__row--strong {
+    margin-top: 0.25rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .ishraq-sim__row--strong span,
+  .ishraq-sim__row--strong strong {
+    color: #d8b77a;
+  }
+
+  .ishraq-sim__summary {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .ishraq-sim__summary {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .ishraq-sim__summary-box {
+    border-radius: 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: #fff;
+    padding: 1.35rem;
+    box-shadow: 0 10px 30px -18px rgba(36, 0, 10, 0.2);
+  }
+
+  .ishraq-sim__summary-box p {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #857b7e;
+  }
+
+  .ishraq-sim__summary-box strong {
+    display: block;
+    margin-top: 0.65rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    color: #28704a;
+  }
+
+  .ishraq-sim__summary-box.is-negative strong {
+    color: #dc2626;
+  }
+
+  .ishraq-sim__summary-box--accent {
+    background: #321520;
+    border-color: #4b2130;
+  }
+
+  .ishraq-sim__summary-box--accent p {
+    color: #d8b77a;
+  }
+
+  .ishraq-sim__summary-box--accent strong {
+    color: #fff;
+  }
+
+  .ishraq-sim__summary-box--accent.is-negative strong {
+    color: #fca5a5;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Space Seller sim",
+  "settings": [
+    {
+      "type": "text",
+      "id": "page_password",
+      "label": "Page password",
+      "default": "ishraq-sim-2026",
+      "info": "Shared password to unlock this page. Change after publish."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Space Seller sim"
+    }
+  ]
+}
+{% endschema %}

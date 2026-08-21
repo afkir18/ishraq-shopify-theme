@@ -1,9 +1,10 @@
 {% comment %}
   Ads spend & reports — clone of admin /admin/ads-spend.
-  Data stored in browser localStorage. Soft password gate.
+  Persists to Ishraq CRM (same DB as admin) via password-gated API.
 {% endcomment %}
 
 {% assign gate_password = section.settings.page_password | default: 'Medafkir@988' %}
+{% assign api_base = section.settings.api_base_url | default: 'https://admin.ishraq.ma' | strip %}
 
 <meta name="robots" content="noindex, nofollow">
 
@@ -12,6 +13,7 @@
   dir="ltr"
   id="ishraq-ads"
   data-password="{{ gate_password | escape }}"
+  data-api-base="{{ api_base | escape }}"
 >
   <div class="ishraq-ads__gate" id="ishraq-ads-gate" hidden>
     <div class="ishraq-ads__gate-card">
@@ -74,7 +76,7 @@
       <article class="ishraq-ads__kpi ishraq-ads__kpi--green">
         <p>CRM leads</p>
         <strong id="kpi-leads">0</strong>
-        <span>Leads entered with spend in this period</span>
+        <span>Orders in the same filtered period</span>
       </article>
       <article class="ishraq-ads__kpi ishraq-ads__kpi--amber">
         <p>Cost per lead</p>
@@ -82,6 +84,8 @@
         <span>Total spend ÷ CRM leads</span>
       </article>
     </section>
+
+    <p class="ishraq-ads__status" id="ishraq-ads-status" hidden></p>
 
     <section class="ishraq-ads__platforms" id="ishraq-ads-platforms"></section>
 
@@ -145,10 +149,6 @@
             <span class="ishraq-ads__suffix">MAD</span>
           </span>
         </label>
-        <label>
-          Leads
-          <input type="number" id="ads-leads" min="0" step="1" value="0">
-        </label>
         <label class="ishraq-ads__form-full">
           Notes
           <input type="text" id="ads-notes" placeholder="Optional">
@@ -166,51 +166,60 @@
 <script>
   (function () {
     var STORAGE_AUTH = 'ishraq_ads_unlocked';
-    var STORAGE_DATA = 'ishraq_ads_entries_v1';
-    var PLATFORMS = ['TikTok Ads', 'Facebook Ads', 'Google Ads', 'Snapchat Ads'];
-    var PRODUCTS = {
-      '': 'All products',
-      'collagen-gummies': 'غوميز الكولاجين',
-      'melatonin-sleep': 'ميلاتونين للنوم'
-    };
+    var STORAGE_PASS = 'ishraq_ads_pass';
 
     var root = document.getElementById('ishraq-ads');
     var gate = document.getElementById('ishraq-ads-gate');
     var app = document.getElementById('ishraq-ads-app');
     var formGate = document.getElementById('ishraq-ads-gate-form');
     var errorGate = document.getElementById('ishraq-ads-gate-error');
+    var statusEl = document.getElementById('ishraq-ads-status');
     var expectedPass = (root && root.getAttribute('data-password')) || '';
+    var apiBase = ((root && root.getAttribute('data-api-base')) || 'https://admin.ishraq.ma').replace(/\/$/, '');
     var fromEl = document.getElementById('ishraq-ads-from');
     var toEl = document.getElementById('ishraq-ads-to');
     var dialog = document.getElementById('ishraq-ads-dialog');
     var formAdd = document.getElementById('ishraq-ads-form');
     var formError = document.getElementById('ishraq-ads-form-error');
+    var productSelect = document.getElementById('ads-product');
+    var summary = null;
+    var loading = false;
+    var saving = false;
 
     function pad(n) { return String(n).padStart(2, '0'); }
     function toISO(d) {
       return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
     }
-    function parseISO(s) {
-      var p = String(s || '').split('-');
-      return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
-    }
     function startOfMonth(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
     function endOfMonth(d) { return new Date(d.getFullYear(), d.getMonth() + 1, 0); }
 
-    function money(amountMad) {
+    function moneyFromMinor(minor) {
+      var amountMad = (Number(minor) || 0) / 100;
       return new Intl.NumberFormat('fr-MA', {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2
       }).format(amountMad) + ' MAD';
     }
-    function moneyCpl(amountMad) {
+    function moneyCplFromMinor(minor) {
+      if (minor == null) return '—';
+      var amountMad = (Number(minor) || 0) / 100;
       return new Intl.NumberFormat('fr-MA', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       }).format(amountMad) + ' MAD';
     }
     function formatCount(n) {
-      return new Intl.NumberFormat('fr-MA', { maximumFractionDigits: 0 }).format(n);
+      return new Intl.NumberFormat('fr-MA', { maximumFractionDigits: 0 }).format(n || 0);
+    }
+
+    function getStoredPassword() {
+      try { return sessionStorage.getItem(STORAGE_PASS) || ''; } catch (e) { return ''; }
+    }
+    function setStoredPassword(pass) {
+      try {
+        if (pass) sessionStorage.setItem(STORAGE_PASS, pass);
+        else sessionStorage.removeItem(STORAGE_PASS);
+      } catch (e) {}
     }
 
     function showUnlocked(unlocked) {
@@ -219,7 +228,173 @@
       app.hidden = !unlocked;
     }
     function isUnlocked() {
-      try { return sessionStorage.getItem(STORAGE_AUTH) === '1'; } catch (e) { return false; }
+      try { return sessionStorage.getItem(STORAGE_AUTH) === '1' && !!getStoredPassword(); } catch (e) { return false; }
+    }
+
+    function setStatus(message, isError) {
+      if (!statusEl) return;
+      if (!message) {
+        statusEl.hidden = true;
+        statusEl.textContent = '';
+        return;
+      }
+      statusEl.hidden = false;
+      statusEl.textContent = message;
+      statusEl.classList.toggle('is-error', !!isError);
+    }
+
+    function api(path, options) {
+      options = options || {};
+      var headers = Object.assign(
+        { 'X-Ads-Spend-Password': getStoredPassword() || expectedPass },
+        options.headers || {}
+      );
+      if (options.body && !headers['Content-Type']) {
+        headers['Content-Type'] = 'application/json';
+      }
+      return fetch(apiBase + '/api/tools/ads-spend' + path, Object.assign({}, options, {
+        headers: headers,
+        cache: 'no-store'
+      })).then(function (res) {
+        if (res.status === 204) return null;
+        return res.text().then(function (text) {
+          var payload = null;
+          try { payload = text ? JSON.parse(text) : null; } catch (e) { payload = null; }
+          if (!res.ok) {
+            var detail = (payload && payload.detail) || 'Request failed (' + res.status + ')';
+            var err = new Error(typeof detail === 'string' ? detail : JSON.stringify(detail));
+            err.status = res.status;
+            throw err;
+          }
+          return payload;
+        });
+      });
+    }
+
+    function fillProducts(items) {
+      if (!productSelect) return;
+      var current = productSelect.value;
+      var html = '<option value="">All products</option>';
+      (items || []).forEach(function (p) {
+        html +=
+          '<option value="' +
+          String(p.id).replace(/"/g, '&quot;') +
+          '">' +
+          String(p.name_ar || p.id) +
+          '</option>';
+      });
+      productSelect.innerHTML = html;
+      productSelect.value = current || '';
+    }
+
+    function render() {
+      if (!summary) {
+        document.getElementById('ishraq-ads-count').textContent = 'Loading…';
+        return;
+      }
+      var platforms = summary.platforms || [];
+      var daily = (summary.daily || []).filter(function (row) {
+        return (Number(row.spend_minor) || 0) > 0;
+      });
+      var count = summary.entries_count || 0;
+
+      document.getElementById('ishraq-ads-count').textContent =
+        count + ' spend ' + (count === 1 ? 'entry' : 'entries') + ' in selected period';
+      document.getElementById('kpi-spend').textContent = moneyFromMinor(summary.total_spend_minor);
+      document.getElementById('kpi-spend-helper').textContent =
+        count + ' ' + (count === 1 ? 'entry' : 'entries') + ' in selected period';
+      document.getElementById('kpi-leads').textContent = formatCount(summary.total_leads);
+      document.getElementById('kpi-cpl').textContent = moneyCplFromMinor(summary.cost_per_lead_minor);
+
+      var platformsEl = document.getElementById('ishraq-ads-platforms');
+      platformsEl.innerHTML = platforms.map(function (p) {
+        return (
+          '<article class="ishraq-ads__platform">' +
+          '<p class="ishraq-ads__platform-name">' + p.label + '</p>' +
+          '<p class="ishraq-ads__platform-spend">' + moneyFromMinor(p.spend_minor) + '</p>' +
+          '<p class="ishraq-ads__platform-meta">Cost per lead: ' + moneyCplFromMinor(p.cost_per_lead_minor) + '</p>' +
+          '<p class="ishraq-ads__platform-meta">' +
+          p.entries + ' ' + (p.entries === 1 ? 'spend entry' : 'spend entries') +
+          '</p></article>'
+        );
+      }).join('');
+
+      var wrap = document.getElementById('ishraq-ads-table-wrap');
+      var tbody = document.getElementById('ishraq-ads-tbody');
+      if (!daily.length) {
+        wrap.hidden = true;
+        tbody.innerHTML = '';
+        return;
+      }
+      wrap.hidden = false;
+      tbody.innerHTML = daily.map(function (row) {
+        return (
+          '<tr>' +
+          '<td>' + row.date + '</td>' +
+          '<td>' + (row.product || 'All products') + '</td>' +
+          '<td><span class="ishraq-ads__badge">' + row.platform + '</span></td>' +
+          '<td class="tabular">' + moneyFromMinor(row.spend_minor) + '</td>' +
+          '<td class="tabular">' + formatCount(row.leads) + '</td>' +
+          '<td class="tabular ishraq-ads__cpl">' + moneyCplFromMinor(row.cost_per_lead_minor) + '</td>' +
+          '<td>' +
+          (row.id
+            ? '<button type="button" class="ishraq-ads__delete" data-id="' + row.id + '">Delete</button>'
+            : '') +
+          '</td>' +
+          '</tr>'
+        );
+      }).join('');
+
+      tbody.querySelectorAll('[data-id]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-id');
+          if (!window.confirm('Delete this spend entry?')) return;
+          btn.disabled = true;
+          api('/' + encodeURIComponent(id), { method: 'DELETE' })
+            .then(function () { return loadSummary(); })
+            .catch(function (err) {
+              setStatus(err.message || 'Delete failed', true);
+              btn.disabled = false;
+            });
+        });
+      });
+    }
+
+    function loadSummary() {
+      if (!isUnlocked()) return Promise.resolve();
+      loading = true;
+      setStatus('Loading spend data…', false);
+      var from = fromEl.value || '2020-01-01';
+      var to = toEl.value || toISO(new Date());
+      return api('/summary?from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to))
+        .then(function (data) {
+          summary = data;
+          setStatus('', false);
+          render();
+        })
+        .catch(function (err) {
+          setStatus(err.message || 'Unable to load spend data', true);
+        })
+        .finally(function () {
+          loading = false;
+        });
+    }
+
+    function loadProducts() {
+      return api('/products')
+        .then(function (data) {
+          fillProducts((data && data.items) || []);
+        })
+        .catch(function () {
+          /* keep fallback options */
+        });
+    }
+
+    function unlock(pass) {
+      try { sessionStorage.setItem(STORAGE_AUTH, '1'); } catch (e) {}
+      setStoredPassword(pass);
+      showUnlocked(true);
+      return Promise.all([loadProducts(), loadSummary()]);
     }
 
     showUnlocked(isUnlocked());
@@ -229,14 +404,12 @@
         e.preventDefault();
         var input = document.getElementById('ishraq-ads-password');
         var pass = input ? String(input.value || '') : '';
-        if (pass === expectedPass) {
-          try { sessionStorage.setItem(STORAGE_AUTH, '1'); } catch (err) {}
-          if (errorGate) errorGate.hidden = true;
-          showUnlocked(true);
-          render();
-        } else if (errorGate) {
-          errorGate.hidden = false;
+        if (pass !== expectedPass) {
+          if (errorGate) errorGate.hidden = false;
+          return;
         }
+        if (errorGate) errorGate.hidden = true;
+        unlock(pass);
       });
     }
 
@@ -244,21 +417,11 @@
     if (lockBtn) {
       lockBtn.addEventListener('click', function () {
         try { sessionStorage.removeItem(STORAGE_AUTH); } catch (e) {}
+        setStoredPassword('');
+        summary = null;
         showUnlocked(false);
+        setStatus('', false);
       });
-    }
-
-    function loadEntries() {
-      try {
-        var raw = localStorage.getItem(STORAGE_DATA);
-        var parsed = raw ? JSON.parse(raw) : [];
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        return [];
-      }
-    }
-    function saveEntries(entries) {
-      try { localStorage.setItem(STORAGE_DATA, JSON.stringify(entries)); } catch (e) {}
     }
 
     function setPreset(name) {
@@ -291,7 +454,7 @@
       document.querySelectorAll('#ishraq-ads-presets button').forEach(function (btn) {
         btn.classList.toggle('is-active', btn.getAttribute('data-preset') === name);
       });
-      render();
+      if (isUnlocked()) loadSummary();
     }
 
     document.querySelectorAll('#ishraq-ads-presets button').forEach(function (btn) {
@@ -299,111 +462,8 @@
         setPreset(btn.getAttribute('data-preset'));
       });
     });
-    if (fromEl) fromEl.addEventListener('change', render);
-    if (toEl) toEl.addEventListener('change', render);
-
-    function inRange(dateStr, from, to) {
-      return dateStr >= from && dateStr <= to;
-    }
-
-    function filteredEntries() {
-      var from = fromEl.value || '2020-01-01';
-      var to = toEl.value || toISO(new Date());
-      return loadEntries().filter(function (e) { return inRange(e.date, from, to); });
-    }
-
-    function render() {
-      var entries = filteredEntries();
-      var totalSpend = 0;
-      var totalLeads = 0;
-      var byPlatform = {};
-      PLATFORMS.forEach(function (p) {
-        byPlatform[p] = { spend: 0, leads: 0, entries: 0 };
-      });
-
-      entries.forEach(function (e) {
-        var spend = Number(e.amountMad) || 0;
-        var leads = Number(e.leads) || 0;
-        totalSpend += spend;
-        totalLeads += leads;
-        if (!byPlatform[e.platform]) {
-          byPlatform[e.platform] = { spend: 0, leads: 0, entries: 0 };
-        }
-        byPlatform[e.platform].spend += spend;
-        byPlatform[e.platform].leads += leads;
-        byPlatform[e.platform].entries += 1;
-      });
-
-      var cpl = totalLeads > 0 ? totalSpend / totalLeads : 0;
-      var countEl = document.getElementById('ishraq-ads-count');
-      if (countEl) {
-        countEl.textContent =
-          entries.length +
-          ' spend ' +
-          (entries.length === 1 ? 'entry' : 'entries') +
-          ' in selected period';
-      }
-      document.getElementById('kpi-spend').textContent = money(totalSpend);
-      document.getElementById('kpi-spend-helper').textContent =
-        entries.length + ' ' + (entries.length === 1 ? 'entry' : 'entries') + ' in selected period';
-      document.getElementById('kpi-leads').textContent = formatCount(totalLeads);
-      document.getElementById('kpi-cpl').textContent = moneyCpl(cpl);
-
-      var platformsEl = document.getElementById('ishraq-ads-platforms');
-      platformsEl.innerHTML = PLATFORMS.map(function (label) {
-        var row = byPlatform[label] || { spend: 0, leads: 0, entries: 0 };
-        var pCpl = row.leads > 0 ? row.spend / row.leads : 0;
-        return (
-          '<article class="ishraq-ads__platform">' +
-          '<p class="ishraq-ads__platform-name">' + label + '</p>' +
-          '<p class="ishraq-ads__platform-spend">' + money(row.spend) + '</p>' +
-          '<p class="ishraq-ads__platform-meta">Cost per lead: ' + moneyCpl(pCpl) + '</p>' +
-          '<p class="ishraq-ads__platform-meta">' +
-          row.entries + ' ' + (row.entries === 1 ? 'spend entry' : 'spend entries') +
-          '</p></article>'
-        );
-      }).join('');
-
-      var withSpend = entries
-        .filter(function (e) { return (Number(e.amountMad) || 0) > 0; })
-        .slice()
-        .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
-
-      var wrap = document.getElementById('ishraq-ads-table-wrap');
-      var tbody = document.getElementById('ishraq-ads-tbody');
-      if (!withSpend.length) {
-        wrap.hidden = true;
-        tbody.innerHTML = '';
-        return;
-      }
-      wrap.hidden = false;
-      tbody.innerHTML = withSpend.map(function (e) {
-        var spend = Number(e.amountMad) || 0;
-        var leads = Number(e.leads) || 0;
-        var rowCpl = leads > 0 ? spend / leads : 0;
-        var productLabel = PRODUCTS[e.productId] || e.product || 'All products';
-        return (
-          '<tr>' +
-          '<td>' + e.date + '</td>' +
-          '<td>' + productLabel + '</td>' +
-          '<td><span class="ishraq-ads__badge">' + e.platform + '</span></td>' +
-          '<td class="tabular">' + money(spend) + '</td>' +
-          '<td class="tabular">' + formatCount(leads) + '</td>' +
-          '<td class="tabular ishraq-ads__cpl">' + moneyCpl(rowCpl) + '</td>' +
-          '<td><button type="button" class="ishraq-ads__delete" data-id="' + e.id + '">Delete</button></td>' +
-          '</tr>'
-        );
-      }).join('');
-
-      tbody.querySelectorAll('[data-id]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var id = btn.getAttribute('data-id');
-          if (!window.confirm('Delete this spend entry?')) return;
-          saveEntries(loadEntries().filter(function (e) { return e.id !== id; }));
-          render();
-        });
-      });
-    }
+    if (fromEl) fromEl.addEventListener('change', function () { if (isUnlocked()) loadSummary(); });
+    if (toEl) toEl.addEventListener('change', function () { if (isUnlocked()) loadSummary(); });
 
     function openDialog() {
       formError.hidden = true;
@@ -411,7 +471,6 @@
       document.getElementById('ads-date').value = toEl.value || toISO(new Date());
       document.getElementById('ads-product').value = '';
       document.getElementById('ads-amount').value = '0';
-      document.getElementById('ads-leads').value = '0';
       document.getElementById('ads-notes').value = '';
       dialog.hidden = false;
     }
@@ -424,32 +483,44 @@
 
     formAdd.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (saving) return;
       var amount = Number(document.getElementById('ads-amount').value) || 0;
       if (amount <= 0) {
         formError.textContent = 'Enter a spend amount greater than 0 MAD.';
         formError.hidden = false;
         return;
       }
-      var productId = document.getElementById('ads-product').value;
-      var entry = {
-        id: 'ads_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-        platform: document.getElementById('ads-platform').value,
-        productId: productId,
-        product: PRODUCTS[productId] || 'All products',
-        amountMad: amount,
-        date: document.getElementById('ads-date').value,
-        leads: Number(document.getElementById('ads-leads').value) || 0,
-        notes: String(document.getElementById('ads-notes').value || '').trim()
-      };
-      var all = loadEntries();
-      all.push(entry);
-      saveEntries(all);
-      closeDialog();
-      render();
+      var productId = String(document.getElementById('ads-product').value || '').trim();
+      saving = true;
+      formError.hidden = true;
+      api('', {
+        method: 'POST',
+        body: JSON.stringify({
+          platform: document.getElementById('ads-platform').value,
+          campaign: productId || null,
+          amount_minor: Math.round(amount * 100),
+          spent_on: document.getElementById('ads-date').value,
+          notes: String(document.getElementById('ads-notes').value || '').trim() || null
+        })
+      })
+        .then(function () {
+          closeDialog();
+          return loadSummary();
+        })
+        .catch(function (err) {
+          formError.textContent = err.message || 'Unable to save spend.';
+          formError.hidden = false;
+        })
+        .finally(function () {
+          saving = false;
+        });
     });
 
     setPreset('last7');
-    if (isUnlocked()) render();
+    if (isUnlocked()) {
+      loadProducts();
+      loadSummary();
+    }
   })();
 </script>
 
@@ -914,7 +985,14 @@
       "id": "page_password",
       "label": "Page password",
       "default": "Medafkir@988",
-      "info": "Soft client-side gate for private access."
+      "info": "Must match backend ADS_SPEND_PAGE_PASSWORD."
+    },
+    {
+      "type": "text",
+      "id": "api_base_url",
+      "label": "API base URL",
+      "default": "https://admin.ishraq.ma",
+      "info": "Ishraq admin host that proxies /api/tools/ads-spend."
     }
   ],
   "presets": [

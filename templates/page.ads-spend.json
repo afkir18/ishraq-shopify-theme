@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "ishraq-ads-spend",
+      "settings": {
+        "page_password": "Medafkir@988"
+      }
+    }
+  },
+  "order": ["main"]
+}
